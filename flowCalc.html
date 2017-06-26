@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Parker Flow Predictor</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-  <script src="script/flowCalculations.js"></script>
-  <link href="css/flowCalculator.css" rel="stylesheet"/>
-</head>
-<body>
+	<title>Parker Flow Predictor</title>
+	<meta charset="utf-8">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <script src="script/test.js"></script>
+    <link rel="stylesheet" href="css/test.css">
+	<script src="script/flowCalculations.js"></script>
+  </head>
+<body ng-app="lineApp">
 
 <div class="col-xs-12 header bottomPad">
 	<div class="col-xs-2">
@@ -106,98 +107,46 @@
 		</div>
 	</div>
 </div>
-<div class="col-xs-12 addingSection boxed">
-<div class="goldStrip"></div>
-	<!--LINE LOSS PIPE 1 --> 
-	<div class="col-xs-12 parkerBox addPad" id="lineLosses">
-		<h4> Line Losses info</h4>
-		<div class="col-sm-4">
-			<label for="pDiam1">Diameter of Pipe (Inches)</label><br>
-			<select class="selectpicker col-sm-12" style="height: 4.5ex" id="pDiam1" value="3">
-			  <option>0</option>
-			  <option>2</option>
-			  <option>3</option>
-			  <option>4</option>
-			  <option>6</option>
-			</select>
-		</div>
-		<div class="col-sm-3">
-			<label for="pLength1">Length of Pipe</label>
-			<div class="input-group">
-				<input type="text" class="form-control pLength" id="pLength1" value="3">
-				<span class="input-group-addon">ft</span>
+<div ng-controller="LineListController as lineList" class="col-xs-12 addingSection boxed topPad">
+	<div class="goldStrip"></div>
+		<div class="col-xs-12 parkerBox addPad" id="lineLosses">	
+			<div ng-repeat="line in lineList.lines">
+				<h4 class="show-{{line.show}}"> Line Losses info</h4>
+				<div class="col-sm-4">
+					<label for="pDiam{{line.text}}">Diameter of Pipe (Inches)</label><br>
+					<select class="selectpicker col-sm-12" style="height: 4.5ex" id="pDiam{{line.text}}">
+					  <option>0</option>
+					  <option>2</option>
+					  <option>3</option>
+					  <option>4</option>
+					  <option>6</option>
+					</select>
+				</div>
+				<div class="col-sm-3">
+					<label for="pLength{{line.text}}">Length of Pipe</label>
+					<div class="input-group">
+						<input type="text" class="form-control pLength" id="pLength{{line.text}}">
+						<span class="input-group-addon">ft</span>
+					</div>
+				</div>
+				
+				<div class="col-sm-3">
+					<label for="roughness{{line.text}}">Roughness of Pipe</label>
+					<div class="input-group">		
+						<input type="text" class="form-control" id="roughness{{line.text}}">
+						<span class="input-group-addon">in</span>
+					</div>
+				</div>
 			</div>
 		</div>
-		
-		<div class="col-sm-3">
-			<label for="roughness1">Roughness of Pipe</label>
-			<div class="input-group">		
-				<input type="text" class="form-control" id="roughness1" value="0.012">
-				<span class="input-group-addon">in</span>
-			</div>
+	<form ng-submit="lineList.addLine()">
+		<div class = "col-xs-12 addButton">
+			<button type="button" class="btn btn-default btn-sm customBtn" onclick="addLine()">
+				<span class="glyphicon glyphicon-plus"></span> ADD A NEW PIPE
+			</button>
+			<div class="col-xs-12">&nbsp;</div>
 		</div>
-			
-
-	<!--LINE LOSS PIPE 2 -->
-		<div class="col-sm-4">
-			<label for="pDiam">Diameter of Pipe (Inches)</label><br>
-			<select class="selectpicker col-sm-12" style="height: 4.5ex" id="pDiam2">
-			<option>0</option>		  
-			<option>2</option>
-			  <option>3</option>
-			  <option>4</option>
-			  <option>6</option>
-			</select>
-		</div>
-		<div class="col-sm-3">
-			<label for="pLength2">Length of Pipe</label>
-			<div class="input-group">
-				<input type="text" class="form-control pLength" id="pLength2">
-				<span class="input-group-addon">ft</span>
-			</div>
-		</div>
-		
-		<div class="col-sm-3">
-			<label for="roughness2">Roughness of Pipe</label>
-			<div class="input-group">			
-				<input type="text" class="form-control" id="roughness2">
-				<span class="input-group-addon">in</span>
-			</div>
-		</div>
-	<!--LINE LOSS PIPE 3 -->
-		<div class="col-sm-4">
-			<label for="pDiam3">Diameter of Pipe (Inches)</label><br>
-			<select class="selectpicker col-sm-12" style="height: 4.5ex" id="pDiam3">
-			<option>0</option>
-			  <option>2</option>
-			  <option>3</option>
-			  <option>4</option>
-			  <option>6</option>
-			</select>
-		</div>
-		<div class="col-sm-3">
-			<label for="pLength3">Length of Pipe</label>
-			<div class="input-group">
-				<input type="text" class="form-control pLength" id="pLength3">
-				<span class="input-group-addon">ft</span>
-			</div>
-		</div>
-		
-		<div class="col-sm-3">
-			<label for="roughness3">Roughness of Pipe</label>
-			<div class="input-group">
-				<input type="text" class="form-control" id="roughness3">
-				<span class="input-group-addon">in</span>
-			</div>
-		</div>		
-	</div>
-	
-	<div class = "col-xs-12 addButton">
-		<button type="button" class="btn btn-default btn-sm customBtn" onclick="addLine()">
-			<span class="glyphicon glyphicon-plus"></span> ADD A NEW PIPE
-		</button>
-		<div class="col-xs-12">&nbsp;</div>
-	</div>
+	</form>
 </div>
 
 <div class="col-xs-12 addingSection">
@@ -402,7 +351,6 @@
 </div>
 </div>
 
-
 <!-- IMAGE AREA
 <div class="col-xs-12 topPad">
 	<div id="schematic" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -420,7 +368,6 @@
 		</div>
 	</div>
 </div>
-
 
 <div class="col-xs-12 boxed">
 	<div class="goldStrip"> </div>
@@ -474,7 +421,6 @@
 	<div class="col-xs-12">&nbsp;</div>
 </div>
 
-
 <div class="col-xs-12" id = "bottomSection">
 	<h2 id = "answerText">CALCULATED VALUES</h2>
 	<br>
@@ -497,11 +443,7 @@
 	</div>
 	<div class="col-xs-12">&nbsp;</div>
 	<br><br>
-
-
-
 </div>
-
 
 </body>
 </html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html ng-app="lineApp">
+  <head>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <script src="script/flowCalculations.js"></script>
+	<script src="script/test.js"></script>
+    <link rel="stylesheet" href="css/test.css">
+  </head>
+  <body>
+	<div ng-controller="LineListController as lineList" class="col-xs-12 addingSection boxed topPad">
+	<div class="goldStrip"></div>
+		<div class="col-xs-12 parkerBox addPad" id="lineLosses">	
+			<div ng-repeat="line in lineList.lines">
+				<h4 class="show-{{line.show}}"> Line Losses info</h4>
+				<div class="col-sm-4">
+					<label for="pDiam{{line.text}}">Diameter of Pipe (Inches)</label><br>
+					<select class="selectpicker col-sm-12" style="height: 4.5ex" id="pDiam{{line.text}}">
+					  <option>0</option>
+					  <option>2</option>
+					  <option>3</option>
+					  <option>4</option>
+					  <option>6</option>
+					</select>
+				</div>
+				<div class="col-sm-3">
+					<label for="pLength{{line.text}}">Length of Pipe</label>
+					<div class="input-group">
+						<input type="text" class="form-control pLength" id="pLength{{line.text}}">
+						<span class="input-group-addon">ft</span>
+					</div>
+				</div>
+				
+				<div class="col-sm-3">
+					<label for="roughness{{line.text}}">Roughness of Pipe</label>
+					<div class="input-group">		
+						<input type="text" class="form-control" id="roughness{{line.text}}">
+						<span class="input-group-addon">in</span>
+					</div>
+				</div>
+			</div>
+		</div>	
+		<div class = "col-xs-12 addButton">
+			<button type="button" class="btn btn-default btn-sm customBtn" onclick="addLine()">
+				<span class="glyphicon glyphicon-plus"></span> ADD A NEW PIPE
+			</button>
+		<div class="col-xs-12">&nbsp;</div>
+		</div>
+	</div>
+
+  </body>
+</html>
