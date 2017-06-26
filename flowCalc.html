@@ -8,6 +8,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
   <style>
   	.header{
   		background-color: rgb(255, 185, 29);
@@ -124,12 +125,13 @@
 // used to determine how many lines and fittings were added
 var lines = [true, true, true];
 var fittings = [true, true, true];
+// keeps track of which lines generate images
 var imgAdder = new Array();
 var imgSource = new Array();
+// holds the images used in the website in an array
 var imgArray = new Array();
-var dragId = [true, true];
 // load default image into array
-for (var o = 0; o < 35; o++){
+for (var o = 0; o < 36; o++){
 	imgArray[o] = new Image();
 	imgArray[o].src = 'src/logo.jpg';
 }
@@ -167,8 +169,18 @@ imgArray[32].src = 'src/2206.gif';
 imgArray[33].src = 'src/2206.gif';
 imgArray[34].src = 'src/2301.gif';
 
+  /**
+	* getImage(sender): retrieves an image in the above image array depending on the index selected 
+	* under the fittings info section of the webpage.
+	*
+	* sender - the dropdown menu which activated the function
+	**/
+
 function getImage(sender){
+	// The if statement commented out below would make the image appear in the schematic builder area
+	// only when the fitting and the fitting row is different
 	//if( (!imgAdder.includes(imgArray[sender.selectedIndex].src) || imgAdder.length  == 0)){
+		// checks if the fitting is already on the schematic
 		if((!imgSource.includes(sender.id) || imgSource.length == 0)){
 			$("#dropArea").append("<img class=\"ui-widget-content fittingImg\" id= img" + sender.id + "></img>");
 			document.getElementById("img" + sender.id).src = imgArray[sender.selectedIndex].src;
@@ -184,6 +196,7 @@ function getImage(sender){
 			var usedPic = $.inArray(imgSrc, imgAdder);
 			imgAdder.splice(usedPic, 1);
 		}
+		fNums.push(document.getElementById("fNum" + i).value);
 	//}
 }
 
