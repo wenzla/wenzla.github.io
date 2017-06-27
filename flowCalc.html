@@ -9,11 +9,10 @@
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-    <script src="script/test.js"></script>
-    <link rel="stylesheet" href="css/test.css">
+    <link rel="stylesheet" href="css/flowCalculator.css">
 	<script src="script/flowCalculations.js"></script>
   </head>
-<body ng-app="lineApp">
+<body ng-app="flowApp">
 
 <div class="col-xs-12 header bottomPad">
 	<div class="col-xs-2">
@@ -107,14 +106,14 @@
 		</div>
 	</div>
 </div>
-<div ng-controller="LineListController as lineList" class="col-xs-12 addingSection boxed topPad">
+<div ng-controller="FlowListController as flowList" class="col-xs-12 addingSection boxed topPad">
 	<div class="goldStrip"></div>
 		<div class="col-xs-12 parkerBox addPad" id="lineLosses">	
-			<div ng-repeat="line in lineList.lines">
-				<h4 class="show-{{line.show}}"> Line Losses info</h4>
+			<div ng-repeat="flow in flowList.flows">
+				<h4 class="show-{{flow.show}}"> Line Losses info</h4>
 				<div class="col-sm-4">
-					<label for="pDiam{{line.text}}">Diameter of Pipe (Inches)</label><br>
-					<select class="selectpicker col-sm-12" style="height: 4.5ex" id="pDiam{{line.text}}">
+					<label for="pDiam{{flow.text}}">Diameter of Pipe (Inches)</label><br>
+					<select class="selectpicker col-sm-12" style="height: 4.5ex" id="pDiam{{flow.text}}">
 					  <option>0</option>
 					  <option>2</option>
 					  <option>3</option>
@@ -123,234 +122,106 @@
 					</select>
 				</div>
 				<div class="col-sm-3">
-					<label for="pLength{{line.text}}">Length of Pipe</label>
+					<label for="pLength{{flow.text}}">Length of Pipe</label>
 					<div class="input-group">
-						<input type="text" class="form-control pLength" id="pLength{{line.text}}">
+						<input type="text" class="form-control pLength" id="pLength{{flow.text}}">
 						<span class="input-group-addon">ft</span>
 					</div>
 				</div>
 				
 				<div class="col-sm-3">
-					<label for="roughness{{line.text}}">Roughness of Pipe</label>
+					<label for="roughness{{flow.text}}">Roughness of Pipe</label>
 					<div class="input-group">		
-						<input type="text" class="form-control" id="roughness{{line.text}}">
+						<input type="text" class="form-control" id="roughness{{flow.text}}">
 						<span class="input-group-addon">in</span>
 					</div>
 				</div>
 			</div>
-		</div>
-	<form ng-submit="lineList.addLine()">
+		</div>	
 		<div class = "col-xs-12 addButton">
 			<button type="button" class="btn btn-default btn-sm customBtn" onclick="addLine()">
 				<span class="glyphicon glyphicon-plus"></span> ADD A NEW PIPE
 			</button>
-			<div class="col-xs-12">&nbsp;</div>
-		</div>
-	</form>
-</div>
-
-<div class="col-xs-12 addingSection">
-<div class="goldStrip"></div>
-	<div class="col-xs-12 addButton" id="fittingsection">
-		<h4> Fittings info</h4>
-		<!--Fitting 1 -->
-		<div class="col-sm-4">
-			<label for="fType1">Type of Fitting</label><br>
-			<select class="selectpicker col-sm-12" style="height: 4.5ex" id="fType1" onchange="getImage(this)" onload="getImage(this)" name=1>
-			  <option>180°  Return Bend, Flanged</option>
-				<option>180°  Return Bend, Threaded</option>
-				<option>Angle Valve Fully Open</option>
-				<option>Ball Valve </option>
-				<option>Ball Valve (1/2 Closed)</option>
-				<option>Ball Valve (2/3 Closed)</option>
-				<option>Branch Flow, Threaded</option>
-				<option>Butterfly Valve</option>
-				<option>Close Return Bend</option>
-				<option>Gate Valve  </option>
-				<option>Gate Valve (1/2 closed)</option>
-				<option>Gate Valve (1/4 closed)</option>
-				<option>Gate Valve (3/4 closed)</option>
-				<option>Globe Valve</option>
-				<option>Long Radius 45° Flanged</option>
-				<option>Long Radius 90° Flanged</option>
-				<option>Long Radius 90° Threaded</option>
-				<option>Pipe Entrance (inward Projecting)</option>
-				<option>Pipe Entrance (Sharp Edged)</option>
-				<option>Pipe Exit</option>
-				<option>Plug Valve 3-Way Thru-Flow</option>
-				<option>Plug Valve Branch Flow</option>
-				<option>Plug Valve Straightaway</option>
-				<option>Regular 45° Threaded</option>
-				<option>Regular 90° Flanged </option>
-				<option>Regular 90° Threaded </option>
-				<option>Standard Elbow 45°</option>
-				<option>Standard Elbow Long Radius 90°</option>
-				<option>Sudden Expander</option>
-				<option>Sudden Reducer</option>
-				<option>Swing Check Valve</option>
-				<option>Tees, Branch Flow, Flanged</option>
-				<option>Tees, Line Flow, Flanged</option>
-				<option>Tees, Line Flow, Threaded</option>
-				<option>Threaded Union</option>
-			</select>
-		</div>
-		<div class="col-sm-3">
-			<label for="fDiam1">Diameter (Inches)</label><br>
-			<select class="selectpicker col-sm-12" style="height: 4.5ex" id="fDiam1" value="3">
-			  <option>2</option>
-			  <option>3</option>
-			  <option>4</option>
-			  <option>6</option>
-			</select>
-		</div>
-		<div class="col-sm-3">
-			<div class="form-group">
-				<label for="fNum1">Number of Fittings</label>
-				<input type="text" class="form-control" id="fNum1" value="1">
-			</div>
-		</div>
-		<div class="col-sm-1">
-		<div class="col-sm-12 col-xs-0">&nbsp;</div>
-			<label class="checkbox-inline">
-				<input type="checkbox" value="" id="check1">Parallel
-			</label>
 		<div class="col-xs-12">&nbsp;</div>
 		</div>
-	<!--Fitting 2 -->
+</div>
+
+<div ng-controller="FlowListController as flowList" class="col-xs-12 addingSection">
+<div class="goldStrip"></div>
+	<div class="col-xs-12 parkerBox" id="fittingsection">
+		<div ng-repeat="flow in flowList.flows">
+			<h4 class="show-{{flow.show}}"> Fittings info</h4>
 			<div class="col-sm-4">
-			<label for="fType2">Type of Fitting</label><br>
-			<select class="selectpicker col-sm-12" style="height: 4.5ex" id="fType2" onchange="getImage(this)" name=2>
-			  <option>180°  Return Bend, Flanged</option>
-				<option>180°  Return Bend, Threaded</option>
-				<option>Angle Valve Fully Open</option>
-				<option>Ball Valve </option>
-				<option>Ball Valve (1/2 Closed)</option>
-				<option>Ball Valve (2/3 Closed)</option>
-				<option>Branch Flow, Threaded</option>
-				<option>Butterfly Valve</option>
-				<option>Close Return Bend</option>
-				<option>Gate Valve  </option>
-				<option>Gate Valve (1/2 closed)</option>
-				<option>Gate Valve (1/4 closed)</option>
-				<option>Gate Valve (3/4 closed)</option>
-				<option>Globe Valve</option>
-				<option>Long Radius 45° Flanged</option>
-				<option>Long Radius 90° Flanged</option>
-				<option>Long Radius 90° Threaded</option>
-				<option>Pipe Entrance (inward Projecting)</option>
-				<option>Pipe Entrance (Sharp Edged)</option>
-				<option>Pipe Exit</option>
-				<option>Plug Valve 3-Way Thru-Flow</option>
-				<option>Plug Valve Branch Flow</option>
-				<option>Plug Valve Straightaway</option>
-				<option>Regular 45° Threaded</option>
-				<option>Regular 90° Flanged </option>
-				<option>Regular 90° Threaded </option>
-				<option>Standard Elbow 45°</option>
-				<option>Standard Elbow Long Radius 90°</option>
-				<option>Sudden Expander</option>
-				<option>Sudden Reducer</option>
-				<option>Swing Check Valve</option>
-				<option>Tees, Branch Flow, Flanged</option>
-				<option>Tees, Line Flow, Flanged</option>
-				<option>Tees, Line Flow, Threaded</option>
-				<option>Threaded Union</option>
-			</select>
-		</div>
-		<div class="col-sm-3">
-			<label for="fDiam2">Diameter (Inches)</label><br>
-			<select class="selectpicker col-sm-12" style="height: 4.5ex" id="fDiam2">
-			  <option>2</option>
-			  <option>3</option>
-			  <option>4</option>
-			  <option>6</option>
-			</select>
-		</div>
-		<div class="col-sm-3">
-			<div class="form-group">
-				<label for="fNum2">Number of Fittings</label>
-				<input type="text" class="form-control" id="fNum2">
+				<label for="fType{{flow.text}}">Type of Fitting</label><br>
+				<select class="selectpicker col-sm-12" style="height: 4.5ex" id="fType{{flow.text}}" onchange="getImage(this)" onload="getImage(this)" name="{{flow.text}}">
+				  <option>180°  Return Bend, Flanged</option>
+					<option>180°  Return Bend, Threaded</option>
+					<option>Angle Valve Fully Open</option>
+					<option>Ball Valve </option>
+					<option>Ball Valve (1/2 Closed)</option>
+					<option>Ball Valve (2/3 Closed)</option>
+					<option>Branch Flow, Threaded</option>
+					<option>Butterfly Valve</option>
+					<option>Close Return Bend</option>
+					<option>Gate Valve  </option>
+					<option>Gate Valve (1/2 closed)</option>
+					<option>Gate Valve (1/4 closed)</option>
+					<option>Gate Valve (3/4 closed)</option>
+					<option>Globe Valve</option>
+					<option>Long Radius 45° Flanged</option>
+					<option>Long Radius 90° Flanged</option>
+					<option>Long Radius 90° Threaded</option>
+					<option>Pipe Entrance (inward Projecting)</option>
+					<option>Pipe Entrance (Sharp Edged)</option>
+					<option>Pipe Exit</option>
+					<option>Plug Valve 3-Way Thru-Flow</option>
+					<option>Plug Valve Branch Flow</option>
+					<option>Plug Valve Straightaway</option>
+					<option>Regular 45° Threaded</option>
+					<option>Regular 90° Flanged </option>
+					<option>Regular 90° Threaded </option>
+					<option>Standard Elbow 45°</option>
+					<option>Standard Elbow Long Radius 90°</option>
+					<option>Sudden Expander</option>
+					<option>Sudden Reducer</option>
+					<option>Swing Check Valve</option>
+					<option>Tees, Branch Flow, Flanged</option>
+					<option>Tees, Line Flow, Flanged</option>
+					<option>Tees, Line Flow, Threaded</option>
+					<option>Threaded Union</option>
+				</select>
 			</div>
-		</div>
-		<div class="col-sm-1">
-		<div class="col-sm-12 col-xs-0">&nbsp;</div>
-			<label class="checkbox-inline">
-				<input type="checkbox" value="" id="check2">Parallel
-			</label>
-		<div class="col-sm-12 col-xs-0">&nbsp;</div>
-		</div>
-	<!--Fitting 3 -->
-			<div class="col-sm-4">
-			<label for="fType3">Type of Fitting</label><br>
-			<select class="selectpicker col-sm-12" style="height: 4.5ex" id="fType3" onchange="getImage(this)" name=3>
-			  <option>180°  Return Bend, Flanged</option>
-				<option>180°  Return Bend, Threaded</option>
-				<option>Angle Valve Fully Open</option>
-				<option>Ball Valve </option>
-				<option>Ball Valve (1/2 Closed)</option>
-				<option>Ball Valve (2/3 Closed)</option>
-				<option>Branch Flow, Threaded</option>
-				<option>Butterfly Valve</option>
-				<option>Close Return Bend</option>
-				<option>Gate Valve  </option>
-				<option>Gate Valve (1/2 closed)</option>
-				<option>Gate Valve (1/4 closed)</option>
-				<option>Gate Valve (3/4 closed)</option>
-				<option>Globe Valve</option>
-				<option>Long Radius 45° Flanged</option>
-				<option>Long Radius 90° Flanged</option>
-				<option>Long Radius 90° Threaded</option>
-				<option>Pipe Entrance (inward Projecting)</option>
-				<option>Pipe Entrance (Sharp Edged)</option>
-				<option>Pipe Exit</option>
-				<option>Plug Valve 3-Way Thru-Flow</option>
-				<option>Plug Valve Branch Flow</option>
-				<option>Plug Valve Straightaway</option>
-				<option>Regular 45° Threaded</option>
-				<option>Regular 90° Flanged </option>
-				<option>Regular 90° Threaded </option>
-				<option>Standard Elbow 45°</option>
-				<option>Standard Elbow Long Radius 90°</option>
-				<option>Sudden Expander</option>
-				<option>Sudden Reducer</option>
-				<option>Swing Check Valve</option>
-				<option>Tees, Branch Flow, Flanged</option>
-				<option>Tees, Line Flow, Flanged</option>
-				<option>Tees, Line Flow, Threaded</option>
-				<option>Threaded Union</option>
-			</select>
-		</div>
-		<div class="col-sm-3">
-			<label for="fDiam3">Diameter (Inches)</label><br>
-			<select class="selectpicker col-sm-12" style="height: 4.5ex" id="fDiam3">
-			  <option>2</option>
-			  <option>3</option>
-			  <option>4</option>
-			  <option>6</option>
-			</select>
-		</div>
-		<div class="col-sm-3">
-			<div class="form-group">
-				<label for="fNum3">Number of Fittings</label>
-				<input type="text" class="form-control" id="fNum3" >
+			<div class="col-sm-3">
+				<label for="fDiam{{flow.text}}">Diameter (Inches)</label><br>
+				<select class="selectpicker col-sm-12" style="height: 4.5ex" id="fDiam{{flow.text}}">
+				  <option>2</option>
+				  <option>3</option>
+				  <option>4</option>
+				  <option>6</option>
+				</select>
 			</div>
-		</div>
-		<div class="col-sm-1">
-		<div class="col-sm-12 col-xs-0">&nbsp;</div>
-			<label class="checkbox-inline">
-				<input type="checkbox" value="" id="check3">Parallel
-			</label>
-		<div class="col-sm-12 col-xs-0">&nbsp;</div>
+			<div class="col-sm-3">
+				<div class="form-group">
+					<label for="fNum{{flow.text}}">Number of Fittings</label>
+					<input type="text" class="form-control" id="fNum{{flow.text}}">
+				</div>
+			</div>
+			<div class="col-sm-1">
+			<div class="col-sm-12 col-xs-0">&nbsp;</div>
+				<label class="checkbox-inline">
+					<input type="checkbox" value="" id="check{{flow.text}}">Parallel
+				</label>
+			<div class="col-xs-12">&nbsp;</div>
+			</div>
 		</div>
 	</div>
 	<div class = "col-xs-12 addButton">
-	<button type="button" class="btn btn-default btn-sm customBtn" onclick="addFitting()">
-        <span class="glyphicon glyphicon-plus"></span> ADD A NEW FITTING
-    </button>
-	<div class="col-xs-12">&nbsp;</div>
-</div>
-</div>
-
+		<button type="button" class="btn btn-default btn-sm customBtn" onclick="addFitting()">
+			<span class="glyphicon glyphicon-plus"></span> ADD A NEW FITTING
+		</button>
+		<div class="col-xs-12">&nbsp;</div>
+	</div>
+</div>	
 <!-- IMAGE AREA
 <div class="col-xs-12 topPad">
 	<div id="schematic" ondrop="drop(event)" ondragover="allowDrop(event)">
