@@ -9,41 +9,44 @@ var imgArray = new Array();
 // load default image into array
 for (var o = 0; o < 36; o++){
 	imgArray[o] = new Image();
-	imgArray[o].src = 'src/logo.jpg';
+	imgArray[o].src = 'schem/logo.jpg';
 }
 // loads images for the schematic
+imgArray[0].src = 'schem/180.png';
+imgArray[1].src = 'schem/180.png';
 imgArray[2].src = 'schem/angle valve.PNG';
 imgArray[3].src = 'schem/ball valve.PNG';
 imgArray[4].src = 'schem/ball valve.PNG';
 imgArray[5].src = 'schem/ball valve.PNG';
-imgArray[6].src = 'src/2206.gif';
+imgArray[6].src = 'schem/Branch flow.png';
 imgArray[7].src = 'schem/butterfly valve.PNG';
+imgArray[8].src = 'schem/180.png';
 imgArray[9].src = 'schem/gate valve 2.PNG';
 imgArray[10].src = 'schem/gate valve 2.PNG';
 imgArray[11].src = 'schem/gate valve 2.PNG';
 imgArray[12].src = 'schem/gate valve 2.PNG';
 imgArray[13].src = 'schem/globe valve.PNG';
-imgArray[14].src = 'src/2105.gif';
+imgArray[14].src = 'schem/45.png';
 imgArray[15].src = 'schem/90 bend.PNG';
 imgArray[16].src = 'schem/90 bend.PNG';
-imgArray[17].src = 'src/1704.gif';
-imgArray[18].src = 'src/1801.gif';
-imgArray[19].src = 'src/1701.gif';
+imgArray[17].src = 'schem/reducer.PNG';
+imgArray[18].src = 'schem/reducer.PNG';
+imgArray[19].src = 'schem/expander.PNG';
 imgArray[20].src = 'schem/plug valve.PNG';
 imgArray[21].src = 'schem/plug valve.PNG';
 imgArray[22].src = 'schem/plug valve.PNG';
-imgArray[23].src = 'src/2105.gif';
+imgArray[23].src = 'schem/45.png';
 imgArray[24].src = 'schem/90 bend.PNG';
 imgArray[25].src = 'schem/90 bend.PNG';
-imgArray[26].src = 'src/2105.gif';
+imgArray[26].src = 'schem/45.png';
 imgArray[27].src = 'schem/90 bend.PNG';
-imgArray[28].src = 'src/1801.gif';
+imgArray[28].src = 'schem/expander.PNG';
 imgArray[29].src = 'schem/reducer.PNG';
-imgArray[30].src = 'src/2503.gif';
-imgArray[31].src = 'src/2206.gif';
-imgArray[32].src = 'src/2206.gif';
-imgArray[33].src = 'src/2206.gif';
-imgArray[34].src = 'src/2301.gif';
+imgArray[30].src = 'schem/swing valve.png';
+imgArray[31].src = 'schem/tees.PNG';
+imgArray[32].src = 'schem/tees.PNG';
+imgArray[33].src = 'schem/tees.PNG';
+imgArray[34].src = 'schem/threaded union.png';
 
   /**
 	* getImage(sender): retrieves an image in the above image array depending on the index selected 
