@@ -106,6 +106,13 @@ select::-ms-expand {
 #dropArea{
 	height: 40ex;
 	border: 1px solid #A5A095;
+	overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+#dropArea img{
+	display: inline-block;
+    vertical-align: middle;
 }
 .show-true{
 	display: inherit;
