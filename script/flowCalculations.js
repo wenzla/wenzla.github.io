@@ -347,10 +347,10 @@ function calculate() {
 	var ans = q*VLratio;
 	
 	$('#resultText').fadeOut(200, function() {
-        $(this).text(ans + " GPM ").fadeIn("slow");
+        $(this).text(parseFloat(ans).toFixed(6) + " GPM ").fadeIn("slow");
     });
 	$('#result2Text').fadeOut(200, function() {
-        $(this).text("V/L:  " + (VL*100) + "%").fadeIn("slow");
+        $(this).text("V/L:  " + (parseFloat(VL*100).toFixed(6)) + "%").fadeIn("slow");
     });
 	
 }
