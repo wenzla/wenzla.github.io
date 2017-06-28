@@ -176,8 +176,9 @@ function calculate() {
 	} else if (pump == 8.5){
 		pumpVelocity = 8.7
 		// 4" flowrate
-		q = freq * pumpVelocity;
+		q = (-0.626 * dPressure) + (0.296 * (freq*30));
 	} else {
+		// 3" flowrate
 		q = (3.853 * freq) - (0.1585 * dPressure) + 1.0701;
 	}
 	
@@ -343,10 +344,15 @@ function calculate() {
     var TVP = Math.exp(D);
 	var VL = (atm - pfCalc)/(pfCalc - TVP);
 	var VLratio = 1.0/(VL + 1);
-	
 	var ans = q*VLratio;
-    document.getElementById("result").innerHTML = ans + " GPM ";
-	document.getElementById("result2").innerHTML = "V/L:  " + (VL*100) + "%";
+	
+	$('#resultText').fadeOut(200, function() {
+        $(this).text(ans + " GPM ").fadeIn("slow");
+    });
+	$('#result2Text').fadeOut(200, function() {
+        $(this).text("V/L:  " + (VL*100) + "%").fadeIn("slow");
+    });
+	
 }
 
 angular.module('flowApp', [])
