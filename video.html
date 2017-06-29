@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+		<style>
+			.header{
+				background-color: rgb(255,185,29);
+				text-align: center;
+			}
+			.link{
+				padding: 3.5ex;
+				font-size: 16px;
+				border: solid 1px #bbb;
+				font-weight: bold;
+				color: white;
+				background-color: black;
+			}
+			.chapter{
+				padding: 1ex;
+			}
+			.videoContainer{
+				text-align: center;
+				padding-bottom: 1ex;
+				width: 100%;
+				height: 50em;
+			}
+			#vid{
+				width: 100%;
+				height: 100%;
+			}
+			.thumbnail{
+				width: 22ex;
+				height: 15ex;
+			}
+		</style>
+	</head>
+	<script>
+		var youTubeString = "https://www.youtube.com/embed/XGSy3_Czz8k?autoplay=1&start="
+		function setTime(time){
+			 document.getElementById('vid').src = youTubeString + time;
+		}
+	
+		$(document).ready(function(){
+			$('#Chap1').popover({
+				placement : 'top',
+				trigger : 'hover',
+				html : true,
+				content : '<img src="images/intro.png" class="media-object thumbnail">'
+			});
+			$('#Chap2').popover({
+				placement : 'top',
+				trigger : 'hover',
+				html : true,
+				content : '<img src="images/FTS-300.png" class="media-object thumbnail">'
+			});
+			$('#Chap3').popover({
+				placement : 'top',
+				trigger : 'hover',
+				html : true,
+				content : '<img src="images/acMotor.png" class="media-object thumbnail">'
+			});
+			$('#Chap4').popover({
+				placement : 'top',
+				trigger : 'hover',
+				html : true,
+				content : '<img src="images/safety.png" class="media-object thumbnail">'
+			});
+			$('#Chap5').popover({
+				placement : 'top',
+				trigger : 'hover',
+				html : true,
+				content : '<img src="images/revAndDry.png" class="media-object thumbnail">'
+			});
+			$('#Chap6').popover({
+				placement : 'top',
+				trigger : 'hover',
+				html : true,
+				content : '<img src="images/FTS-350.png" class="media-object thumbnail">'
+			});
+			$('#Chap7').popover({
+				placement : 'top',
+				trigger : 'hover',
+				html : true,
+				content : '<img src="images/FTS-300EXSS.png" class="media-object thumbnail">'
+			});
+			$('#Chap8').popover({
+				placement : 'top',
+				trigger : 'hover',
+				html : true,
+				content : '<img src="images/FTS-400.png" class="media-object thumbnail">'
+			});
+			$('#Chap9').popover({
+				placement : 'top',
+				trigger : 'hover',
+				html : true,
+				content : '<img src="images/IoT.png" class="media-object thumbnail">'
+			});
+		});
+	</script>
+	<body>		
+		<div class="col-xs-12 videoContainer">
+			<iframe width="1280" height="720" id="vid" src="https://www.youtube.com/embed/XGSy3_Czz8k"> </iframe>
+		</div>
+		
+		<div class="col-xs-12 header">
+			<h4><b>Chapter Selection</b></h4>
+		</div>
+		
+		<div class="col-xs-12 chapterSelect">
+			<div class = "col-xs-4 chapter">
+				<button class="col-xs-12 link" id="Chap1" data-toggle="popover" title="Introduction" onclick="setTime(0)">
+					Introduction
+				</button>
+			</div>
+			<div class = "col-xs-4 chapter">
+				<button class="col-xs-12 link" id="Chap2" data-toggle="popover" title="FTS-300" onclick="setTime(45)">
+					FTS-300
+				</button>
+			</div>
+			<div class = "col-xs-4 chapter">
+				<button class="col-xs-12 link" id="Chap3" data-toggle="popover" title="AC Motor" onclick="setTime(174)">
+					AC Motor
+				</button>
+			</div>
+			<div class = "col-xs-4 chapter">
+				<button class="col-xs-12 link" id="Chap4" data-toggle="popover" title="Safety Add-ons" onclick="setTime(322)">
+					Additional Safety Features
+				</button>
+			</div>
+			<div class = "col-xs-4 chapter">
+				<button class="col-xs-12 link" id="Chap5" data-toggle="popover" title="Other Capabilites" onclick="setTime(368)">
+					Reverse and Dry Run
+				</button>
+			</div>
+			<div class = "col-xs-4 chapter">
+				<button class="col-xs-12 link" id="Chap6" data-toggle="popover" title="FTS-350" onclick="setTime(431)">
+					FTS-350
+				</button>
+			</div>
+			<div class = "col-xs-4 chapter">
+				<button class="col-xs-12 link" id="Chap7" data-toggle="popover" title="FTS-300 EX SS" onclick="setTime(480)">
+					FTS-300 EX SS
+				</button>
+			</div>
+			<div class = "col-xs-4 chapter">
+				<button class="col-xs-12 link" id="Chap8" data-toggle="popover" title="FTS-400" onclick="setTime(513)">
+					FTS-400
+				</button>
+			</div>
+			<div class = "col-xs-4 chapter">
+				<button class="col-xs-12 link" id="Chap9" data-toggle="popover" title="Internet of Things" onclick="setTime(559)">
+					Internet of Things
+				</button>
+			</div>
+		</div>
+	
+	</body>
+</html>

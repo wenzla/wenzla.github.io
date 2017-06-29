@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<title>Internship Projects</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -12,46 +13,92 @@
 			text-align: center;
 		}
 		.link{
-			padding: 2ex;
+			padding: 3.5ex;
 			background-color: white;
 			font-size: 16px;
+			border: solid 1px #bbb;
 		}
 		.subtext{
 			color: #bbb;
+		}
+		.spaced{
+			padding-bottom: 2ex;
+		}
+		.glyphicon-circle-arrow-right{
+			font-size: 2.5ex;
+			color: black;
+		}
+		.thumbnail{
+			height: 15ex;
+			width: 22ex;
 		}
 		</style>
 	</head>
 	<script>
 		$(document).ready(function(){
 			$('#testPage').popover({
-				placement : 'top',
+				placement : 'bottom',
 				trigger : 'hover',
 				html : true,
-				content : '<img src="testPage.png" class="media-object">'
+				content : '<img src="images/testPage.png" class="media-object">'
+			});
+			$('#videoPage').popover({
+				placement : 'bottom',
+				trigger : 'hover',
+				html : true,
+				content : '<img src="images/intro.png" class="media-object thumbnail">'
 			});
 			$('#chuCalc').popover({
-				placement : 'top',
+				placement : 'bottom',
 				trigger : 'hover',
 				html : true,
-				content : '<img src="calcTooltip.png" class="media-object">'
+				content : '<img src="images/calcTooltip.png" class="media-object">'
 			});
 		});
 	</script>
 	<body>
 		<div class="header">
-			<h1>Index page</h1>
-			<p class="subtext">A series of web projects made by Allen Wenzl</p>
+			<h1>Intern Project Page</h1>
+			<p class="subtext">Click the links below to be taken to each project</p>
 		</div>
 		<hr>
-		<div class="col-xs-12 link">
-			<div class="col-xs-12">
-				<a id="chuCalc" href="flowCalc.html" data-toggle="popover" title="Parker Flow Rate Calculator"> Parker Flow Calculator v1.1</a>
+		<a href="flowCalc.html"> 
+			<div class="col-xs-12 col-sm-6 spaced">
+				<div class="col-xs-12 link" id="chuCalc" data-toggle="popover" title="Parker Flow Rate Calculator">
+					<div class="col-xs-11">
+						Parker Flow Calculator v1.1 
+					</div>
+					<div class="col-xs-1">
+						<span class="glyphicon glyphicon-circle-arrow-right"></span>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="col-xs-12 link">
-			<div class="col-xs-12">
-				<a id="testPage" href="testApp.html" data-toggle="popover" title="Testing Location">Test Area</a>
+		</a>
+		<a href="video.html">
+			<div class="col-xs-12 col-sm-6 spaced">
+				<div class="col-xs-12 link" id="videoPage" data-toggle="popover" title="Parker Long Video">
+					<div class="col-xs-11">
+						Parker Long Video
+					</div>
+					<div class="col-xs-1">
+						<span class="glyphicon glyphicon-circle-arrow-right"></span>
+					</div>
+				</div>
 			</div>
-		</div>
+		</a>	
+		
+		<a href="testApp.html">
+			<div class="col-xs-12 col-sm-6 spaced">
+				<div class="col-xs-12 link" id="testPage" data-toggle="popover" title="Testing Location">
+					<div class="col-xs-11">
+						Test Area
+					</div>
+					<div class="col-xs-1">
+						<span class="glyphicon glyphicon-circle-arrow-right"></span>
+					</div>
+				</div>
+			</div>
+		</a>
+		
 	</body>
 </html>
