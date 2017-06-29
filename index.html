@@ -8,54 +8,10 @@
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-		<style>
-		.header{
-			text-align: center;
-		}
-		.link{
-			padding: 3.5ex;
-			background-color: white;
-			font-size: 16px;
-			border: solid 1px #bbb;
-		}
-		.subtext{
-			color: #bbb;
-		}
-		.spaced{
-			padding-bottom: 2ex;
-		}
-		.glyphicon-circle-arrow-right{
-			font-size: 2.5ex;
-			color: black;
-		}
-		.thumbnail{
-			height: 15ex;
-			width: 22ex;
-		}
-		</style>
+		<link rel="stylesheet" href="css/index.css">
+		<script src="script/index.js"></script>
 	</head>
-	<script>
-		$(document).ready(function(){
-			$('#testPage').popover({
-				placement : 'bottom',
-				trigger : 'hover',
-				html : true,
-				content : '<img src="images/testPage.png" class="media-object">'
-			});
-			$('#videoPage').popover({
-				placement : 'bottom',
-				trigger : 'hover',
-				html : true,
-				content : '<img src="images/intro.png" class="media-object thumbnail">'
-			});
-			$('#chuCalc').popover({
-				placement : 'bottom',
-				trigger : 'hover',
-				html : true,
-				content : '<img src="images/calcTooltip.png" class="media-object">'
-			});
-		});
-	</script>
+
 	<body>
 		<div class="header">
 			<h1>Intern Project Page</h1>

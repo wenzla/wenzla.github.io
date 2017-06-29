@@ -1,0 +1,23 @@
+.header{
+	text-align: center;
+}
+.link{
+	padding: 3.5ex;
+	background-color: white;
+	font-size: 16px;
+	border: solid 1px #bbb;
+}
+.subtext{
+	color: #bbb;
+}
+.spaced{
+	padding-bottom: 2ex;
+}
+.glyphicon-circle-arrow-right{
+	font-size: 2.5ex;
+	color: black;
+}
+.thumbnail{
+	height: 15ex;
+	width: 22ex;
+}

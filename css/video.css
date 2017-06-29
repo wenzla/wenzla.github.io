@@ -1,0 +1,29 @@
+.header{
+	background-color: rgb(255,185,29);
+	text-align: center;
+}
+.link{
+	padding: 3.5ex;
+	font-size: 16px;
+	border: solid 1px #bbb;
+	font-weight: bold;
+	color: white;
+	background-color: black;
+}
+.chapter{
+	padding: 1ex;
+}
+.videoContainer{
+	text-align: center;
+	padding-bottom: 1ex;
+	width: 100%;
+	height: 50em;
+}
+#vid{
+	width: 100%;
+	height: 100%;
+}
+.thumbnail{
+	width: 22ex;
+	height: 15ex;
+}
