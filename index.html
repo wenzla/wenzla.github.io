@@ -7,14 +7,51 @@
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-		<script src="script/flowCalculations.js"></script>
-		<script src="script/test.js"></script>
-		<link rel="stylesheet" href="css/test.css">
+		<style>
+		.header{
+			text-align: center;
+		}
+		.link{
+			padding: 2ex;
+			background-color: white;
+			font-size: 16px;
+		}
+		.subtext{
+			color: #bbb;
+		}
+		</style>
 	</head>
+	<script>
+		$(document).ready(function(){
+			$('#testPage').popover({
+				placement : 'top',
+				trigger : 'hover',
+				html : true,
+				content : '<img src="testPage.png" class="media-object">'
+			});
+			$('#chuCalc').popover({
+				placement : 'top',
+				trigger : 'hover',
+				html : true,
+				content : '<img src="calcTooltip.png" class="media-object">'
+			});
+		});
+	</script>
 	<body>
-		<h1>Index page</h1>
-		<a href="flowCalc.html"> Parker Flow Calculator v1.1</a>
-		<br>
-		<a href="testApp.html">Test area</a>
+		<div class="header">
+			<h1>Index page</h1>
+			<p class="subtext">A series of web projects made by Allen Wenzl</p>
+		</div>
+		<hr>
+		<div class="col-xs-12 link">
+			<div class="col-xs-12">
+				<a id="chuCalc" href="flowCalc.html" data-toggle="popover" title="Parker Flow Rate Calculator"> Parker Flow Calculator v1.1</a>
+			</div>
+		</div>
+		<div class="col-xs-12 link">
+			<div class="col-xs-12">
+				<a id="testPage" href="testApp.html" data-toggle="popover" title="Testing Location">Test Area</a>
+			</div>
+		</div>
 	</body>
 </html>
