@@ -21,3 +21,16 @@
 	height: 15ex;
 	width: 22ex;
 }
+a{
+	color: black;
+	font-weight: bold;
+}
+
+.link:hover, a:hover{
+	background-color: #ccc;
+	color: #222;
+}
+
+a:hover .glyphicon-circle-arrow-right{
+	color: white;
+}

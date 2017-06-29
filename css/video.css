@@ -27,3 +27,8 @@
 	width: 22ex;
 	height: 15ex;
 }
+
+.link:hover {
+	color: rgb(255,185,29);
+	background-color: #222;
+}
