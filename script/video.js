@@ -1,4 +1,4 @@
-var youTubeString = "https://www.youtube.com/embed/XGSy3_Czz8k?autoplay=1&start="
+var youTubeString = "https://www.youtube.com/embed/Z1wAEf_-IGk?autoplay=1&start="
 function setTime(time){
 	 document.getElementById('vid').src = youTubeString + time;
 }
