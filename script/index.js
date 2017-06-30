@@ -1,3 +1,12 @@
+angular.module('link', [])
+  .controller('linkController', function() {
+    var linkList = this;
+    linkList.links = [
+      {url:'flowCalc', id: 'chuCalc', title:'Parker Flow Rate Calculator', text: 'Parker Flow Calculator'},
+	  {url:'video', id: 'videoPage', title:'Parker Long Video', text: 'Parker Long Video'},
+      {url:'testApp', id: 'testPage', title:'Testing Locations', text: 'Test Area'}];
+  });
+  
 $(document).ready(function(){
 	$('#testPage').popover({
 		placement : 'bottom',

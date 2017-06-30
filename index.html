@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="link">
 	<head>
 		<title>Internship Projects</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
@@ -12,45 +12,23 @@
 		<script src="script/index.js"></script>
 	</head>
 
-	<body>
+	<body ng-controller="linkController as linkList">
 		<div class="header">
 			<h1>Intern Project Page</h1>
 			<p class="subtext">Click the links below to be taken to each project</p>
 		</div>
 		<hr>
-		
-		<div class="col-xs-12 col-sm-6 spaced">
-			<a href="flowCalc.html"> 
-				<div class="col-xs-12 link" id="chuCalc" data-toggle="popover" title="Parker Flow Rate Calculator">
-					<div class="col-xs-11">
-						Parker Flow Calculator v1.1 
+		<div ng-repeat="link in linkList.links" class="projectContainer">
+			<div class="col-xs-12 col-sm-6 spaced">
+				<a href="{{link.url}}.html"> 
+					<div class="col-xs-12 link" id="{{link.id}}" data-toggle="popover" title="{{link.title}}">
+						<div class="col-xs-11">
+							{{link.text}} 
+						</div>
+						<span class="glyphicon glyphicon-circle-arrow-right"></span>
 					</div>
-					<span class="glyphicon glyphicon-circle-arrow-right"></span>
-				</div>
-			</a>
+				</a>
+			</div>
 		</div>
-		
-		<div class="col-xs-12 col-sm-6 spaced">
-			<a href="video.html">
-				<div class="col-xs-12 link" id="videoPage" data-toggle="popover" title="Parker Long Video">
-					<div class="col-xs-11">
-						Parker Long Video
-					</div>
-					<span class="glyphicon glyphicon-circle-arrow-right"></span>
-				</div>
-			</a>
-		</div>	
-		
-		<div class="col-xs-12 col-sm-6 spaced">
-			<a href="testApp.html">
-				<div class="col-xs-12 link" id="testPage" data-toggle="popover" title="Testing Location">
-					<div class="col-xs-11">
-						Test Area
-					</div>
-					<span class="glyphicon glyphicon-circle-arrow-right"></span>
-				</div>
-			</a>
-		</div>
-		
 	</body>
 </html>
