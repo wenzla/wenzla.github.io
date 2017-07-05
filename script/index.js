@@ -20,7 +20,7 @@ $(document).ready(function(){
 		trigger : 'hover',
 		delay: {show: 200, hide: 200},
 		html : true,
-		content : '<p>A simple chapter selector for a video made for Parker.</p><img src="images/intro.PNG" class="center-block media-object thumbnail">'
+		content : '<p>A simple chapter selector for a video made for Parker.</p><img src="images/Additional Safety Features.PNG" class="center-block media-object thumbnail">'
 	});
 	$('#chuCalc').popover({
 		placement : 'bottom',

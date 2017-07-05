@@ -15,7 +15,7 @@
 }
 .videoContainer{
 	text-align: center;
-	padding-bottom: 1ex;
+	padding: 1ex;
 	width: 100%;
 	height: 50em;
 }
@@ -31,4 +31,19 @@
 .link:hover {
 	color: rgb(255,185,29);
 	background-color: #222;
+}
+
+.popover-title {
+      font-weight: bold;
+      text-align:center;
+	  color: rgb(255,185,29);
+	  background-color: black;
+}
+
+.arrow {
+      border-top-color: black !important;
+}
+
+.popover {
+      border: 1px solid black;
 }

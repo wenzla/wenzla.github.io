@@ -78,33 +78,38 @@ function getImage(sender){
 		fNums.push(document.getElementById("fNum" + i).value);
 	//}
 }
-
+// makes the tank and pump picture draggable within the area
 $( function() {
     $( "#tankPic" ).draggable({  opacity: 0.6, snap: true, containment: "#dropArea", scroll: false });
     $( "#pumpPic" ).draggable({ opacity: 0.6, snap: true, containment: "#dropArea", scroll: false });
 } );
-
+// Appends a new div to the lines section
 function addLine(){
 	lines.push(true);
 	$("#lineLosses").append(" <div class=\"col-sm-4 line" + lines.length + "\"><label for=\"pDiam" + lines.length + "\">Diameter of Pipe (Inches)</label><br>	<select class=\"selectpicker col-sm-12\" style=\"height: 4.5ex\" id=\"pDiam" + lines.length + "\"> <option>0</option> <option>2</option> <option>3</option> <option>4</option> <option>6</option> </select></div> <div class=\"col-sm-3 line" + lines.length + "\"> <label for=\"pLength" + lines.length + "\">Length of Pipe</label> <div class=\"input-group\"> <input type=\"text\" class=\"form-control\" id=\"pLength" + lines.length + "\"> <span class=\"input-group-addon\">ft</span> </div> </div>  <div class=\"col-sm-3 line" + lines.length + "\"> <label for=\"roughness" + lines.length + "\">Roughness of Pipe</label>  <div class=\"input-group\"> <input type=\"text\" class=\"form-control\" id=\"roughness" + lines.length + "\"> <span class=\"input-group-addon\">in</span> </div> </div> <div class=\"col-sm-1 bottomPad line" + lines.length + "\"> <p>&nbsp;</p> <button type=\"button\" class=\"btn btn-xs btn-default customBtn\" onclick=\"deleteLine(" + lines.length + ")\"> <span class=\"glyphicon glyphicon-remove\"></span>	</button> </div>");	
-	}
+}
+// Appends a new div to the fittings section
 function addFitting(){
 	fittings.push(true);
 	$("#fittingsection").append("  <div class=\"col-sm-4 fitting" + fittings.length + "\"> <label for=\"fType" + fittings.length + "\">Type of Fitting</label><br> <select class=\"selectpicker col-sm-12\" style=\"height: 4.5ex\" id=\"fType" + fittings.length + "\" onchange=\"getImage(this)\" name=" + fittings.length + "> <option>180°  Return Bend, Flanged</option> <option>180°  Return Bend, Threaded</option> <option>Angle Valve Fully Open</option> <option>Ball Valve </option> <option>Ball Valve (1/2 Closed)</option> <option>Ball Valve (2/3 Closed)</option> <option>Branch Flow, Threaded</option> <option>Butterfly Valve</option> <option>Close Return Bend</option> <option>Gate Valve  </option> <option>Gate Valve (1/2 closed)</option> <option>Gate Valve (1/4 closed)</option> <option>Gate Valve (3/4 closed)</option> <option>Globe Valve</option> <option>Long Radius 45° Flanged</option> <option>Long Radius 90° Flanged</option> <option>Long Radius 90° Threaded</option> <option>Pipe Entrance (inward Projecting)</option> <option>Pipe Entrance (Sharp Edged)</option> <option>Pipe Exit</option> <option>Plug Valve 3-Way Thru-Flow</option> <option>Plug Valve Branch Flow</option> <option>Plug Valve Straightaway</option> <option>Regular 45° Threaded</option> <option>Regular 90° Flanged </option> <option>Regular 90° Threaded </option> <option>Standard Elbow 45°</option> <option>Standard Elbow Long Radius 90°</option> <option>Sudden Expander</option> <option>Sudden Reducer</option> <option>Swing Check Valve</option> <option>Tees, Branch Flow, Flanged</option> <option>Tees, Line Flow, Flanged</option> <option>Tees, Line Flow, Threaded</option> <option>Threaded Union</option> </select> </div> <div class=\"col-sm-3 fitting" + fittings.length + "\"> <label for=\"fDiam" + fittings.length + "\">Diameter (Inches)</label><br> <select class=\"selectpicker col-sm-12\" style=\"height: 4.5ex\" id=\"fDiam" + fittings.length + "\"> <option>2</option> <option>3</option> <option>4</option> <option>6</option> </select> </div> <div class=\"col-sm-3 fitting" + fittings.length + "\"> <div class=\"form-group\"> <label for=\"fNum" + fittings.length + "\">Number of Fittings</label> <input type=\"text\" class=\"form-control\" id=\"fNum" + fittings.length + "\"> </div> </div> </div> <div class=\"col-sm-1 fitting" + fittings.length + "\"> <div class=\"col-xs-12\">&nbsp;</div> <label class=\"checkbox-inline fitting" + fittings.length + "\"> <input type=\"checkbox\" value=\"\" id=\"check" + fittings.length + "\">Parallel</label> </div> <div class=\"col-sm-1 bottomPad fitting" + fittings.length + "\"> <p>&nbsp;</p> <button type=\"button\" class=\"btn btn-xs btn-default customBtn\" onclick=\"deleteFitting(" + fittings.length +")\"> <span class=\"glyphicon glyphicon-remove\"></span>	</button> </div>");
 }
+// Deletes a div from the lines section
 function deleteLine(line){
 	$(".line" + line).remove();	
 	lines[line - 1] = false;
 }
+// Deletes a div from the fittings section
 function deleteFitting(fit){
 	$(".fitting" + fit).remove();
 	$("#imgfType" + fit).remove();
 	fittings[fit - 1] = false;
 }
-
+// Validates that the user inputted valid values
 function checkForm() {
 	var returnValue = true;
+	// regex for all integers and decimals that are not negative
 	var numRegex = /(^[0-9]+$|^[0-9]*\.[0-9]+$)/g;
+	// checks if user selected a pump
 	if($('input[name="pumps"]:checked').val() == null){
 		document.getElementById("alertMessage").innerHTML =  "Please select a pump under \"Pump Options.\"";
 		if(!$("#alert").is(":visible")){
@@ -112,36 +117,38 @@ function checkForm() {
 		}
 		returnValue =  false;
 	}
-	
+	// checks if user inputted numbers correctly
 	$('.checkVals input[type="text"]').each(function(){
         if (!this.value.match(numRegex)){
+			// the box with the wrong number gets a red outline
 			this.style = "border-color: red; box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 7px rgba(200,15,15,0.6);"
+			// A warning message tells the user they messed up entering values
 			document.getElementById("alertMessage").innerHTML =  "Please change the highlighted values above.";
 			if(!$("#alert").is(":visible")){
 				$("#alert").fadeIn("slow");
 			}
             returnValue =  false;
 		} else {
+			// removes the red box since the user fixed their mistake
 			this.style = "border-color: none; box-shadow: none;"
 		}			
 	});
 	
-	
+	// If the user fixed the mistakes, the error message fades away.
 	if($("#alert").is(":visible") && returnValue){
 		$("#alert").fadeOut("slow");
 	}
-	
 	return returnValue;
 }
 
 function calculate() {
 	var canCalc = true;
 	canCalc = checkForm();
-	
+	// Doesn't even bother with calculations if the user inputted questionable values
 	if (!canCalc){
 		return;
 	}
-	
+	// Gets variables used for calculations
 	var height = $("#height").val();
 	var atm = $("#atm").val();
 	var dPressure = $("#dPressure").val();
@@ -151,12 +158,16 @@ function calculate() {
 	var pump = $('input[name="pumps"]:checked').val();
 	var freq = document.getElementById("frequency").value;
 	var density = document.getElementById("fluid_density").value;
+	// npshr in feet
 	var npshrft = (pump * Math.pow(((freq * 30.0)/1800.0), 1.5)) + 0.5;
+	/// npshr in psi
 	var npshrps = (npshrft * 32.2 * density) / 144.0;
 	var kinematicViscosity = document.getElementById("kViscosity").value;
+	// There can be a variable amount of pipes so we need a dynamically sized array to keep track of them
 	var pipesDValue = new Array();
 	var roughnesses = new Array();
 	var pipeLength = new Array();
+	// gets the diameter, roughness and length of each pipe
 	for (var i = 0; i < lines.length; i++){
 		if(lines[i]){
 			pipesDValue.push($("#pDiam" + (i + 1)).find("option:selected").text());
@@ -168,35 +179,38 @@ function calculate() {
 	for(var i = 0; i < pipesDValue.length; i++){
 		roughRatio.push(roughnesses[i]/pipesDValue[i]);
 	}
-	var pumpVelocity = 3.8;
+	//var pumpVelocity = 3.8;
+	// Flowrate used in this calculation
 	var q;
 	// RVP flowrate
 	if (pump == 3){
 		q = (3.83 * freq) - (2.39 * dPressure) + 0.8155;
 	} else if (pump == 8.5){
-		pumpVelocity = 8.7
+		//pumpVelocity = 8.7
 		// 4" flowrate
 		q = (-0.626 * dPressure) + (0.296 * (freq*30));
 	} else {
 		// 3" flowrate
 		q = (3.853 * freq) - (0.1585 * dPressure) + 1.0701;
 	}
-	
+	// flowrate if some lines or fittings are in parallel
 	var pq = q/2;
-	
+	// Area of each pipe
 	var pipeAreas = new Array();
 	for (var i = 0; i < pipesDValue.length; i++){
 		pipeAreas.push(Math.PI * Math.pow((pipesDValue[i])/2.0, 2));
 	}
+	// k values of each pipe
 	var k = new Array();
 	for(var i = 0; i < pipeAreas.length; i++){
 		k.push(((pipeLength[i] * 12) / pipesDValue[i]) * (1.325/Math.pow(Math.log(roughnesses[i]/(3.7*pipesDValue[i])+(5.74/Math.pow((((q*0.00223)/(pipeAreas[i]/144))*pipesDValue[i]/12)/kinematicViscosity, 0.9))),2)));
 	}	
-	
+	// There can be a variable amount of fittings so we need a dynamically sized array to keep track of them
 	var fittingsD = new Array();
 	var fittingsT = new Array();
 	var fittingsDValue = new Array();
 	var fNums = new Array();
+	// gets the diameter, number, type, and if parallel of each pipe
 	for (var i = 1; i < (fittings.length + 1); i++){
 		if(fittings[i-1]){
 			fittingsD.push(document.getElementById("fDiam" + i).selectedIndex);
@@ -205,22 +219,22 @@ function calculate() {
 			fNums.push(document.getElementById("fNum" + i).value);
 		}
 	}
-	
-	//var fittingsD = [document.getElementById("fDiam1").selectedIndex, document.getElementById("fDiam2").selectedIndex, document.getElementById("fDiam3").selectedIndex, document.getElementById("fDiam4").selectedIndex, document.getElementById("fDiam5").selectedIndex, document.getElementById("fDiam6").selectedIndex];
-	//var fittingsT = [document.getElementById("fType1").selectedIndex, document.getElementById("fType2").selectedIndex, document.getElementById("fType3").selectedIndex, document.getElementById("fType4").selectedIndex, document.getElementById("fType5").selectedIndex, document.getElementById("fType6").selectedIndex];
-	//var fittingsDValue = [document.getElementById("fDiam1").options[document.getElementById("fDiam1").selectedIndex].text, document.getElementById("fDiam2").options[document.getElementById("fDiam2").selectedIndex].text,document.getElementById("fDiam3").options[document.getElementById("fDiam3").selectedIndex].text,document.getElementById("fDiam4").options[document.getElementById("fDiam4").selectedIndex].text,document.getElementById("fDiam5").options[document.getElementById("fDiam5").selectedIndex].text,document.getElementById("fDiam6").options[document.getElementById("fDiam6").selectedIndex].text];
+	// matrix of all the different type of fittings' k values
  	var matrix = [[0.2,	0.2,	0.2	,0.2],[1.5,	1.5	,1.5,	1.5],[2	,2	,2	,2],[0.06,	0.05,	0.05	,0.05],	[5.5,	5.5	,5.5,	5.5],[210,	210,	210,	210],[2	,2	,2	,2],[0.86,	0.81	,0.77,	0.68],	[0.95	,0.9	,0.85	,0.75],	[0.15	,0.14,	0.14,	0.12],	[2.1	,2.1,	2.1	,2.1],	[0.26,	0.26	,0.26	,0.26],	[17	,17	,17	,17],	[6.5	,6.1,	5.8,	5.1],	[0.2	,0.2	,0.2,	0.2],	[0.2,	0.2	,0.2,	0.2],	[0.7	,0.7,	0.7,	0.7],	[0.78,	0.78	,0.78,	0.78],	[0.5,	0.5	,0.5,	0.5],	[1	,1	,1	,1],	[0.57	,0.54,	0.51,	0.45],	[1.71,	1.62	,1.53	,1.35],	[0.34	,0.32,	0.31	,0.27],	[0.4,	0.4	,0.4	,0.4],	[0.3	,0.3,	0.3	,0.3],	[1.5	,1.5	,1.5,	1.5],	[0.3	,0.29,	0.27,	0.24],	[0.3	,0.29,	0.27,	0.24],	[0.3	,0.19,	0.3	,0],	[0,	0.275,	0.2	,0.275],	[2,2	,2,	2],	[1,	1,	1,	1],	[0.2,	0.2	,0.2,	0.2],	[0.9	,0.9,	0.9,	0.9],	[0.08,	0.08	,0.08,	0.08]];
-	
+	// gets the k values of the fittings actually user-specified
 	var kFittings = new Array();
+	// loop variable
 	var p = 0;
 	while (p < fittingsT.length){
 		kFittings.push(matrix[fittingsT[p]][fittingsD[p]] * fNums[p]);
 		p += 1;
 	}
+	// holds which fittings are in parallel
 	var fitParallel = new Array();
+	// keeps track of k and k in parallel values of each fitting
 	var kDiams = [0 ,0 ,0 ,0];
 	var pkDiams = [0 ,0 ,0 ,0];
-	
+	// gets which fittings are in parallel
 	for(var i = 0; i < fittingsDValue.length; i++){
 		if($("#check" + (i+1)).is(":checked")){
 			fitParallel[i] = true;
@@ -228,6 +242,7 @@ function calculate() {
 			fitParallel[i] = false;
 		}
 	}
+	// keeps track of the k values for each of the 4 possible diameters
 	for(var i = 0; i < pipesDValue.length; i++){
 		if(pipesDValue[i] == 2){
 			kDiams[0] += k[i];			
@@ -239,6 +254,7 @@ function calculate() {
 			kDiams[3] += k[i];
 		}
 	}
+	// keeps track of the k values for each of the 4 possible diameters (of fittings this time)
 	for(var i = 0; i < fittingsDValue.length; i++){
 		if(!fitParallel[i]){
 			if(fittingsDValue[i] == 2){
@@ -262,7 +278,7 @@ function calculate() {
 			}
 		}
 	}
-	
+	// get strainer and breakaway valve variables
 	var StrainerDValue = document.getElementById("sDiam").options[document.getElementById("sDiam").selectedIndex].text;
 	var BreakawayDValue = document.getElementById("bDiam").options[document.getElementById("bDiam").selectedIndex].text;
 	var breakawayNum = document.getElementById("bNum").value;
@@ -270,6 +286,7 @@ function calculate() {
 	var strainerCheck = $("#checkStrainer").is(":checked");
 	var breakawaycheck = $("#checkBreak").is(":checked");
 	var BPressureDrop;
+	// gets breakaway valve pressure drop value dependant on diameter and if it is in parallel
 	if(!breakawaycheck){
 		if (BreakawayDValue != 4){
 			BPressureDrop = (0.000007 * Math.pow(q, 2)) + (-0.00001*q) + -0.0013;
@@ -284,6 +301,7 @@ function calculate() {
 		}
 	}
 	BPressureDrop = BPressureDrop * breakawayNum;
+	// resistance based on size of the strainer
 	var resistance;
 	if (StrainerDValue == 2){
 		resistance = 0.0005;
@@ -294,6 +312,7 @@ function calculate() {
 	} else if (StrainerDValue == 6){
 		resistance = 0.000006;
 	}
+	// pressuredrop of the strainer based on number and if in parallel
 	var SPressureDrop;
 	if(!strainerCheck){
 		SPressureDrop = (resistance * Math.pow(q,2)) * StrainerNum;
@@ -333,28 +352,31 @@ function calculate() {
 	
 	var totalHeadLossPsi = headLossPsi + BPressureDrop + SPressureDrop + pheadLossPsi;
 	var staticHead = ((density * 32.2 * height)/144);
+	// had to use parse statements else it just appended strings to each other then minused creating a NaN
 	var pfCalc = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsi) - parseFloat(npshrps);
 	// old TVP formulas
 	// var TVP = RVP * Math.pow(Math.E,(-6622.5 * ((1/((temperature*1.8021)+459.69)) - (1/559.69)))) + (.04*RVP) + (.1 * 27);
 	// var TVP = ((0.7553 - (413/(temperature + 459.6))) * Math.pow(2.5, 0.5) * Math.log10(RVP)) - ((1.854 - (1.042/(temperature + 459.6))) * Math.pow(2.5, 0.5)) + (((2416/(temperature + 459.6)) - 2.013) * Math.log10(RVP)) - ((8.742/(temperature + 459.6)) + 15.64);
+	// New TVP calculation uses A, B, C, and D to make looking and typing the calculation easier
 	var A = 9.4674 - (-0.9445 * Math.log(RVP));
     var B = 5211 - (16.014 * Math.log(RVP));
     var C = 459.67;
     var D = A-((B)/(parseFloat(temperature) + parseFloat(C)));
     var TVP = Math.exp(D);
 	var VL = (atm - pfCalc)/(pfCalc - TVP);
+	// The v/l ratio shown on the page
 	var VLratio = 1.0/(VL + 1);
+	// The estimated flow shown on the page
 	var ans = q*VLratio;
-	
+	// Adds a fade animation when the answer shows up
 	$('#resultText').fadeOut(200, function() {
         $(this).text(parseFloat(ans).toFixed(6) + " GPM ").fadeIn("slow");
     });
 	$('#result2Text').fadeOut(200, function() {
         $(this).text("V/L:  " + (parseFloat(VL*100).toFixed(6)) + "%").fadeIn("slow");
     });
-	
 }
-
+// the angularJS controller used to generate the list of fittings and lines (saves a lot of copy and pasting)
 angular.module('flowApp', [])
   .controller('FlowListController', function() {
     var flowList = this;
