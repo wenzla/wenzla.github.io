@@ -1,17 +1,81 @@
-<!doctype html>
-<html >
+<!DOCTYPE html>
+<html>
 	<head>
+		<title> Testing Ground </title>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-		<script src="script/flowCalculations.js"></script>
 		<script src="script/test.js"></script>
 		<link rel="stylesheet" href="css/test.css">
 	</head>
 	<body>
-		No testing at this time.
+		<div class="col-xs-3" id="accordian">
+			<div class="col-xs-12 sideHead">
+				<h3>Components</h3>
+			</div>
+			<div class="col-xs-12 sidebar">
+				<h4 data-toggle="collapse" href="#headingGen" data-parent="#accordian">Heading</h4>
+				<div id="headingGen" class="collapse">
+					<div class="form-group">
+						<label for="titleGen">Title:</label>
+						<input type="text" class="form-control" id="titleGen">
+					</div>
+					<div class="form-group">
+						<label for="titleGen">Date:</label>
+						<input type="text" class="form-control" id="titleGen">
+					</div>
+					<div class="checkbox">
+						<label><input type="checkbox" value="">Use Today's Date?</label>
+					</div>
+					<div class="bPad">
+						<button type="button" class="btn btn-default">Generate</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 sidebar">
+				<h4 data-toggle="collapse" href="#sectionGen" data-parent="#accordian">Section </h4>
+				<div id="sectionGen" class="collapse">
+					<div class="form-group">
+						<label for="titleGen">Title:</label>
+						<input type="text" class="form-control" id="titleGen">
+					</div>
+					<div class="bPad">
+						<button type="button" class="btn btn-default">Generate</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 sidebar">
+				<h4 data-toggle="collapse" href="#subsectionGen" data-parent="#accordian">Sub-section</h4>
+				<div id="subsectionGen" class="collapse">
+					<div class="form-group">
+						<label for="SStitleGen">Title:</label>
+						<input type="text" class="form-control" id="SStitleGen">
+					</div>
+					<div class="form-group">
+						<label for="SnameGen">Section Name:</label>
+						<input type="text" class="form-control" id="SnameGen">
+					</div>
+					<div class="form-group">
+						<label for="SStextGen">Text:</label>
+						<textarea class="form-control" rows="5" id="SStextGen"></textarea>
+					</div>
+					<div class="bPad">
+						<button type="button" class="btn btn-default">Generate</button>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="col-xs-9">
+			<div class="col-xs-12" id="buildArea">
+				<div style="background-color: #ddd">
+					<div style="text-align: center; font-weight: bold; font-size: 3ex; padding-top: 1.5ex;">Heading</div>
+					<div style="text-align: center; padding-top: 1.5ex; padding-bottom: 1.5ex; color: #aaa; ">XX/XX/XXXX</div>
+				<div>
+			</div>
+		</div>
 	</body>
 </html>

@@ -3,3 +3,27 @@ body{
 	background-color: white;
 	font: helvetica;
 }
+.sidebar{
+	background-color: #222;
+	color: white;
+	text-align: center;
+	border-bottom: #555 1px solid;
+}
+.sideHead{
+	background-color: #555;
+	text-align: center;
+	color: white;
+	border-bottom: white 1px solid;
+}
+
+h4:hover{
+	cursor: pointer;
+}
+
+.sidebar:hover{
+	background-color: #444;
+}
+
+.bPad{
+	padding-bottom: 1ex;
+}
