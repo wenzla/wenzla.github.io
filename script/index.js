@@ -4,7 +4,7 @@ angular.module('link', [])
     linkList.links = [
       {url:'flowCalc',  id: 'chuCalc', title:'Parker Flow Rate Calculator', text: 'Parker Flow Calculator'},
 	  {url:'video', id: 'videoPage', title:'Parker Long Video', text: 'Parker Long Video'},
-      {url:'testApp', id: 'testPage', title:'Testing Locations', text: 'Test Area'}];
+      {url:'other', id: 'testPage', title:'Testing Locations', text: 'Test Area'}];
   });
   
 $(document).ready(function(){
