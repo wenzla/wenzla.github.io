@@ -24,14 +24,14 @@
 						<input type="text" class="form-control" id="titleGen">
 					</div>
 					<div class="form-group">
-						<label for="titleGen">Date:</label>
-						<input type="text" class="form-control" id="titleGen">
+						<label for="dateGen">Date:</label>
+						<input type="text" class="form-control" id="dateGen">
 					</div>
 					<div class="checkbox">
-						<label><input type="checkbox" value="">Use Today's Date?</label>
+						<label><input type="checkbox" value="1" name="today">Use Today's Date?</label>
 					</div>
 					<div class="bPad">
-						<button type="button" class="btn btn-default">Generate</button>
+						<button id="buttonGen" type="button" class="btn btn-default" onclick="makeHeading()">Generate</button>
 					</div>
 				</div>
 			</div>
@@ -39,11 +39,11 @@
 				<h4 data-toggle="collapse" href="#sectionGen" data-parent="#accordian">Section </h4>
 				<div id="sectionGen" class="collapse">
 					<div class="form-group">
-						<label for="titleGen">Title:</label>
-						<input type="text" class="form-control" id="titleGen">
+						<label for="StitleGen">Title:</label>
+						<input type="text" class="form-control" id="StitleGen">
 					</div>
 					<div class="bPad">
-						<button type="button" class="btn btn-default">Generate</button>
+						<button type="button" class="btn btn-default" onclick="makeSection()">Generate</button>
 					</div>
 				</div>
 			</div>
@@ -51,30 +51,35 @@
 				<h4 data-toggle="collapse" href="#subsectionGen" data-parent="#accordian">Sub-section</h4>
 				<div id="subsectionGen" class="collapse">
 					<div class="form-group">
-						<label for="SStitleGen">Title:</label>
-						<input type="text" class="form-control" id="SStitleGen">
-					</div>
-					<div class="form-group">
-						<label for="SnameGen">Section Name:</label>
-						<input type="text" class="form-control" id="SnameGen">
+						<label for="SSnameGen">Sub-Section Name:</label>
+						<input type="text" class="form-control" id="SSnameGen">
 					</div>
 					<div class="form-group">
 						<label for="SStextGen">Text:</label>
 						<textarea class="form-control" rows="5" id="SStextGen"></textarea>
 					</div>
 					<div class="bPad">
-						<button type="button" class="btn btn-default">Generate</button>
+						<button type="button" class="btn btn-default" onclick="makeSSection()">Generate</button>
 					</div>
 				</div>
 			</div>
-			
+			<div class="col-xs-12 sidebar">
+				<h4 data-toggle="collapse" href="#cheatSheet" data-parent="#accordian">Cheat Sheet</h4>
+				<div id="cheatSheet" class="collapse">
+					<p><code>&lt;b&gt;Text&lt;/b&gt;</code>  for <b>bold</b> text</p>
+					<p><code>&lt;i&gt;Text&lt;/i&gt;</code>  for <i>italic</i> text</p>
+					<p><code>&lt;br&gt;</code>  for a new line</p>
+					<p><code>&<span>09;</span> or &<span>emsp;</span></code>  for a tab</p>
+					<p><code>&<span>nbsp;</span></code>  for an extra space</p>
+				</div>
+			</div>
+			<div class="col-xs-12 tPad undo">
+				<button type="button" class="btn btn-default" onclick="undo()">Undo</button>
+			</div>
 		</div>
 		<div class="col-xs-9">
 			<div class="col-xs-12" id="buildArea">
-				<div style="background-color: #ddd">
-					<div style="text-align: center; font-weight: bold; font-size: 3ex; padding-top: 1.5ex;">Heading</div>
-					<div style="text-align: center; padding-top: 1.5ex; padding-bottom: 1.5ex; color: #aaa; ">XX/XX/XXXX</div>
-				<div>
+		
 			</div>
 		</div>
 	</body>

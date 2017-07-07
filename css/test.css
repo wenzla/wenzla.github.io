@@ -27,3 +27,12 @@ h4:hover{
 .bPad{
 	padding-bottom: 1ex;
 }
+
+.tPad{
+	padding-bottom: 1ex;
+}
+
+.undo{
+	padding: 2ex;
+	text-align: center;
+}
