@@ -5,6 +5,9 @@ var SsectionCounter = 0;
 var latest = [false, false, false];
 var last = new Array();
 var lastIndex = 0;
+var outputString = new Array();
+outputString.push("\n");
+outputString.push("<!DOCTYPE html><html><body style=\"color: black; background-color: white\">");
 function makeHeading(){
 	var title = $("#titleGen").val();
 	var date = $("#dateGen").val();
@@ -13,7 +16,9 @@ function makeHeading(){
 		var today = new Date();
 		date = (today.getMonth()+1)+'-'+today.getDate()+'-'+today.getFullYear();
 	}
-	$("#buildArea").append("<div id=\"heading" + headingCounter + "\" style=\"background-color: #ddd\"><div style=\"text-align: center; font-weight: bold; font-size: 3ex; padding-top: 1.5ex;\">" + title + "</div><div style=\"text-align: center; padding-top: 1.5ex; padding-bottom: 1.5ex; color: #aaa; \">" + date + "</div></div>");
+	var stringGen = "<div id=\"heading" + headingCounter + "\" style=\"background-color: #ddd\"><div style=\"text-align: center; font-weight: bold; font-size: 3ex; padding-top: 1.5ex; color: rgb(78,216,255)\">" + title + "</div><div style=\"text-align: center; padding-top: 1.5ex; padding-bottom: 1.5ex; color: black; \"> Announcements for " + date + "</div></div>";
+	$("#buildArea").append(stringGen);
+	outputString.push(stringGen);
 	headingCounter += 1;
 	latest = [true, false, false];
 	last[lastIndex] = 0;
@@ -24,18 +29,22 @@ function makeHeading(){
 
 function makeSection(){
 	var title = $("#StitleGen").val();
-	$("#buildArea").append("<div id=\"section" + sectionCounter + "\" style=\"font-size: 3.5ex; font-weight: bold; text-align: center; padding-bottom: 1ex; padding-top: 1ex;\">" + title + "<hr></div>");
+	var stringGen = "<div id=\"section" + sectionCounter + "\" style=\"font-size: 3.5ex; font-weight: bold; text-align: center; padding-bottom: 1ex; padding-top: 1ex; color: rgb(78,216,255)\">" + title + "<hr></div>";
+	$("#buildArea").append(stringGen);
+	outputString.push(stringGen);
 	sectionCounter += 1;
 	latest = [false, true, false];
 	last[lastIndex] = 1;
 	lastIndex += 1;
 	
 }
-
+//color:rgb(78,216,255)
 function makeSSection(){
 	var SSname = $("#SSnameGen").val();
 	var SStext = $("#SStextGen").val();
-	$("#buildArea").append("<div id=\"Ssection" + SsectionCounter + "\" style=\"font-size: 2ex; font-weight: bold; padding-bottom: 0.5ex;\">" + SSname + "</div> <div><p>" + SStext + "</p></div>");
+	var stringGen = "<div id=\"Ssection" + SsectionCounter + "\"><div style=\"padding-left: 5%; padding-right: 5%; font-size: 2ex; font-weight: bold; padding-bottom: 0.5ex;\">" + SSname + "</div><p style=\"padding-left: 5%; padding-right: 5%\">" + SStext + "</p></div>";
+	$("#buildArea").append(stringGen);
+	outputString.push(stringGen);
 	SsectionCounter += 1;
 	latest = [false, false, true];
 	last[lastIndex] = 2;
@@ -67,9 +76,41 @@ function undo(){
 		last.pop();
 		lastIndex -= 1;
 		latest[last[lastIndex - 1]] = true;
+		outputString.pop();
 	} else {
 		alert("Nothing to remove.")
 	}	
 	
 }
+
+function output(){
+	outputString.push("</body></html>")
+	for (var i = 0; i < outputString.length; i++){
+		$("#popupText").append(outputString[i]);
+	}
+	outputString.pop();
+}
+
+function dismissPopup(){
+	$("#popupText").empty();
+	$('#copyMessage').removeClass('animate');
+	$('#copyMessage').css('visibility', 'hidden');
+	
+}
+
+function copy(){
+	var clipboard = new Clipboard('.copy-button', {
+		target: function() {
+			return document.querySelector('#popupText');
+		}
+	});
+	e1 = $('#copyMessage');
+	e1.addClass('animate');
+	e1.css('visibility', 'visible');
+
+}
+
+
+
+
 

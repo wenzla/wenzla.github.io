@@ -36,3 +36,53 @@ h4:hover{
 	padding: 2ex;
 	text-align: center;
 }
+
+button:active, button:focus{
+	outline: none !important;
+	border-color: rgb(78,216,255) !important;
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 7px rgba(78,216,255,0.6) !important;
+}
+
+#copyMessage{
+	visibility: hidden;
+	padding: 1ex;
+	border: #ddd 1px solid;
+	background-color: white;
+}
+
+.animate{
+	-webkit-animation: confirmation 1.5s; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: confirmation 1.5s; /* Firefox < 16 */
+    -ms-animation: confirmation 1.5s; /* Internet Explorer */
+    -o-animation: confirmation 1.5s; /* Opera < 12.1 */
+    animation: confirmation 1.5s;
+}
+
+/* Firefox < 16 */
+@-moz-keyframes confirmation {
+    from { opacity: 0.2;  left: 5ex}
+    to   { opacity: 1;	left: 0ex}
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes confirmation {
+    from { opacity: 0.2;  left: 5ex}
+    to   { opacity: 1;	left: 0ex}
+}
+
+/* Internet Explorer */
+@-ms-keyframes confirmation {
+    from { opacity: 0.2;  left: 5ex}
+    to   { opacity: 1;	left: 0ex}
+}
+
+/* Opera < 12.1 */
+@-o-keyframes confirmation {
+    from { opacity: 0.2;  left: 5ex}
+    to   { opacity: 1;	left: 0ex}
+}
+
+@keyframes confirmation {
+    from { opacity: 0.2;  left: 5ex}
+    to   { opacity: 1;	left: 0ex}
+}

@@ -35,3 +35,49 @@ a{
       font-weight: bold;
       text-align: center;
 }
+
+.link:active, .link:focus{
+	border-color: #FDD880 !important;
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 7px rgba(255,185,29,0.6) !important;
+}
+
+a:active, a:focus{
+	color: black;
+}
+
+.spaced{
+	-webkit-animation: fadein 0.75s linear 0s; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadein 0.75s linear 0s; /* Firefox < 16 */
+    -ms-animation: fadein 0.75s linear 0s; /* Internet Explorer */
+    -o-animation: fadein 0.75s linear 0s; /* Opera < 12.1 */
+    animation: fadein 0.75s linear 0s;
+}
+
+@keyframes fadein {
+    from { opacity: 0;  top: 3.5ex}
+    to   { opacity: 1;	top: 0ex}
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { opacity: 0;  top: 3.5ex}
+    to   { opacity: 1;	top: 0ex}
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0;  top: 3.5ex}
+    to   { opacity: 1;	top: 0ex}
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0;  top: 3.5ex}
+    to   { opacity: 1;	top: 0ex}
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+    from { opacity: 0;  top: 3.5ex}
+    to   { opacity: 1;	top: 0ex}
+}
