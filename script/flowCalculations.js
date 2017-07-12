@@ -11,6 +11,9 @@ for (var o = 0; o < 36; o++){
 	imgArray[o] = new Image();
 	imgArray[o].src = 'schem/logo.jpg';
 }
+
+var ctx = $("#flowChart");
+var myChart = new Chart(ctx, {});
 // loads images for the schematic
 imgArray[0].src = 'schem/180.png';
 imgArray[1].src = 'schem/180.png';
@@ -148,6 +151,7 @@ function calculate() {
 	if (!canCalc){
 		return;
 	}
+	$("#flowChart").remove()
 	// Gets variables used for calculations
 	var height = $("#height").val();
 	var atm = $("#atm").val();
@@ -158,10 +162,19 @@ function calculate() {
 	var pump = $('input[name="pumps"]:checked').val();
 	var freq = document.getElementById("frequency").value;
 	var density = document.getElementById("fluid_density").value;
-	// npshr in feet
-	var npshrft = (pump * Math.pow(((freq * 30.0)/1800.0), 1.5)) + 0.5;
-	/// npshr in psi
-	var npshrps = (npshrft * 32.2 * density) / 144.0;
+	
+	var freqs = new Array();
+	var loopIndex = parseInt(freq) + 40;
+	for (var i = 0; i < loopIndex; i++){
+		freqs[i] = (i+1);
+	}
+
+	// npshr in psi
+	var npshrpsis = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		npshrpsis[i] = (((pump * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 0.5) * 32.2 * density) / 144.0;
+	}
+	
 	var kinematicViscosity = document.getElementById("kViscosity").value;
 	// There can be a variable amount of pipes so we need a dynamically sized array to keep track of them
 	var pipesDValue = new Array();
@@ -179,32 +192,40 @@ function calculate() {
 	for(var i = 0; i < pipesDValue.length; i++){
 		roughRatio.push(roughnesses[i]/pipesDValue[i]);
 	}
-	//var pumpVelocity = 3.8;
+	
+	var qs = new Array();
 	// Flowrate used in this calculation
-	var q;
-	// RVP flowrate
-	if (pump == 3){
-		q = (3.83 * freq) - (2.39 * dPressure) + 0.8155;
-	} else if (pump == 8.5){
-		//pumpVelocity = 8.7
-		// 4" flowrate
-		q = (-0.626 * dPressure) + (0.296 * (freq*30));
-	} else {
-		// 3" flowrate
-		q = (3.853 * freq) - (0.1585 * dPressure) + 1.0701;
+	for (var i = 0; i < loopIndex; i++){
+		// RVP flowrate
+		if (pump == 3){
+			qs[i] = (3.83 * freqs[i]) - (2.39 * dPressure) + 0.8155;
+		} else if (pump == 8.5){
+			// 4" flowrate
+			qs[i] = (-0.626 * dPressure) + (0.296 * (freqs[i]*30));
+		} else {
+			// 3" flowrate
+			qs[i] = (3.853 * freqs[i]) - (0.1585 * dPressure) + 1.0701;
+		}
 	}
-	// flowrate if some lines or fittings are in parallel
-	var pq = q/2;
+	var pqs = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		pqs[i] = qs[i]/2;
+	}
+	
+	
 	// Area of each pipe
 	var pipeAreas = new Array();
 	for (var i = 0; i < pipesDValue.length; i++){
 		pipeAreas.push(Math.PI * Math.pow((pipesDValue[i])/2.0, 2));
 	}
 	// k values of each pipe
-	var k = new Array();
-	for(var i = 0; i < pipeAreas.length; i++){
-		k.push(((pipeLength[i] * 12) / pipesDValue[i]) * (1.325/Math.pow(Math.log(roughnesses[i]/(3.7*pipesDValue[i])+(5.74/Math.pow((((q*0.00223)/(pipeAreas[i]/144))*pipesDValue[i]/12)/kinematicViscosity, 0.9))),2)));
-	}	
+	var k = createMatrix(loopIndex, pipesDValue.length);
+	for(var h = 0; h < loopIndex; h++){
+		for(var i = 0; i < pipeAreas.length; i++){
+			k[h][i] = (((pipeLength[i] * 12) / pipesDValue[i]) * (1.325/Math.pow(Math.log(roughnesses[i]/(3.7*pipesDValue[i])+(5.74/Math.pow((((qs[h]*0.00223)/(pipeAreas[i]/144))*pipesDValue[i]/12)/kinematicViscosity, 0.9))),2)));
+		}	
+	}
+	
 	// There can be a variable amount of fittings so we need a dynamically sized array to keep track of them
 	var fittingsD = new Array();
 	var fittingsT = new Array();
@@ -232,8 +253,13 @@ function calculate() {
 	// holds which fittings are in parallel
 	var fitParallel = new Array();
 	// keeps track of k and k in parallel values of each fitting
-	var kDiams = [0 ,0 ,0 ,0];
-	var pkDiams = [0 ,0 ,0 ,0];
+	var kDiams = new Array();
+	var pkDiams = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		kDiams[i] = [0,0,0,0];
+		pkDiams[i] = [0,0,0,0];
+	}
+	
 	// gets which fittings are in parallel
 	for(var i = 0; i < fittingsDValue.length; i++){
 		if($("#check" + (i+1)).is(":checked")){
@@ -243,38 +269,43 @@ function calculate() {
 		}
 	}
 	// keeps track of the k values for each of the 4 possible diameters
-	for(var i = 0; i < pipesDValue.length; i++){
-		if(pipesDValue[i] == 2){
-			kDiams[0] += k[i];			
-		} else if (pipesDValue[i] == 3){
-			kDiams[1] += k[i];
-		} else if (pipesDValue[i] == 4){
-			kDiams[2] += k[i];
-		} else if (pipesDValue[i] == 6){
-			kDiams[3] += k[i];
+	for(var h = 0; h < loopIndex; h++){
+		for(var i = 0; i < pipesDValue.length; i++){
+			if(pipesDValue[i] == 2){
+				kDiams[h][0] += parseFloat(k[h][i]);			
+			} else if (pipesDValue[i] == 3){
+				kDiams[h][1] += parseFloat(k[h][i]);
+			} else if (pipesDValue[i] == 4){
+				kDiams[h][2] += parseFloat(k[h][i]);
+			} else if (pipesDValue[i] == 6){
+				kDiams[h][3] += parseFloat(k[h][i]);
+			}
 		}
 	}
+	
 	// keeps track of the k values for each of the 4 possible diameters (of fittings this time)
-	for(var i = 0; i < fittingsDValue.length; i++){
-		if(!fitParallel[i]){
-			if(fittingsDValue[i] == 2){
-				kDiams[0] += kFittings[i];			
-			} else if (fittingsDValue[i] == 3){
-				kDiams[1] += kFittings[i];
-			} else if (fittingsDValue[i] == 4){
-				kDiams[2] += kFittings[i];
-			} else if (fittingsDValue[i] == 6){
-				kDiams[3] += kFittings[i];
-			}
-		} else {
-			if(fittingsDValue[i] == 2){
-				pkDiams[0] += kFittings[i];			
-			} else if (fittingsDValue[i] == 3){
-				pkDiams[1] += kFittings[i];
-			} else if (fittingsDValue[i] == 4){
-				pkDiams[2] += kFittings[i];
-			} else if (fittingsDValue[i] == 6){
-				pkDiams[3] += kFittings[i];
+	for(var h = 0; h < loopIndex; h++){
+		for(var i = 0; i < fittingsDValue.length; i++){
+			if(!fitParallel[i]){
+				if(fittingsDValue[i] == 2){
+					kDiams[h][0] += kFittings[i];			
+				} else if (fittingsDValue[i] == 3){
+					kDiams[h][1] += kFittings[i];
+				} else if (fittingsDValue[i] == 4){
+					kDiams[h][2] += kFittings[i];
+				} else if (fittingsDValue[i] == 6){
+					kDiams[h][3] += kFittings[i];
+				}
+			} else {
+				if(fittingsDValue[i] == 2){
+					pkDiams[h][0] += kFittings[i];			
+				} else if (fittingsDValue[i] == 3){
+					pkDiams[h][1] += kFittings[i];
+				} else if (fittingsDValue[i] == 4){
+					pkDiams[h][2] += kFittings[i];
+				} else if (fittingsDValue[i] == 6){
+					pkDiams[h][3] += kFittings[i];
+				}
 			}
 		}
 	}
@@ -285,22 +316,7 @@ function calculate() {
 	var StrainerNum = document.getElementById("sNum").value;
 	var strainerCheck = $("#checkStrainer").is(":checked");
 	var breakawaycheck = $("#checkBreak").is(":checked");
-	var BPressureDrop;
-	// gets breakaway valve pressure drop value dependant on diameter and if it is in parallel
-	if(!breakawaycheck){
-		if (BreakawayDValue != 4){
-			BPressureDrop = (0.000007 * Math.pow(q, 2)) + (-0.00001*q) + -0.0013;
-		} else {
-			BPressureDrop = (0.00001 * Math.pow(q, 2)) + (-0.0005*q) + 0.0332;
-		}
-	} else {
-		if (BreakawayDValue != 4){
-			BPressureDrop = (0.000007 * Math.pow(pq, 2)) + (-0.00001*pq) + -0.0013;
-		} else {
-			BPressureDrop = (0.00001 * Math.pow(pq, 2)) + (-0.0005*pq) + 0.0332;
-		}
-	}
-	BPressureDrop = BPressureDrop * breakawayNum;
+
 	// resistance based on size of the strainer
 	var resistance;
 	if (StrainerDValue == 2){
@@ -312,48 +328,103 @@ function calculate() {
 	} else if (StrainerDValue == 6){
 		resistance = 0.000006;
 	}
-	// pressuredrop of the strainer based on number and if in parallel
-	var SPressureDrop;
-	if(!strainerCheck){
-		SPressureDrop = (resistance * Math.pow(q,2)) * StrainerNum;
-	} else{
-		SPressureDrop = (resistance * Math.pow(pq,2)) * StrainerNum;
+
+	// gets breakaway valve pressure drop value dependant on diameter and if it is in parallel
+	BPressureDrops = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		if(!breakawaycheck){
+			if (BreakawayDValue != 4){
+				BPressureDrops[i] = (0.000007 * Math.pow(qs[i], 2)) + (-0.00001*qs[i]) + -0.0013;
+			} else {
+				BPressureDrops[i] = (0.00001 * Math.pow(qs[i], 2)) + (-0.0005*qs[i]) + 0.0332;
+			}
+		} else {
+			if (BreakawayDValue != 4){
+				BPressureDrops[i] = (0.000007 * Math.pow(pqs[i], 2)) + (-0.00001*pqs[i]) + -0.0013;
+			} else {
+				BPressureDrops[i] = (0.00001 * Math.pow(pqs[i], 2)) + (-0.0005*pqs[i]) + 0.0332;
+			}
+		}
+		BPressureDrops[i] = BPressureDrops[i] * breakawayNum;
+	}
+	//pressuredrop of the strainer based on number and if in parallel
+	var SPressureDrops = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		if(!strainerCheck){
+			SPressureDrops[i] = (resistance * Math.pow(qs[i],2)) * StrainerNum;
+		} else{
+			SPressureDrops[i] = (resistance * Math.pow(pqs[i],2)) * StrainerNum;
+		}
 	}
 	
 	// will eventually become velocities later
-	var velocity = [2,3,4,6];
-	for (var i = 0; i < velocity.length; i++){
-		velocity[i] = (q*0.00223)/(Math.PI * Math.pow(velocity[i]/24,2));
+	var velocityM = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		velocityM[i] = [2,3,4,6];
 	}
-	var headVelocity = [0,0,0,0];
-	for (var i = 0; i < headVelocity.length; i++){
-		headVelocity[i] = (Math.pow(velocity[i], 2))/(2*32.2);
+	for (var i = 0; i < loopIndex; i++){
+		for (var j = 0; j < velocityM[0].length; j++){
+			velocityM[i][j] = (qs[i]*0.00223)/(Math.PI * Math.pow(velocityM[i][j]/24,2));
+		}
 	}
-	var headLossF = 0;
-	for(var i = 0; i < headVelocity.length; i++){
-		headLossF += kDiams[i] * headVelocity[i];
+	var headVelocityM = createMatrix(loopIndex, velocityM[0].length);
+	for (var i = 0; i < loopIndex; i++){
+		for (var j = 0; j < velocityM[0].length; j++){
+			headVelocityM[i][j] = (Math.pow(velocityM[i][j], 2))/(2*32.2);
+		}
 	}
-	var headLossPsi = (headLossF * density * 32.2) / 144.0;
+	var headLosses = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		headLosses[i] = 0;
+		for(var j = 0; j < velocityM[0].length; j++){
+			headLosses[i] += kDiams[i][j] * headVelocityM[i][j];
+		}
+	}	
 	
-	var pvelocity = [2,3,4,6];
-	for (var i = 0; i < pvelocity.length; i++){
-		pvelocity[i] = (pq*0.00223)/(Math.PI * Math.pow(pvelocity[i]/24,2));
+	var headLossPsis = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		headLossPsis[i] = (headLosses[i] * density * 32.2) / 144.0;
 	}
-	var pheadVelocity = [0,0,0,0];
-	for (var i = 0; i < pheadVelocity.length; i++){
-		pheadVelocity[i] = (Math.pow(pvelocity[i], 2))/(2*32.2);
-	}
-	var pheadLossF = 0;
-	for(var i = 0; i < pheadVelocity.length; i++){
-		pheadLossF += pkDiams[i] * pheadVelocity[i];
-	}
-	var pheadLossPsi = (pheadLossF * density * 32.2) / 144.0;
 	
+	var pvelocityM = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		pvelocityM[i] = [2,3,4,6];
+	}
+	for (var i = 0; i < loopIndex; i++){
+		for (var j = 0; j < pvelocityM[0].length; j++){
+			pvelocityM[i][j] = (qs[i]*0.00223)/(Math.PI * Math.pow(pvelocityM[i][j]/24,2));
+		}
+	}
+	var pheadVelocityM = createMatrix(loopIndex, pvelocityM[0].length);
+	for (var i = 0; i < loopIndex; i++){
+		for (var j = 0; j < pvelocityM[0].length; j++){
+			pheadVelocityM[i][j] = (Math.pow(pvelocityM[i][j], 2))/(2*32.2);
+		}
+	}
+	var pheadLosses = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		pheadLosses[i] = 0;
+		for(var j = 0; j < pvelocityM[0].length; j++){
+			pheadLosses[i] += pkDiams[i][j] * pheadVelocityM[i][j];
+		}
+	}	
+	var pheadLossPsis = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		pheadLossPsis[i] = (pheadLosses[i] * density * 32.2) / 144.0;
+	}
 	
-	var totalHeadLossPsi = headLossPsi + BPressureDrop + SPressureDrop + pheadLossPsi;
+	var totalHeadLossPsis = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		totalHeadLossPsis[i] = headLossPsis[i] + BPressureDrops[i] + SPressureDrops[i] + pheadLossPsis[i];
+	}
+	
 	var staticHead = ((density * 32.2 * height)/144);
 	// had to use parse statements else it just appended strings to each other then minused creating a NaN
-	var pfCalc = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsi) - parseFloat(npshrps);
+	var pfCalcs = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		pfCalcs[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsis[i]);
+	}
+	
 	// old TVP formulas
 	// var TVP = RVP * Math.pow(Math.E,(-6622.5 * ((1/((temperature*1.8021)+459.69)) - (1/559.69)))) + (.04*RVP) + (.1 * 27);
 	// var TVP = ((0.7553 - (413/(temperature + 459.6))) * Math.pow(2.5, 0.5) * Math.log10(RVP)) - ((1.854 - (1.042/(temperature + 459.6))) * Math.pow(2.5, 0.5)) + (((2416/(temperature + 459.6)) - 2.013) * Math.log10(RVP)) - ((8.742/(temperature + 459.6)) + 15.64);
@@ -363,19 +434,106 @@ function calculate() {
     var C = 459.67;
     var D = A-((B)/(parseFloat(temperature) + parseFloat(C)));
     var TVP = Math.exp(D);
+	/**
 	var VL = (atm - pfCalc)/(pfCalc - TVP);
 	// The v/l ratio shown on the page
 	var VLratio = 1.0/(VL + 1);
+	if (VLratio < 0){
+		VLratio = 0;
+	}**/
+	var VLs = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		VLs[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVP);
+		if (VLs[i] < 0 && freqs[i] < 20){
+			VLs[i] = 0;
+		}
+	}
+	
 	// The estimated flow shown on the page
-	var ans = q*VLratio;
+	//var ans = q*VLratio;
+	var answers = new Array();
+	for (var i = 0; i < loopIndex; i++){
+		answers[i] = qs[i]*(1.0/(VLs[i] + 1));
+		if (answers[i] < 0){
+			answers[i] = 0;
+		}
+	}
 	// Adds a fade animation when the answer shows up
 	$('#resultText').fadeOut(200, function() {
-        $(this).text(parseFloat(ans).toFixed(6) + " GPM ").fadeIn("slow");
+        $(this).text(parseFloat(answers[freq-1]).toFixed(6) + " GPM ").fadeIn("slow");
     });
 	$('#result2Text').fadeOut(200, function() {
-        $(this).text("V/L:  " + (parseFloat(VL*100).toFixed(6)) + "%").fadeIn("slow");
+        $(this).text("V/L:  " + (parseFloat(VLs[freq-1]*100).toFixed(6)) + "%").fadeIn("slow");
     });
+	$('#result3Text').fadeOut(200, function() {
+        $(this).text(" q: " + parseFloat(qs[freq-1]).toFixed(4)).fadeIn("slow");
+    });
+
+	$(".graph").append("<canvas id=\"flowChart\" width=\"80%\" height=\"30%\"></canvas>")
+	var ctx = $("#flowChart");
+	var myChart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: freqs,
+			datasets: [{
+				label: 'Theoretical Flow',
+				data: qs,
+				backgroundColor: [
+					'rgba(0,19,66,0.1)'
+				],
+				borderColor: [
+					'#001342'
+				],
+				borderWidth: 1
+			},
+			{
+				label: 'Flow with current setup',
+				data: answers,
+				backgroundColor: [
+					'rgba(255,185,29,0.3)'
+				],
+				borderColor: [
+					'rgb(255,185,29)'
+				],
+				borderWidth: 1
+			},
+			]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Flow [GPM]'
+					}
+				}],
+				xAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Frequency (Hz)'
+					}
+				}],
+			}
+		}
+	});
+	
+	$('html, body').animate({scrollTop:$(document).height()}, 1200);
+
 }
+
+function createMatrix(length) {
+    var arr = new Array(length || 0),
+        i = length;
+
+    if (arguments.length > 1) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        while(i--) arr[length-1 - i] = createMatrix.apply(this, args);
+    }
+
+    return arr;
+}
+
+
 // the angularJS controller used to generate the list of fittings and lines (saves a lot of copy and pasting)
 angular.module('flowApp', [])
   .controller('FlowListController', function() {

@@ -64,8 +64,9 @@ img{
 }
 #answerText{
 	font-weight: bold;
+	padding-bottom: 1.5ex;
 }
-#result, #result2{
+.result{
 	border: 1px;
 	border-style: solid;
 	font-size: 200%;
