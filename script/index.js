@@ -29,4 +29,13 @@ $(document).ready(function(){
 		html : true,
 		content : '<p>Flow calculator to determine the flow rate and V/L ratio of Parker FTS series pumps given an environment setup.</p> <img src="images/calcTooltip.png" class="media-object center-block">'
 	});
+	/**
+	$('#emailGen').popover({
+		placement : 'bottom',
+		trigger : 'hover',
+		delay: {show: 200, hide: 200},
+		html : true,
+		content : '<p>An email generator to let anyone write HTML emails.</p> <img src="images/calcTooltip.png" class="media-object center-block">'
+	});
+	**/
 });

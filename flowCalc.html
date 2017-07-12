@@ -216,7 +216,7 @@
 			</div>
 		</div>
 	</div>
-	<div class = "col-xs-12 addButton">
+	<div class = "col-xs-12 addButton ">
 		<button type="button" class="btn btn-default btn-sm customBtn" onclick="addFitting()">
 			<span class="glyphicon glyphicon-plus"></span> ADD A NEW FITTING
 		</button>
@@ -230,7 +230,7 @@
 	</div>	
 </div>
 -->
-<div class="col-xs-12 boxed topPad">
+<div class="col-xs-12 boxed topPad" style="display: none">
 	<div class="goldStrip"> </div>
 	<div class="col-xs-12 parkerBox topMPad bottomPad">
 		<h4>Buildable Schematic</h4>
@@ -241,7 +241,7 @@
 	</div>
 </div>
 
-<div class="col-xs-12 boxed">
+<div class="col-xs-12 boxed topPad">
 	<div class="goldStrip"> </div>
 	<div class="col-xs-12 parkerBox topMPad bottomPad">
 	
@@ -295,18 +295,21 @@
 
 <div class="col-xs-12" id = "bottomSection">
 	<h2 id = "answerText">CALCULATED VALUES</h2>
-	<div class="col-xs-12 graph bottomPadBig">
-		<canvas id="flowChart" width="80%" height="30%"></canvas>
+	<div class="col-xs-12 graph bottomPad">
+		<canvas id="flowChart" width="100%" height="30%"></canvas>
 	</div>
 	<div class="col-xs-12">
 		<div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-0">
+			<p class="center resultLabel">Estimated Flow</p>
 			<p class="result"><font id="resultText">XXX.XXXXXX GPM</font></p>
 		</div>
 		<div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-0">
-			<p class="result"><font id="result2Text">V/L</font></p>
+			<p class="center resultLabel">V/L</p>
+			<p class="result"><font id="result2Text">XX.XXXX%</font></p>
 		</div>
 		<div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-0">
-			<p class="result"><font id="result3Text">Units</font></p>
+			<p class="center resultLabel">Theoretical Flow</p>
+			<p class="result"><font id="result3Text">XXX.XXXXXX GPM</font></p>
 		</div>
 	</div>	
 	<div class="col-xs-12">&nbsp;</div>
