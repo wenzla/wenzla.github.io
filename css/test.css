@@ -1,0 +1,44 @@
+.boxed{
+	padding-bottom: 2.5ex;
+}
+
+.parkerBox, .addButton{
+	background-color: white;
+}
+
+img{
+  	max-height: 20ex;
+  	max-width: 20ex;
+}
+
+a
+{
+	padding: 10%;
+}
+
+#pumpPic, #tankPic, .fittingImg{
+	height: 12ex;
+	width: 15ex;
+}
+
+.topPad{
+	padding-top: 2.5ex;
+}
+.topMPad{
+	padding-top: 0.5ex;
+}
+.bottomPad{
+	padding-bottom: 1.5ex;
+}
+.input-group{
+	padding-bottom: 2ex;
+}
+.bottomPadBig{
+	padding-bottom: 2.2ex;
+}
+.bottomMPad{
+	padding-bottom: 0.5ex;
+}
+.btn:focus{
+	background-color: transparent;
+}
