@@ -1,8 +1,27 @@
+/**
+
+video.js - The javascript for the chapter select page
+
+Dependencies:
+bootstrap.css - used for the popovers
+jquery.js - used for the selector help methods
+
+Original Author: Allen Wenzl
+
+Originally created: 6/29/17
+Last modified: 7/13/17
+Last modified by: Allen Wenzl
+
+**/
+
+// Youtube URL used to select time start
 var youTubeString = "https://www.youtube.com/embed/Z1wAEf_-IGk?autoplay=1&start="
 function setTime(time){
 	document.getElementById('vid').src = youTubeString + time;
+	// autoscrolls to the top of the page
+	$('html, body').animate({scrollTop:$(document)}, 500);
 }
-
+// On document load, loads the tooltips in on the chapter select buttons
 $(document).ready(function(){
 	$('#Chap1').popover({
 		placement : 'top',

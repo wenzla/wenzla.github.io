@@ -1,5 +1,22 @@
 <!doctype html>
 <html>
+<!--
+video.html - Chapter select for Parker FTS marketing video
+
+Original Author: Allen Wenzl
+
+Video credits - 
+Narrarator, photo editor, 2-d animator: Allen Wenzl
+Director, Video editor, Music: Charles El-Helou
+3-d Animator, Script writer, filming : Heston Smith
+
+Info provided by: Parker and James Chu
+
+Originally created: 6/29/17
+Last modified: 7/13/17
+Last modified by: Allen Wenzl
+
+-->
 	<head>
 		<title>Parker Video</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
@@ -12,14 +29,15 @@
 		<link rel="stylesheet" href="css/video.css">
 	</head>
 	<body>		
+		<!-- Embedded YouTube video -->
 		<div class="col-xs-12 videoContainer">
 			<iframe width="1280" height="720" id="vid" src="https://www.youtube.com/embed/Z1wAEf_-IGk"> </iframe>
 		</div>
-		
+		<!-- Chapter select divider -->
 		<div class="col-xs-12 header">
 			<h4><b>Chapter Selection</b></h4>
 		</div>
-		
+		<!-- Chapter select buttons -->
 		<div class="col-xs-12 chapterSelect">
 			<div class = "col-xs-4 chapter">
 				<button class="col-xs-12 link" id="Chap1" data-toggle="popover" title="Introduction" onclick="setTime(0)">

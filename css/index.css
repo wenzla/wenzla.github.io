@@ -1,50 +1,68 @@
+/*
+
+index.css - Additional (Most of the) styling for index.html
+Original Author: Allen Wenzl
+
+Originally created: 6/29/17
+Last modified: 7/13/17
+Last modified by: Allen Wenzl
+
+*/
+
+/* Makes the top of the page have centered text */
 .header{
 	text-align: center;
 }
+/*  Styles the boxes for the links */
 .link{
 	padding: 2.5ex;
 	background-color: white;
 	font-size: 16px;
 	border: solid 1px #bbb;
 }
+/*  Colors the text under the title */
 .subtext{
 	color: #bbb;
 }
+/* Added a spacing helper class  */
 .spaced{
 	padding-bottom: 2ex;
 }
+/*  Styles the arrow on each link box */
 .glyphicon-circle-arrow-right{
 	font-size: 2.5ex;
 	color: black;
 }
+/*  gives the max size allowed for each thumbnail */
 .thumbnail{
 	height: 15ex;
 	width: 22ex;
 }
+/*  Changes style of text in each link box */
 a{
 	color: black;
 	font-weight: bold;
 }
-
+/*  Changes hover effect of each link box */
 .link:hover, a:hover{
 	background-color: #eee;
 	color: #222;
 }
-
+/* Styles the title section of the popovers  */
 .popover-title {
       font-weight: bold;
       text-align: center;
 }
-
+/*  Gives glowing effect when a link box is clicked */
 .link:active, .link:focus{
 	border-color: #FDD880 !important;
 	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 7px rgba(255,185,29,0.6) !important;
 }
-
+/*  Forces the link text to stay black in color even after click */
 a:active, a:focus{
 	color: black;
 }
-
+/*  Adds fadein animation for each link box */
 .spaced{
 	-webkit-animation: fadein 0.75s linear 0s; /* Safari, Chrome and Opera > 12.1 */
     -moz-animation: fadein 0.75s linear 0s; /* Firefox < 16 */

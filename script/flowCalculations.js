@@ -1,3 +1,28 @@
+/**
+flowCalculations.js - contains all the javascript and calculations for flowCalc.html
+
+Note: this was originally a small calculator but later had to be expanded to include more features.
+Because of this, there may be some sections commented out (or not) that MAY be used later but never actually
+did by the time my employment was finished.  Also, this caclulator originally only had bootstrap as a 
+dependency.  So when jquery was added later, not all the original javascript was converted. (still works however)
+
+Dependencies:
+angular.js - used to generate "pipes" and "fittings" under the line losses info and fittings info sections, respectively
+bootstrap.css - used by almost the entire web app to make it look better; also bootstrap classes are used
+by some selectors in this file.
+jquery.js - used for convinience when writing this file
+jqueryui.js (OBSOLETE) - used for the buildable schematic
+jqueryui-touch-punch.js (OBSOLETE) - used to make jqueryui elements mobile compatible
+chart.js - used to generate the graph when values are calculated
+
+Original Author: Allen Wenzl
+Calculations provided by: Heston Smith, Charles El-Helou, and Andy Meyers (slightly modified by Allen Wenzl)
+
+Originally created: 6/26/17
+Last modified: 7/13/17
+Last modified by: Allen Wenzl
+
+**/
 // used to determine how many lines and fittings were added
 var lines = [true, true, true];
 var fittings = [true, true, true];
@@ -14,7 +39,7 @@ for (var o = 0; o < 36; o++){
 
 var ctx = $("#flowChart");
 var myChart = new Chart(ctx, {});
-// loads images for the schematic
+// loads images for the schematic;  MOSTLY OBSOLETE
 imgArray[0].src = 'schem/180.png';
 imgArray[1].src = 'schem/180.png';
 imgArray[2].src = 'schem/angle valve.PNG';
@@ -51,7 +76,7 @@ imgArray[32].src = 'schem/tees.PNG';
 imgArray[33].src = 'schem/tees.PNG';
 imgArray[34].src = 'schem/threaded union.png';
 
-  /**
+  /**   OBSOLETE
 	* getImage(sender): retrieves an image in the above image array depending on the index selected 
 	* under the fittings info section of the webpage.
 	*
@@ -151,6 +176,7 @@ function calculate() {
 	if (!canCalc){
 		return;
 	}
+	// removes then adds the graph back in for it to work correctly
 	$("#flowChart").remove()
 	// Gets variables used for calculations
 	var height = $("#height").val();
@@ -164,6 +190,7 @@ function calculate() {
 	var density = document.getElementById("fluid_density").value;
 	
 	var freqs = new Array();
+	// graphs from frequency 1hz to 40hz above what the user inputted
 	var loopIndex = parseInt(freq) + 40;
 	for (var i = 0; i < loopIndex; i++){
 		freqs[i] = (i+1);
@@ -207,6 +234,7 @@ function calculate() {
 			qs[i] = (3.853 * freqs[i]) - (0.1585 * dPressure) + 1.0701;
 		}
 	}
+	// flow rate used if setup has parallel elements
 	var pqs = new Array();
 	for (var i = 0; i < loopIndex; i++){
 		pqs[i] = qs[i]/2;
@@ -380,12 +408,12 @@ function calculate() {
 			headLosses[i] += kDiams[i][j] * headVelocityM[i][j];
 		}
 	}	
-	
+	// just a conversion factor
 	var headLossPsis = new Array();
 	for (var i = 0; i < loopIndex; i++){
 		headLossPsis[i] = (headLosses[i] * density * 32.2) / 144.0;
 	}
-	
+	// gets velocities of elements if they are in parallel
 	var pvelocityM = new Array();
 	for (var i = 0; i < loopIndex; i++){
 		pvelocityM[i] = [2,3,4,6];
@@ -412,7 +440,7 @@ function calculate() {
 	for (var i = 0; i < loopIndex; i++){
 		pheadLossPsis[i] = (pheadLosses[i] * density * 32.2) / 144.0;
 	}
-	
+	// gets total headloss of setup
 	var totalHeadLossPsis = new Array();
 	for (var i = 0; i < loopIndex; i++){
 		totalHeadLossPsis[i] = headLossPsis[i] + BPressureDrops[i] + SPressureDrops[i] + pheadLossPsis[i];
@@ -444,6 +472,7 @@ function calculate() {
 	var VLs = new Array();
 	for (var i = 0; i < loopIndex; i++){
 		VLs[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVP);
+		// slightly corrects the VL ratio when under 20 hz, since the flow model isn't good at low frequencies
 		if (VLs[i] < 0 && freqs[i] < 20){
 			VLs[i] = 0;
 		}
@@ -469,7 +498,9 @@ function calculate() {
         $(this).text(parseFloat(qs[freq-1]).toFixed(4) + " GPM").fadeIn("slow");
     });
 
-	$(".graph").append("<canvas id=\"flowChart\" width=\"80%\" height=\"30%\"></canvas>")
+	// graphs the theoretical vs estimated flow
+	$(".graph").fadeIn("fast");
+	$(".graph").append("<canvas id=\"flowChart\" width=\"80%\" height=\"30%\"></canvas>");
 	var ctx = $("#flowChart");
 	var myChart = new Chart(ctx, {
 		type: 'line',
@@ -518,20 +549,19 @@ function calculate() {
 			}
 		}
 	});
-	
+	// autoscrolls to the bottom of the page
 	$('html, body').animate({scrollTop:$(document).height()}, 1200);
 
 }
-
+// function to help declare a matrix of arbitrary size for calculations above
 function createMatrix(length) {
     var arr = new Array(length || 0),
         i = length;
-
+	// recursively creates an array at each index of the originally produced array 
     if (arguments.length > 1) {
         var args = Array.prototype.slice.call(arguments, 1);
         while(i--) arr[length-1 - i] = createMatrix.apply(this, args);
     }
-
     return arr;
 }
 

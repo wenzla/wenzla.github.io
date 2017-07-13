@@ -1,25 +1,39 @@
+/*
+
+email.css - Additional (Most of the) styling for email.html
+Original Author: Allen Wenzl
+
+Originally created: 7/6/17
+Last modified: 7/13/17
+Last modified by: Allen Wenzl
+
+*/
+
+/* Default body css on the page */
 body{
   	color: black;
 	background-color: white;
 	font: helvetica;
 }
+/* Side menu css */
 .sidebar{
 	text-align: center;
 	border-bottom: #555 1px solid;
 	border-left: #555 1px solid;
 	border-right: #555 1px solid;
 }
+/* Side menu heading css */
 .sideHead{
 	background-color: #555;
 	text-align: center;
 	color: white;
 	border-bottom: #555 1px solid;
 }
-
+/* Makes cursor hand thing when hovering over side menu */
 h4:hover{
 	cursor: pointer;
 }
-
+/* Some helper classes used for padding */
 .bPad{
 	padding-bottom: 1ex;
 	text-align: center;
@@ -33,13 +47,13 @@ h4:hover{
 	padding: 2ex;
 	text-align: center;
 }
-
-button:active, button:focus{
+/* Gives glow when clicking buttons */
+button:active, button:focus, .form-control:focus{
 	outline: none !important;
 	border-color: rgb(78,216,255) !important;
 	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 7px rgba(78,216,255,0.6) !important;
 }
-
+/* styles the message when copying html to clipboard */
 #copyMessage{
 	visibility: hidden;
 	padding: 1ex;
@@ -49,28 +63,29 @@ button:active, button:focus{
 	color: #777;
 }
 
-
+/* The blue bar that appears when hovering over the side menu */
 .sidebar:hover {
 	border-right: rgb(78,216,255) 1ex solid;
 }
-
+/* Change background color when hovering over side menu and other buttons */
 .btn-default:hover, .btn-default:active, .btn-default:focus, .sidebar:hover {
 	background-color: rgba(78,216,255,0.05);
 }
-
+/* Top of page header style */
 .header{
 	text-align: center;
 	padding-bottom: 2ex;
 }
 
+/* Aligns the color selectors */
 #colorSelector{
 	text-align: left;
 }
-
+/* More padding helpers */
 .color{
 	padding-bottom: 1.5ex;
 }
-
+/* Animation for the copy to clipboard message */
 .animate{
 	-webkit-animation: confirmation 2s linear; /* Safari, Chrome and Opera > 12.1 */
     -moz-animation: confirmation 2s linear; /* Firefox < 16 */
@@ -117,7 +132,7 @@ button:active, button:focus{
 	80%   { opacity: 1;	left: 0ex; bottom: 0ex}
 	100% { opacity: 0;  bottom: 2ex ; left: 0ex;}
 }
-
+/* fade in animation on the html preview section */
 .faded{
 	-webkit-animation: fadein 0.5s linear 0s; /* Safari, Chrome and Opera > 12.1 */
     -moz-animation: fadein 0.5s linear 0s; /* Firefox < 16 */

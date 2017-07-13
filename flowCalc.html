@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+<!--
+flowCalc.html - Calculator used to estimate flow given a certain setup using Parker's FTS-series pumps.
+Used to show customers what flow to expect given their plumbing.
+
+Original Author: Allen Wenzl
+Calculations provided by: Heston Smith, Charles El-Helou, and Andy Meyers (slightly modified by Allen Wenzl)
+
+Originally created: 6/26/17
+Last modified: 7/13/17
+Last modified by: Allen Wenzl
+
+-->
 <html lang="en">
 <head>
 	<title>Parker Flow Predictor</title>
@@ -12,9 +24,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js" integrity="sha256-VNbX9NjQNRW+Bk02G/RO6WiTKuhncWI4Ey7LkSbE+5s=" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="css/flowCalculator.css">
 	<script src="script/flowCalculations.js"></script>
-  </head>
+</head>
+<!-- Activates angular.js script -->
 <body ng-app="flowApp">
-
+<!-- Golden header at the top of the page -->
 <div class="col-xs-12 header bottomPad">
 	<div class="col-sm-2 col-xs-12 header">
 		<a href="http://parker.com"><img src="schem/logo.jpg" class="logo"/></a> 
@@ -23,14 +36,16 @@
 		<h3>Flow Predictor</h3>
 	</div>
 </div>
-
+<!--  Space between header and body of webapp -->
 <div class="col-xs-12">&nbsp;</div>
-
+<!-- Fluid data section of the page. Dynamically sizes based on screen size -->
 <div class="col-xs-12 col-sm-6 bottomPad checkVals">	
+	<!-- The gold strip at the top of each box is actually a stylized div  -->
 	<div class="goldStrip"></div>
 	<div class="col-sm-12 parkerBox topMPad bottomPad">
 	
 	<h4 class=> Fluid Data</h4>
+	<!-- Bunch of input boxes  -->
 		<div class="input-group">
 			<label for="fluid">Fluid Type</label><br>
 			<select class="selectpicker col-sm-12" style="height: 4.5ex" id="fluid">
@@ -65,10 +80,12 @@
 		</div>
 	</div>
 </div>
+<!-- The pump options section of the page   -->
 <div class="col-xs-12 col-sm-6">
 <div class="goldStrip"></div>
 	<div class="col-sm-12 parkerBox topMPad bottomMPad checkVals">
 		<h4> Pump Options</h4>
+		<!-- The pump type selector buttons -->
 		<div class="radio">
 		  <label><input type="radio" name="pumps" value = 7>3" Pump</label>
 		</div>
@@ -85,7 +102,7 @@
 		</div>
 	</div>
 </div>
-
+<!-- Static head data section of the page -->
 <div class="col-xs-12 col-sm-6 topPad boxed">
 <div class="goldStrip"></div>
 	<div class="col-sm-12 parkerBox topMPad bottomMPad">
@@ -107,46 +124,48 @@
 		</div>
 	</div>
 </div>
+<!--  Angular.js controller generates  the three initial pumps in the line losses info section-->
 <div ng-controller="FlowListController as flowList" class="col-xs-12 addingSection boxed topPad">
 	<div class="goldStrip"></div>
-		<div class="col-xs-12 parkerBox addPad" id="lineLosses">	
-			<div ng-repeat="flow in flowList.flows">
-				<h4 class="show-{{flow.show}}"> Line Losses info</h4>
-				<div class="col-sm-4">
-					<label for="pDiam{{flow.text}}">Diameter of Pipe (Inches)</label><br>
-					<select class="selectpicker col-sm-12" style="height: 4.5ex" id="pDiam{{flow.text}}">
-					  <option>0</option>
-					  <option>2</option>
-					  <option>3</option>
-					  <option>4</option>
-					  <option>6</option>
-					</select>
+	<div class="col-xs-12 parkerBox addPad" id="lineLosses">	
+		<div ng-repeat="flow in flowList.flows">
+			<h4 class="show-{{flow.show}}"> Line Losses info</h4>
+			<div class="col-sm-4">
+				<label for="pDiam{{flow.text}}">Diameter of Pipe (Inches)</label><br>
+				<select class="selectpicker col-sm-12" style="height: 4.5ex" id="pDiam{{flow.text}}">
+				  <option>0</option>
+				  <option>2</option>
+				  <option>3</option>
+				  <option>4</option>
+				  <option>6</option>
+				</select>
+			</div>
+			<div class="col-sm-3">
+				<label for="pLength{{flow.text}}">Length of Pipe</label>
+				<div class="input-group">
+					<input type="text" class="form-control pLength" id="pLength{{flow.text}}">
+					<span class="input-group-addon">ft</span>
 				</div>
-				<div class="col-sm-3">
-					<label for="pLength{{flow.text}}">Length of Pipe</label>
-					<div class="input-group">
-						<input type="text" class="form-control pLength" id="pLength{{flow.text}}">
-						<span class="input-group-addon">ft</span>
-					</div>
-				</div>
-				
-				<div class="col-sm-3">
-					<label for="roughness{{flow.text}}">Roughness of Pipe</label>
-					<div class="input-group">		
-						<input type="text" class="form-control" id="roughness{{flow.text}}">
-						<span class="input-group-addon">in</span>
-					</div>
+			</div>	
+			<div class="col-sm-3">
+				<label for="roughness{{flow.text}}">Roughness of Pipe</label>
+				<div class="input-group">		
+					<input type="text" class="form-control" id="roughness{{flow.text}}">
+					<span class="input-group-addon">in</span>
 				</div>
 			</div>
-		</div>	
-		<div class = "col-xs-12 addButton">
-			<button type="button" class="btn btn-default btn-sm customBtn" onclick="addLine()">
-				<span class="glyphicon glyphicon-plus"></span> ADD A NEW PIPE
-			</button>
-		<div class="col-xs-12">&nbsp;</div>
 		</div>
+	</div>	
+	<!-- Add new pipe button (note: does not use angular.js since the additional pumps are much different than
+	the first three in css and with the backend javascript)  -->
+	<div class = "col-xs-12 addButton">
+		<button type="button" class="btn btn-default btn-sm customBtn" onclick="addLine()">
+			<span class="glyphicon glyphicon-plus"></span> ADD A NEW PIPE
+		</button>
+	<div class="col-xs-12">&nbsp;</div>
+	</div>
 </div>
-
+<!--  Angular.js controller generates  the three initial fittings in the fittings info section-->
 <div ng-controller="FlowListController as flowList" class="col-xs-12 addingSection">
 <div class="goldStrip"></div>
 	<div class="col-xs-12 parkerBox" id="fittingsection">
@@ -216,6 +235,7 @@
 			</div>
 		</div>
 	</div>
+	<!--  Add new fitting button is separate for same reason as add line button is separate-->
 	<div class = "col-xs-12 addButton ">
 		<button type="button" class="btn btn-default btn-sm customBtn" onclick="addFitting()">
 			<span class="glyphicon glyphicon-plus"></span> ADD A NEW FITTING
@@ -223,6 +243,8 @@
 		<div class="col-xs-12">&nbsp;</div>
 	</div>
 </div>	
+
+<!-- Out-dated html of a buildable schematic -->
 <!-- IMAGE AREA
 <div class="col-xs-12 topPad">
 	<div id="schematic" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -230,6 +252,7 @@
 	</div>	
 </div>
 -->
+<!-- Also outdated (worked but looked bad) so display:none on this div -->
 <div class="col-xs-12 boxed topPad" style="display: none">
 	<div class="goldStrip"> </div>
 	<div class="col-xs-12 parkerBox topMPad bottomPad">
@@ -240,11 +263,10 @@
 		</div>
 	</div>
 </div>
-
+<!-- Last data selection portion on the bottom of the page -->
 <div class="col-xs-12 boxed topPad">
 	<div class="goldStrip"> </div>
 	<div class="col-xs-12 parkerBox topMPad bottomPad">
-	
 		<h4> Strainer info</h4>
 		<div class="col-sm-5">
 			<label for="sDiam">Strainer/Filter Diameter (Inches)</label><br>
@@ -292,12 +314,14 @@
 	</div>
 	<div class="col-xs-12">&nbsp;</div>
 </div>
-
+<!-- Where all the answers appear -->
 <div class="col-xs-12" id = "bottomSection">
 	<h2 id = "answerText">CALCULATED VALUES</h2>
+	<!-- Where the graph of theoretical max flow and actual flow shows up-->
 	<div class="col-xs-12 graph bottomPad">
-		<canvas id="flowChart" width="100%" height="30%"></canvas>
+		<canvas id="flowChart" width="100%" height="30%" class="bottomPad"></canvas>
 	</div>
+	<!-- Where the final answers show up -->
 	<div class="col-xs-12">
 		<div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-0">
 			<p class="center resultLabel">Estimated Flow</p>
@@ -313,6 +337,7 @@
 		</div>
 	</div>	
 	<div class="col-xs-12">&nbsp;</div>
+	<!-- The error message that pops up when either user input is bad or another error occurs -->
 	<div class="col-xs-6 col-xs-offset-3 alert alert-danger alert-dismissable fade in collapse" id="alert">
 		<!--<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>-->
 		<p id="alertMessage">Unknown Error.</p>
