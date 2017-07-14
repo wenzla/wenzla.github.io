@@ -4,3 +4,9 @@ h1{
 .bPad{
 	padding-bottom: 1.5ex;
 }
+#cssResult{
+	font-family: "Courier New", Courier, monospace;
+	padding-right: 1.5ex;
+	overflow-x: scroll;
+	white-space: nowrap;
+}

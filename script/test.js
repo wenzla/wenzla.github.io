@@ -13,6 +13,7 @@ window.onload = function() {
 
 			reader.onload = function(e) {
 				var fileText = reader.result;
+				$('#cssText').val('');
 				$('#cssText').val(fileText);
 			}
 			reader.readAsText(fileIn);	
@@ -23,40 +24,24 @@ window.onload = function() {
 }
 
 function parseText(file) {
-	
-	var beginBracket = /.*[\w]+\n?{/mg;
-	var cssAttributes = /{\n(.*\:\s?\w*.*;?[\n])+}?/mg;
+	var beginBracket = /.*[\w]+ ?\n?{ *\n/mg;
+	var cssAttributes = /{\n?(.*{?\:\s?\w*.*;?}?[\n])+}?/mg;
 	// {\n(.*\:\s?\w*.*;?[\n])+}? <- def right tho
 	var cssGroupNum = file.match(beginBracket).length;
 	var grouped = createMatrix(cssGroupNum, 2);
 	for (var i = 0; i < cssGroupNum; i++) {
 		grouped[i][0] = (file.match(beginBracket)[i]).slice(0,-1);
+		alert(grouped[i][1]);
 		grouped[i][1] = (file.match(cssAttributes)[i]);
 	}
 	
 	var needFormat = segragate(grouped);
-	
-	formatMatrix(needFormat, grouped);
-	
-	
-	//fileArray = file.split('\n');
-	
-	// removes blank lines
-	/**
-	for(var i = 0; i < fileArray.length; i++){
-		if (fileArray[i].length < 2){
-			fileArray.splice(i, 1);
-		}
-	}
-	
-	$.each(needFormat, function() {
-		$("#cssResult").append(this);
-	})**/
-	//alert(grouped);
+	formatMatrix(needFormat);
+
 }
 
-function formatMatrix(matrix, attr){
-	for(var i = 0; i < 5; i++){
+function formatMatrix(matrix){
+	for(var i = 1; i < 5; i++){
 		
 		if (matrix[i].length > 1) {		
 			switch (i) {
@@ -73,111 +58,84 @@ function formatMatrix(matrix, attr){
 					$("#cssResult").append("<br>/* Font Styles */" + "<br><br>");
 					break;
 				default:
+					$("#cssResult").append("<br>/* ERROR */" + "<br><br>");
 					break;
 			}	
 		}
 		
-		if (i != 0) {
-			$.each(matrix[i], function() {
-				$("#cssResult").append(this);
-				$("#cssResult").append("<br>");
-			})
-		}
+		$.each(matrix[i], function() {
+			var separated = this.split("{");
+			//alert(this.split("{"));
+			var line = separated[0]
+			for(var j = 0; j < 61; j++){
+				if (j > separated[0].length){
+					line += '&nbsp;';
+				}
+			}
+			line += "{" + separated[1];
+			$("#cssResult").append(line);
+			$("#cssResult").append("<br>");
+		})
+
 	}
 	
 	$("#cssResult").append("<br>/* Other Styles */" + "<br><br>");
 	$.each(matrix[0], function() {
-		$("#cssResult").append(this);
-		$("#cssResult").append("<br>");
+		var separated = this.split("{");
+			var line = separated[0]
+			for(var j = 0; j < 61; j++){
+				if (j > separated[0].length){
+					line += '&nbsp;';
+				}
+			}
+			line += "{" + separated[1];
+			$("#cssResult").append(line);
+			$("#cssResult").append("<br>");
 	})
 	
+	$("#cssResult").append("<br>");
 }
 
 
 function segragate(array) {
 	var segArray = new Array();
 	var changeIndex;
-	// index 0 means other
-	var borderProps = /border\s*(:|-)/mg; //index 1
-	var paddingProps = /padding\s*(:|-)|margin\s*(:|-)|float\s*:/g; //index 2
-	var backgroundProps = /background\s*(:|-)/mg; //index 3
-	var fontProps = /font\s*(:|-):/mg; //index 4
 	for(var i = 0; i < 5; i++){
 		segArray[i] = new Array();
 	}
 	for (var i = 0; i < array.length; i++){
 		var change = false;
 		
-		switch (borderProps.test(array[i][1])) {
-			case true:
-				changeIndex = 1;
-				change = true;
-				break;
-			case false:
-				break;
-			default:
-				break;
-		}
-		alert(array[i][1] + " : " + paddingProps.test(array[i][1]) + " : " + paddingProps);
-		switch (paddingProps.test(array[i][1])) {
-			case true:
-				changeIndex = 2;
-				change = true;
-				alert("good");
-				break;
-			case false:
-				break;
-			default:
-				alert("should legit NEVER fucking happen but does for some reason");
-				break;
-				
-		}
-		
-		switch (backgroundProps.test(array[i][1])) {
-			case true:
-				changeIndex = 3;
-				change = true;
-				break;
-			case false:
-				break;
-			default:
-				break;
-		}
-		
-		switch (fontProps.test(array[i][1])) {
-			case true:
-				changeIndex = 4;
-				change = true;
-				break;
-			case false:
-				break;
-			default:
-				break;
-		}
-		/**
-		if (borderProps.test(array[i][1])) {
-			changeIndex = 1;
-		} else if (paddingProps.test(array[i][1])) {
-			changeIndex = 2;
-		} else if (backgroundProps.test(array[i][1])) {
-			changeIndex = 3;
-		} else if (fontProps.test(array[i][1])) {
-			changeIndex = 4;
-		} else {
-			changeIndex = 0;
-		}
-		**/
-		if (!change){
-			changeIndex = 0;
-		}
-		
-		segArray[changeIndex].push(array[i][0]);
+		changeIndex = categorize(array[i][1]);
 	
+		segArray[changeIndex].push(array[i][0] + array[i][1]);	
+	}	
+	return segArray;	
+}
+
+function categorize(attr){
+	// index 0 means other
+	var borderProps = /border\s*(:|-)/mg; //index 1
+	var paddingProps = /padding\s*(:|-)|margin\s*(:|-)|float\s*:/g; //index 2
+	var backgroundProps = /background\s*(:|-)/mg; //index 3
+	var fontProps = /font\s*(:|-)/mg; //index 4
+	
+	if (borderProps.test(attr)) {
+		return 1;
+	}
+	if (paddingProps.test(attr)) {
+		return 2;
+	}
+	if (backgroundProps.test(attr)) {
+		return 3;
+	}
+	if (fontProps.test(attr)) {
+		return 4;
 	}
 	
-	return segArray;
-	
+	return 0;
 }
+
 
 // function to help declare a matrix of arbitrary size for calculations above
 function createMatrix(length) {
