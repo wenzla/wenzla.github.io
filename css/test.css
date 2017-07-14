@@ -11,8 +11,7 @@ img{
   	max-width: 20ex;
 }
 
-a
-{
+a{
 	padding: 10%;
 }
 
@@ -23,6 +22,7 @@ a
 
 .topPad{
 	padding-top: 2.5ex;
+	font: helvetica;
 }
 .topMPad{
 	padding-top: 0.5ex;
@@ -41,4 +41,6 @@ a
 }
 .btn:focus{
 	background-color: transparent;
+	color: blue;
+	text-align: center;
 }

@@ -11,17 +11,31 @@
 			<script src="script/test.js"></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js" integrity="sha256-VNbX9NjQNRW+Bk02G/RO6WiTKuhncWI4Ey7LkSbE+5s=" crossorigin="anonymous"></script>
 			<script src="script/common.js"></script>
-			<link rel="stylesheet" href="css/test.css">
+			<link rel="stylesheet" href="css/cssFormat.css">
 		</head>
 		<body>
 			<div class="col-xs-12">
 
-				<h1>Text File Reader</h1>
-				<div>
-					Select a text file: 
-					<input type="file" id="fileInput">
+				<h1 class="bPad">CSS Formater</h1>
+				<div class="bPad">
+					Paste a css file: 
 				</div>
+				<div class="form-group bPad">
+					<label for="cssText">Paste Here:</label>
+					<textarea class="form-control" rows="20" id="cssText"></textarea>
+				</div>
+				
+				<div class="bPad">
+					<button id="InputTextCss" type="button" class="btn btn-default" onclick="parseText($('#cssText').val())">Generate</button>
+				</div>
+				
+				<input type="file" id="fileInput" class="bPad">
 
+				<div id="cssResult">
+			
+				</div>
 			</div>
+			
+			
 		</body>
 	</html>
