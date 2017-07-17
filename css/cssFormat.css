@@ -5,7 +5,6 @@ h1{
 	padding-bottom: 1.5ex;
 }
 #cssResult{
-	font-family: "Courier New", Courier, monospace;
 	padding-right: 1.5ex;
 	overflow-x: scroll;
 	white-space: nowrap;
@@ -21,5 +20,58 @@ h1{
 }
 
 .inputfile + label {
-	cursor: pointer; /* "hand" cursor */
+	cursor: pointer; 
+}
+
+body{
+	font-family: "Courier New", Courier, monospace;
+	background-color: #eee;
+	color: #111;
+}
+
+#cssText{
+	background-color: #555;
+	border-color: #888;
+	color: #fff;
+}
+
+#copyMessage{
+	visibility: hidden;
+}
+
+.typed {
+	-webkit-animation: fadein 1s linear 0s; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadein 1s linear 0s; /* Firefox < 16 */
+    -ms-animation: fadein 1s linear 0s; /* Internet Explorer */
+    -o-animation: fadein 1s linear 0s; /* Opera < 12.1 */
+    animation: fadein 1s linear 0s;
+}
+
+@keyframes fadein {
+    from { opacity: 0;  top: -4ex}
+    to   { opacity: 1;	top: 0ex}
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { opacity: 0;  top: -4ex}
+    to   { opacity: 1;	top: 0ex}
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0;  top: -4ex}
+    to   { opacity: 1;	top: 0ex}
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0;  top: -4ex}
+    to   { opacity: 1;	top: 0ex}
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+    from { opacity: 0;  top: 2.5ex}
+    to   { opacity: 1;	top: 0ex}
 }

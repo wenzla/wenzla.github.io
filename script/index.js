@@ -23,6 +23,7 @@ angular.module('link', [])
 	  {url:'video', id: 'videoPage', title:'Parker Long Video', text: 'Parker Long Video'},
       {url:'test', id: 'testPage', title:'Testing Locations', text: 'Test Area'}];
 	  //{url:'email', id: 'emailGen', title:'Email Generator', text: 'Email Generator'}];
+	  //{url:'email', id: 'cssFormat', title:'CSS Formatter', text: 'CSS Formatter'}];
   });
 // loads the tooltips on document load
 $(document).ready(function(){
@@ -58,6 +59,15 @@ $(document).ready(function(){
 		delay: {show: 200, hide: 200},
 		html : true,
 		content : '<p>An email generator to let anyone write HTML emails.</p> <img src="images/email.png" class="media-object center-block thumbnail">'
+	});
+	**/
+	/**
+	$('#cssFormat').popover({
+		placement : 'bottom',
+		trigger : 'hover',
+		delay: {show: 200, hide: 200},
+		html : true,
+		content : '<p>A web app to help you make your CSS more readable.</p> <img src="images/cssFormat.png" class="media-object center-block thumbnail">'
 	});
 	**/
 });

@@ -8,12 +8,41 @@
 			<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-			<script src="script/test.js"></script>
+			<script src="script/cssFormat.js"></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js" integrity="sha256-VNbX9NjQNRW+Bk02G/RO6WiTKuhncWI4Ey7LkSbE+5s=" crossorigin="anonymous"></script>
 			<script src="script/common.js"></script>
 			<link rel="stylesheet" href="css/cssFormat.css">
 		</head>
 		<body>
-			no tests right now			
+			<div class="col-xs-12">
+
+				<h1 class="bPad">CSS Formatter</h1>
+				
+				<div class="form-group bPad">
+					<label for="cssText">
+					<label for="fileInput" class="btn btn-default" >
+						<span>Choose a file</span>
+					</label>
+					or Paste Below:</label>
+					<div id="fileName">
+					
+					</div>
+					<textarea class="form-control" rows="20" id="cssText"></textarea>
+				</div>
+				
+				<div class="bPad">
+					<button id="InputTextCss" type="button" class="btn btn-default" onclick="parseText($('#cssText').val())">Format CSS</button>
+					<span id="copyMessage"> Now copy-paste below to clipboard.</span>
+				</div>
+				
+				<input type="file" id="fileInput" class="inputfile">
+				
+			</div>
+			
+			<div id="cssResult" class="col-xs-12">
+			
+			</div>
+			
+			
 		</body>
 	</html>
