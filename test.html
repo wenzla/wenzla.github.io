@@ -17,9 +17,7 @@
 			<div class="col-xs-12">
 
 				<h1 class="bPad">CSS Formater</h1>
-				<div class="bPad">
-					Paste a css file: 
-				</div>
+
 				<div class="form-group bPad">
 					<label for="cssText">Paste Here:</label>
 					<textarea class="form-control" rows="20" id="cssText"></textarea>
@@ -29,7 +27,10 @@
 					<button id="InputTextCss" type="button" class="btn btn-default" onclick="parseText($('#cssText').val())">Generate</button>
 				</div>
 				
-				<input type="file" id="fileInput" class="bPad">
+				<input type="file" id="fileInput" class="inputfile">
+				<label for="fileInput" class="btn btn-default" >
+					<span id="inputText">Choose a file</span>
+				</label>
 
 				
 			</div>

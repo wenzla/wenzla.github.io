@@ -1,13 +1,26 @@
 var categoryCount = 6;
-var fileIn;
+
 
 window.onload = function() {
 	var fileInput = document.getElementById('fileInput');
-
+	
 	fileInput.addEventListener('change', function(e) {
-		var fileIn = fileInput.files[0];
-		var textType = /text.*/;
+		var 	fileIn = fileInput.files[0];
+				textType = /text.*/;
+				label	 = $("#inputText");
+				labelVal = label.val();
 
+		var fileName = '';
+		if( this.files && this.files.length > 1 )
+			fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+		else
+			fileName = e.target.value.split( '\\' ).pop();
+
+		if( fileName )
+			label.text(fileName);
+		else
+			label.text(labelVal);		
+	
 		if (fileIn.type.match(textType)) {
 			var reader = new FileReader();
 
@@ -25,6 +38,7 @@ window.onload = function() {
 
 function parseText(file) {
 	file += '\n';
+	$('#cssResult').css("visibility", "visible");
 	var beginBracket = /.*[\w]+ ?\n?{ *\n/mg;
 	var cssAttributes = /{\n?(.*{?\:\s?\w*.*;?}?[\n])+}?/mg;
 	// {\n(.*\:\s?\w*.*;?[\n])+}? <- def right (not on animation css tho)
@@ -166,3 +180,5 @@ function createMatrix(length) {
     }
     return arr;
 }
+
+

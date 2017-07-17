@@ -9,4 +9,17 @@ h1{
 	padding-right: 1.5ex;
 	overflow-x: scroll;
 	white-space: nowrap;
+	visibility: hidden;
+}
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+	cursor: pointer; /* "hand" cursor */
 }
