@@ -21,12 +21,13 @@ angular.module('link', [])
     linkList.links = [
       {url:'flowCalc',  id: 'chuCalc', title:'Parker Flow Rate Calculator', text: 'Parker Flow Calculator'},
 	  {url:'video', id: 'videoPage', title:'Parker Long Video', text: 'Parker Long Video'},
-      {url:'test', id: 'testPage', title:'Testing Locations', text: 'Test Area'}];
+      {url:'test', id: 'testPage', title:'Testing Location', text: 'Test Area'}];
 	  //{url:'email', id: 'emailGen', title:'Email Generator', text: 'Email Generator'}];
 	  //{url:'email', id: 'cssFormat', title:'CSS Formatter', text: 'CSS Formatter'}];
   });
 // loads the tooltips on document load
 $(document).ready(function(){
+	
 	$('#testPage').popover({
 		// Tooltip always appears on the bottom
 		placement : 'bottom',
@@ -36,7 +37,7 @@ $(document).ready(function(){
 		delay: {show: 200, hide: 200},
 		// adds content and a picture to the popover
 		html : true,
-		content : '<p>Test Area to play around with new features.</p><img src="images/testPage.png" class="media-object center-block ">'
+		content : '<p>Test area to play around with new features.</p><img src="images/testPage.png" class="media-object center-block ">'
 	});
 	$('#videoPage').popover({
 		placement : 'bottom',

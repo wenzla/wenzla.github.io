@@ -13,6 +13,31 @@ Last modified by: Allen Wenzl
 .header{
 	text-align: center;
 }
+
+.logo{
+	max-height: 3ex;
+  	max-width: 3ex;
+}
+
+.footer{
+	position: absolute;
+	bottom: 0;
+	width: 100%; 
+	height: 60px; /* Set the fixed height of the footer here */
+	line-height: 60px; /* Vertically center the text there */
+	text-align: center;
+}
+
+/* Margin bottom by footer height */
+body{
+	margin-bottom: 60px;
+	background-color: #f5f5f5;
+}
+
+html{
+	position: relative;
+	min-height: 100%;
+}
 /*  Styles the boxes for the links */
 .link{
 	padding: 2.5ex;
@@ -69,6 +94,7 @@ a:active, a:focus{
     -ms-animation: fadein 0.75s linear 0s; /* Internet Explorer */
     -o-animation: fadein 0.75s linear 0s; /* Opera < 12.1 */
     animation: fadein 0.75s linear 0s;
+    vertical-align: top;
 }
 
 @keyframes fadein {

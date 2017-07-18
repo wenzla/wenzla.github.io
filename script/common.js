@@ -7,3 +7,14 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 ga('create', 'UA-102508413-1', 'auto');
 ga('send', 'pageview');
 
+// function to help declare a matrix of arbitrary size for calculations above
+function createMatrix(length) {
+    var arr = new Array(length || 0),
+        i = length;
+	// recursively creates an array at each index of the originally produced array 
+    if (arguments.length > 1) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        while(i--) arr[length-1 - i] = createMatrix.apply(this, args);
+    }
+    return arr;
+}
