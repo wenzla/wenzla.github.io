@@ -200,20 +200,5 @@ function addAtag(){
 	// adds hyperlink code to subsection textbox
 	$( "#SStextGen" ).append( '&lt;' + "a href=\"" + Hlink + "\">" + Htext + '&lt;' + "/a>");
 }
-// OBSOLETE - can't figure out to change stack css
-/**
-function changeColors(){
-	var backColor = $("#BackGroundColor").val();
-	var textColor = $("#TextColor").val();
-	var titleColor = $("#TitleColor").val();
-	var headColor = $("#HeadingColor").val();
-	$('.HeadingClass').css('background-color',headColor);
-	$('.HeadingTitleClass').css('color',titleColor);
-	$('.SectionClass').css('color',titleColor);
-	$('.SectionClass').css('background-color',backColor);
-	$('.SectionClass').css('backgroundp-color',titleColor);
-	$('.SSectionClass').css('background-color',backColor);
-	$('.TextClass').css('color',textColor);
-		
-}
-**/
+
+
