@@ -553,18 +553,6 @@ function calculate() {
 	$('html, body').animate({scrollTop:$(document).height()}, 1200);
 
 }
-// function to help declare a matrix of arbitrary size for calculations above
-function createMatrix(length) {
-    var arr = new Array(length || 0),
-        i = length;
-	// recursively creates an array at each index of the originally produced array 
-    if (arguments.length > 1) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        while(i--) arr[length-1 - i] = createMatrix.apply(this, args);
-    }
-    return arr;
-}
-
 
 // the angularJS controller used to generate the list of fittings and lines (saves a lot of copy and pasting)
 angular.module('flowApp', []).controller('FlowListController', function() {

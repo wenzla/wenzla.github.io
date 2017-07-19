@@ -1,67 +1,21 @@
-/*
+/* Border Styles */
 
-video.css - Additional (Most of the) styling for index.html
-Original Author: Allen Wenzl
+.link                                                       { padding: 3.5ex; font-size: 16px; border: solid 1px #bbb; font-weight: bold; color: white; background-color: black; } 
+.arrow                                                      { border-top-color: black !important; } 
+.popover                                                    { border: 1px solid black; } 
 
-Originally created: 6/29/17
-Last modified: 7/13/17
-Last modified by: Allen Wenzl
+/* Padding Styles */
 
-*/
+.chapter                                                    { padding: 1ex; } 
+.videoContainer                                             { text-align: center; padding: 1ex; width: 100%; height: 50em; } 
 
-/* Style for chapter select header background */
-.header{
-	background-color: rgb(255,185,29);
-	text-align: center;
-}
+/* Background Styles */
 
-/* Style for chapter select buttons */
-.link{
-	padding: 3.5ex;
-	font-size: 16px;
-	border: solid 1px #bbb;
-	font-weight: bold;
-	color: white;
-	background-color: black;
-}
-/* padding helper method */
-.chapter{
-	padding: 1ex;
-}
-/* Embedded YouTube video section styling */
-.videoContainer{
-	text-align: center;
-	padding: 1ex;
-	width: 100%;
-	height: 50em;
-}
-/* Embedded video sizing */
-#vid{
-	width: 100%;
-	height: 100%;
-}
-/* Thumbnail size for chapter select tooltip */
-.thumbnail{
-	width: 22ex;
-	height: 15ex;
-}
-/* Chapter select hover styling */
-.link:hover {
-	color: rgb(255,185,29);
-	background-color: #222;
-}
-/* Popover (tooltip) title stying */
-.popover-title {
-      font-weight: bold;
-      text-align:center;
-	  color: rgb(255,185,29);
-	  background-color: black;
-}
-/* Change popover (tooltip) arrow color */
-.arrow {
-      border-top-color: black !important;
-}
-/* Changes popover (tooltip) border color */
-.popover {
-      border: 1px solid black;
-}
+.header                                                     { background-color: rgb(255,185,29); text-align: center; } 
+.link:hover                                                 { color: rgb(255,185,29); background-color: #222; } 
+.popover-title                                              { font-weight: bold; text-align:center; color: rgb(255,185,29); background-color: black; } 
+
+/* Other Styles */
+
+#vid                                                        { width: 100%; height: 100%; } 
+.thumbnail                                                  { width: 22ex; height: 15ex; } 

@@ -26,7 +26,7 @@ h3{
 /* Default css of anything added to the page */
 body{
   	color: black;
-	background-color: #EEEEEE;
+	background-color: #eee;
 	font: helvetica;
 }
 /* bottom padding for the boxes */
@@ -113,9 +113,7 @@ select, .btn:focus, .btn:active{
 	border-color: #FDD880 !important;
 	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 7px rgba(255,185,29,0.6) !important;
 }
-.btn:focus{
-	background-color: transparent;
-}
+
 /* Styling for the gold strips at the top of each box */
 .goldStrip{
 	width: 100%;
