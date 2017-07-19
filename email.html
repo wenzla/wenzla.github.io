@@ -17,7 +17,7 @@ Last modified by: Allen Wenzl
 		<script src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
 		<script src="script/email.js"></script>
 		<link rel="stylesheet" href="css/email.css">
-		<script src="/script/common.js"></script>
+		<script src="script/common.js"></script>
 	</head>
 	<body>
 		<!-- Header of the web app -->
@@ -131,12 +131,7 @@ Last modified by: Allen Wenzl
 				</div>
 			</div>
 			<!-- The buttons on the bottom of the page -->
-			<div class="col-xs-12 undo">
-				<button type="button" class="btn btn-default" onclick="output()" data-target="#copyPopup">Output HTML</button>
-			</div>
-			<div class="col-xs-12 tPad text-center">
-				<button type="button" class="btn btn-default" onclick="undo()">Undo</button>
-			</div>	
+
 
 			<!-- The pop up that occurs when the output HTML button is pressed -->
 			<!-- Modal -->
@@ -186,13 +181,50 @@ Last modified by: Allen Wenzl
 					</div>
 				</div>
 			</div>
-			
+			<!-- The pop up that occurs when the output HTML button is pressed -->
+			<!-- Modal -->
+			<div class="modal fade" id="importPopup" role="dialog">
+				<div class="modal-dialog">
+					<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Paste file text below: </h4>
+						</div>
+						<div class="modal-body">
+							<textarea class="form-control" rows="5" id="cssText"></textarea>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 tPad">
+				&nbsp;
+			</div>
+			<div class="col-xs-12 sideHead Pad">
+				<h3>Options</h3>
+			</div>
+			<div class="col-xs-12 optionBox">
+				<div class="col-xs-12 undo">
+					<button type="button" class="btn btn-default" onclick="output()" data-target="#copyPopup">Output HTML</button>
+				</div>
+				<div class="col-xs-12 undo">
+					<button type="button" class="btn btn-default" data-target="#importPopup">Import Text</button>
+				</div>
+				<div class="col-xs-12 undo">
+					<button type="button" class="btn btn-default" onclick="undo()">Undo</button>
+				</div>	
+			</div>
 		</div>
+		
 		<!-- Where the email preview is shown -->
 		<div class="col-xs-9 buildOuter">
 			<div class="col-xs-12" id="buildArea">
 		
 			</div>
 		</div>
+		
 	</body>
 </html>

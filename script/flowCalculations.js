@@ -19,10 +19,14 @@ Original Author: Allen Wenzl
 Calculations provided by: Heston Smith, Charles El-Helou, and Andy Meyers (slightly modified by Allen Wenzl)
 
 Originally created: 6/26/17
-Last modified: 7/13/17
+Last modified: 7/19/17
 Last modified by: Allen Wenzl
 
 **/
+// scroll to top on page load
+//$(window).on('beforeunload', function() {
+    //$(window).scrollTop(0);
+//});
 // used to determine how many lines and fittings were added
 var lines = [true, true, true];
 var fittings = [true, true, true];
@@ -139,7 +143,7 @@ function checkForm() {
 	var numRegex = /(^[0-9]+$|^[0-9]*\.[0-9]+$)/g;
 	// checks if user selected a pump
 	if($('input[name="pumps"]:checked').val() == null){
-		document.getElementById("alertMessage").innerHTML =  "Please select a pump under \"Pump Options.\"";
+		$("#alertMessage").text("Please select a pump under \"Pump Options.\"");
 		if(!$("#alert").is(":visible")){
 			$("#alert").fadeIn("slow");
 		}
@@ -151,7 +155,7 @@ function checkForm() {
 			// the box with the wrong number gets a red outline
 			this.style = "border-color: red; box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 7px rgba(200,15,15,0.6);"
 			// A warning message tells the user they messed up entering values
-			document.getElementById("alertMessage").innerHTML =  "Please change the highlighted values above.";
+			$("#alertMessage").text("Please change the highlighted values above.");
 			if(!$("#alert").is(":visible")){
 				$("#alert").fadeIn("slow");
 			}
@@ -162,6 +166,15 @@ function checkForm() {
 		}			
 	});
 	
+	var freq = $("#frequency");
+	if(freq.val() > 90 || freq.val() < 0){
+		$("#alertMessage").text("Please select a frequency in the valid range of 0-90");
+		if(!$("#alert").is(":visible")){
+			$("#alert").fadeIn("slow");
+		}
+		returnValue =  false;
+	} 	
+
 	// If the user fixed the mistakes, the error message fades away.
 	if($("#alert").is(":visible") && returnValue){
 		$("#alert").fadeOut("slow");
@@ -186,8 +199,8 @@ function calculate() {
 	var temperature = $("#temperature").val();
 	var RVP = $("#RVP").val();
 	var pump = $('input[name="pumps"]:checked').val();
-	var freq = document.getElementById("frequency").value;
-	var density = document.getElementById("fluid_density").value;
+	var freq = $("#frequency").val();
+	var density = $("#fluid_density").val();
 	
 	var freqs = new Array();
 	// graphs from frequency 1hz to 40hz above what the user inputted
@@ -202,7 +215,7 @@ function calculate() {
 		npshrpsis[i] = (((pump * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 0.5) * 32.2 * density) / 144.0;
 	}
 	
-	var kinematicViscosity = document.getElementById("kViscosity").value;
+	var kinematicViscosity = $("#kViscosity").val();
 	// There can be a variable amount of pipes so we need a dynamically sized array to keep track of them
 	var pipesDValue = new Array();
 	var roughnesses = new Array();
@@ -211,8 +224,8 @@ function calculate() {
 	for (var i = 0; i < lines.length; i++){
 		if(lines[i]){
 			pipesDValue.push($("#pDiam" + (i + 1)).find("option:selected").text());
-			roughnesses.push(document.getElementById("roughness" + (i + 1)).value);
-			pipeLength.push(document.getElementById("pLength" + (i + 1)).value);
+			roughnesses.push($("#roughness" + (i + 1)).val());
+			pipeLength.push($("#pLength" + (i + 1)).val());
 		}
 	}
 	var roughRatio = new Array();
@@ -265,7 +278,7 @@ function calculate() {
 			fittingsD.push(document.getElementById("fDiam" + i).selectedIndex);
 			fittingsT.push(document.getElementById("fType" + i).selectedIndex);
 			fittingsDValue.push($("#fDiam" + i).find("option:selected").text());
-			fNums.push(document.getElementById("fNum" + i).value);
+			fNums.push($("#fNum" + i).val());
 		}
 	}
 	// matrix of all the different type of fittings' k values
@@ -340,8 +353,8 @@ function calculate() {
 	// get strainer and breakaway valve variables
 	var StrainerDValue = document.getElementById("sDiam").options[document.getElementById("sDiam").selectedIndex].text;
 	var BreakawayDValue = document.getElementById("bDiam").options[document.getElementById("bDiam").selectedIndex].text;
-	var breakawayNum = document.getElementById("bNum").value;
-	var StrainerNum = document.getElementById("sNum").value;
+	var breakawayNum = $("#bNum").val();
+	var StrainerNum = $("#sNum").val();
 	var strainerCheck = $("#checkStrainer").is(":checked");
 	var breakawaycheck = $("#checkBreak").is(":checked");
 
@@ -473,7 +486,7 @@ function calculate() {
 	for (var i = 0; i < loopIndex; i++){
 		VLs[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVP);
 		// slightly corrects the VL ratio when under 20 hz, since the flow model isn't good at low frequencies
-		if (VLs[i] < 0 && freqs[i] < 20){
+		if (VLs[i] < 0 && freqs[i] < 15){
 			VLs[i] = 0;
 		}
 	}
@@ -485,6 +498,15 @@ function calculate() {
 		answers[i] = qs[i]*(1.0/(VLs[i] + 1));
 		if (answers[i] < 0){
 			answers[i] = 0;
+		}
+		if (VLs[i] < 0){
+			VLs[i] = 0;
+		}
+		if (qs[i] < 0){
+			qs[i] = 0;
+		}
+		if (answers[i] > qs[i]){
+			answers[i] = qs[i];
 		}
 	}
 	// Adds a fade animation when the answer shows up
@@ -519,7 +541,7 @@ function calculate() {
 				pointBackgroundColor: '#001342'
 			},
 			{
-				label: 'Flow with current setup',
+				label: 'Flow with Current Setup',
 				data: answers,
 				backgroundColor: [
 					'rgba(255,185,29,0.3)'

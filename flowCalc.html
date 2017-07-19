@@ -44,9 +44,9 @@ Last modified by: Allen Wenzl
 	<!-- The gold strip at the top of each box is actually a stylized div  -->
 	<div class="goldStrip"></div>
 	<div class="col-sm-12 parkerBox topMPad bottomPad">
-	
-	<h4 class=> Fluid Data</h4>
-	<!-- Bunch of input boxes  -->
+		<h4> Fluid Data</h4>
+		<!-- Bunch of input boxes  -->
+		<!--  OBSOLETE fluid selector.
 		<div class="input-group">
 			<label for="fluid">Fluid Type</label><br>
 			<select class="selectpicker col-sm-12" style="height: 4.5ex" id="fluid">
@@ -54,27 +54,28 @@ Last modified by: Allen Wenzl
 				<option>Deisel fuel</option>
 			</select>
 		</div>
-		<label for="Fluid Density">Fluid Density:</label>
+		-->
+		<label for="Fluid Density" class="extraSpace">Fluid Density</label>
 		<div class="input-group">
 			<input type="text" class="form-control" id="fluid_density" value=1.4937>
 			<span class="input-group-addon">slugs/ft<sup>3</sup></span>
 		</div>
-		<label for="kViscosity">Kinematic Viscosity:</label>
+		<label for="kViscosity" class="extraSpace">Kinematic Viscosity</label>
 		<div class="input-group">
 			<input type="text" class="form-control" id="kViscosity" value=0.0000124>
 			<span class="input-group-addon">cSt</span>
 		</div>
-		<label for="Temperature">Temperature</label>
+		<label for="Temperature" class="extraSpace">Temperature</label>
 		<div class="input-group">	
 			<input type="text" class="form-control" id="temperature" value = 70>
 			<span class="input-group-addon">°F</span>
 		</div>
-		<label for="RVP">RVP</label>
+		<label for="RVP" class="extraSpace">RVP</label>
 		<div class="input-group">
 			<input type="text" class="form-control" id="RVP" value=.1>
 			<span class="input-group-addon">psia</span>
 		</div>
-		<label for="dPressure">Discharge Pressure</label>
+		<label for="dPressure" class="extraSpace">Discharge Pressure</label>
 		<div class="input-group bottomPadBig">
 			<input type="text" class="form-control" id="dPressure" value = 10>
 			<span class="input-group-addon">psia</span>
@@ -254,11 +255,19 @@ Last modified by: Allen Wenzl
 </div>
 -->
 <!-- Also outdated (worked but looked bad) so display:none on this div -->
-<div class="col-xs-12 boxed topPad" style="display: none">
+<div class="col-xs-12 boxed topPad"style="display: none">
 	<div class="goldStrip"> </div>
 	<div class="col-xs-12 parkerBox topMPad bottomPad">
-		<h4>Buildable Schematic</h4>
-		<div id="dropArea">
+		<div class="col-xs-8 topMPad bottomMPad">
+			<h4>Buildable Schematic</h4>
+		</div>
+		<div class="col-xs-4 topSPad bottomMPad">
+			<button type="button" class="btn btn-default btn-sm customBtn" onclick="canMakeNewLine()">
+				<span class="glyphicon glyphicon-plus"></span> ADD A NEW LINE
+			</button>
+			<span class="newLineMessage">Something went wrong</span>
+		</div>
+		<div id="dropArea" class="col-xs-12 origin-point drop-point">
 			<img id="tankPic" class="ui-widget-content" src="schem/tank.PNG"/>
 			<img id="pumpPic" class="ui-widget-content" src="schem/centrifugal pump2.PNG"/>
 		</div>
@@ -350,6 +359,5 @@ Last modified by: Allen Wenzl
 	<div class="col-xs-12">&nbsp;</div>
 	<br><br>
 </div>
-
 </body>
 </html>
