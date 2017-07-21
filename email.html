@@ -181,25 +181,7 @@ Last modified by: Allen Wenzl
 					</div>
 				</div>
 			</div>
-			<!-- The pop up that occurs when the output HTML button is pressed -->
-			<!-- Modal -->
-			<div class="modal fade" id="importPopup" role="dialog">
-				<div class="modal-dialog">
-					<!-- Modal content-->
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">Paste file text below: </h4>
-						</div>
-						<div class="modal-body">
-							<textarea class="form-control" rows="5" id="cssText"></textarea>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						</div>
-					</div>
-				</div>
-			</div>
+			
 			<div class="col-xs-12 tPad">
 				&nbsp;
 			</div>
@@ -211,12 +193,19 @@ Last modified by: Allen Wenzl
 					<button type="button" class="btn btn-default" onclick="output()" data-target="#copyPopup">Output HTML</button>
 				</div>
 				<div class="col-xs-12 undo">
-					<button type="button" class="btn btn-default" data-target="#importPopup">Import Text</button>
-				</div>
-				<div class="col-xs-12 undo">
 					<button type="button" class="btn btn-default" onclick="undo()">Undo</button>
 				</div>	
 			</div>
+			<div class="col-xs-12 optionBox tPad bPad">
+				<p class="tPad">
+					Import email body below.
+				</p>
+				<textarea class="form-control" rows="6" id="cssText"></textarea>
+				<div class="col-xs-12 undo">
+					<button type="button" class="btn btn-default" onclick="undo()">Import</button>
+				</div>
+			</div>
+				
 		</div>
 		
 		<!-- Where the email preview is shown -->

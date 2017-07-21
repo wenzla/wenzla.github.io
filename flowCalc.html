@@ -7,7 +7,7 @@ Original Author: Allen Wenzl
 Calculations provided by: Heston Smith, Charles El-Helou, and Andy Meyers (slightly modified by Allen Wenzl)
 
 Originally created: 6/26/17
-Last modified: 7/13/17
+Last modified: 7/21/17
 Last modified by: Allen Wenzl
 
 -->
@@ -31,6 +31,7 @@ Last modified by: Allen Wenzl
 <!-- Golden header at the top of the page -->
 <div class="col-xs-12 header bottomPad">
 	<div class="col-sm-2 col-xs-12 header">
+		<!-- Logo links to parkers website -->
 		<a href="http://parker.com"><img src="schem/logo.jpg" class="logo"/></a> 
 	</div>
 	<div class="col-sm-8 col-xs-12 header">
@@ -58,6 +59,7 @@ Last modified by: Allen Wenzl
 		<label for="Fluid Density" class="extraSpace">Fluid Density</label>
 		<div class="input-group">
 			<input type="text" class="form-control" id="fluid_density" value=1.4937>
+			<!-- Units at the end of each input box -->
 			<span class="input-group-addon">slugs/ft<sup>3</sup></span>
 		</div>
 		<label for="kViscosity" class="extraSpace">Kinematic Viscosity</label>
@@ -126,7 +128,7 @@ Last modified by: Allen Wenzl
 		</div>
 	</div>
 </div>
-<!--  Angular.js controller generates  the three initial pumps in the line losses info section-->
+<!--  Angular.js controller generates the three initial pumps in the line losses info section-->
 <div ng-controller="FlowListController as flowList" class="col-xs-12 addingSection boxed topPad">
 	<div class="goldStrip"></div>
 	<div class="col-xs-12 parkerBox addPad" id="lineLosses">	
@@ -159,7 +161,7 @@ Last modified by: Allen Wenzl
 		</div>
 	</div>	
 	<!-- Add new pipe button (note: does not use angular.js since the additional pumps are much different than
-	the first three in css and with the backend javascript)  -->
+	the first three in css and has additional javascript functionality)  -->
 	<div class = "col-xs-12 addButton">
 		<button type="button" class="btn btn-default btn-sm customBtn" onclick="addLine()">
 			<span class="glyphicon glyphicon-plus"></span> ADD A NEW PIPE
@@ -176,7 +178,8 @@ Last modified by: Allen Wenzl
 			<div class="col-sm-4">
 				<label for="fType{{flow.text}}">Type of Fitting</label><br>
 				<select class="selectpicker col-sm-12" style="height: 4.5ex" id="fType{{flow.text}}" onchange="getImage(this)" onload="getImage(this)" name="{{flow.text}}">
-				  <option>180°  Return Bend, Flanged</option>
+					<!-- Unfortunately have to do this at least once -->
+					<option>180°  Return Bend, Flanged</option>
 					<option>180°  Return Bend, Threaded</option>
 					<option>Angle Valve Fully Open</option>
 					<option>Ball Valve </option>
@@ -229,6 +232,7 @@ Last modified by: Allen Wenzl
 				</div>
 			</div>
 			<div class="col-sm-1">
+			<!-- These blank divs help with spacing that padding and margin css wouldn't fix -->
 			<div class="col-sm-12 col-xs-0">&nbsp;</div>
 			<label class="checkbox-inline">
 				<input type="checkbox" value="" id="check{{flow.text}}">Parallel
@@ -350,6 +354,7 @@ Last modified by: Allen Wenzl
 	<!-- The error message that pops up when either user input is bad or another error occurs -->
 	<div class="col-xs-6 col-xs-offset-3 alert alert-danger alert-dismissable fade in collapse" id="alert">
 		<!--<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>-->
+		<!-- This message should never be seen -->
 		<p id="alertMessage">Unknown Error.</p>
 	</div>
 	<div class="col-xs-6 col-xs-offset-3">

@@ -4,7 +4,7 @@ Additional css for flowCalc.html.
 Original Author: Allen Wenzl
 
 Originally created: 6/26/17
-Last modified: 7/13/17
+Last modified: 7/21/17
 Last modified by: Allen Wenzl
 
  */
@@ -38,9 +38,6 @@ body{
 	background-color: white;
 }
 
-.extraSpace{
-	padding-top: 1.9ex;
-}
 /* Used for the section headers at the top of each box */
 h4{
   	font-weight: bold;
@@ -71,6 +68,9 @@ img{
 	padding-bottom: 3ex;
 }
 /* Various paddings used throughout the page */
+.extraSpace{
+	padding-top: 1.9ex;
+}
 .topPad{
 	padding-top: 2.5ex;
 }
@@ -115,7 +115,12 @@ input[type="text"], option, select{
 select, .btn:focus, .btn:active{
 	outline: none !important;
 }
-/* Parker gold when a box is clicked on */
+
+select{
+	width: 100%;
+}
+
+/* Parker gold outline when a box is clicked on */
 .btn:active, .btn:focus, .form-control:focus{
 	border-color: #FDD880 !important;
 	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 7px rgba(255,185,29,0.6) !important;
@@ -131,7 +136,7 @@ select, .btn:focus, .btn:active{
 	
 }
 
-/* Button hover effects */
+/* Parker site buttons and its hover effects */
 .btn-default:hover, .btn-default:active, .btn-default:focus, .btn-defualt.active, .btn-defualt, .customBtn, .btn-default:active:focus {
 	/* background-color: #f2f2f2; */	
 	color: #fff;
@@ -139,7 +144,7 @@ select, .btn:focus, .btn:active{
 	border-radius: 3ex;
 	font-weight: bold;
 }
-
+/* Drop down menu styling fix for internet explorer */
 select::-ms-expand {
 	display: none;
 }
