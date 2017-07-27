@@ -47,7 +47,21 @@ function parseText(file) {
 	file += '\n';
 	var 	beginBracket = /.*[\w]+ ?\n?{ *\n/mg;
 			cssAttributes = /{\n?(.*{?\:\s?\w*.*;?}?[\n])+}?(\n*\s)*}?/mg;
-			cssGroupNum = file.match(beginBracket).length;
+			alreadyFormatted = /[\.|#]?\w+[:|-]?\w*\s{15}\s*{.*}/mg;
+	
+	if (file.match(alreadyFormatted)){
+		$("#cssResult").text("Already Formatted.");
+		addAnimation($('#cssResult'), 'fade');
+		return;
+	}
+	
+	if (!file.match(beginBracket)){
+		$("#cssResult").text("Invalid css file.");
+		addAnimation($('#cssResult'), 'fade');
+		return;
+	}
+			
+	var		cssGroupNum = file.match(beginBracket).length;
 			grouped = createMatrix(cssGroupNum, 2);
 	// {\n(.*\:\s?\w*.*;?[\n])+}? <- does not work on animation css
 
@@ -58,8 +72,8 @@ function parseText(file) {
 	
 	var needFormat = segragate(grouped);
 	formatMatrix(needFormat);
-	addAnimation($('#cssResult'), 'typed')
-	addAnimation($('#copyMessage'), 'typed')
+	addAnimation($('#cssResult'), 'fade')
+	addAnimation($('#copyMessage'), 'fade')
 
 }
 

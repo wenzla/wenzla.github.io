@@ -42,13 +42,13 @@ Last modified by: Allen Wenzl
 						<input type="text" class="form-control" id="dateGen">
 					</div>
 					<div class="checkbox">
-						<label><input type="checkbox" class="dateCheckbox">Use Today's Date?</label>
+						<label><input type="checkbox" class="dateCheckbox" name="dateCheckbox">Use Today's Date?</label>
 					</div>
 					<div class="checkbox">
-						<label><input type="checkbox" class="logoCheckbox">Add Logo</label>
+						<label><input type="checkbox" class="logoCheckbox" name="logoCheckbox">Add Logo</label>
 					</div>
 					<div class="checkbox">
-						<label><input type="checkbox" class="buttonCheckbox">Add Button</label>
+						<label><input type="checkbox" class="buttonCheckbox" name="buttonCheckbox">Add Button</label>
 					</div>
 					<div class="bPad">
 						<button id="buttonGen" type="button" class="btn btn-default" onclick="makeHeading()">Generate</button>
@@ -125,7 +125,7 @@ Last modified by: Allen Wenzl
 				<div id="cheatSheet" class="collapse">
 					<p><code>&lt;b&gt;Text&lt;/b&gt;</code>  for <b>bold</b> text</p>
 					<p><code>&lt;i&gt;Text&lt;/i&gt;</code>  for <i>italic</i> text</p>
-					<p><code>&lt;br&gt;</code>  for a new line</p>
+					<p><code>&lt;br&gt;</code>  to force a new line</p>
 					<p><code>&<span>09;</span> or &<span>emsp;</span></code>  for a tab</p>
 					<p><code>&<span>nbsp;</span></code>  for an extra space</p>
 				</div>
@@ -196,13 +196,41 @@ Last modified by: Allen Wenzl
 					<button type="button" class="btn btn-default" onclick="undo()">Undo</button>
 				</div>	
 			</div>
-			<div class="col-xs-12 optionBox tPad bPad">
-				<p class="tPad">
-					Import email body below.
-				</p>
-				<textarea class="form-control" rows="6" id="cssText"></textarea>
-				<div class="col-xs-12 undo">
-					<button type="button" class="btn btn-default" onclick="undo()">Import</button>
+			
+			<div class="col-xs-12 tPad">
+				&nbsp;
+			</div>
+			<div class="col-xs-12 sideHead Pad">
+				<h3>Import</h3>
+			</div>
+			<div class="col-xs-12 sidebar">
+				<h4 data-toggle="collapse" href="#importText" data-parent="#accordian">Import Email</h4>
+				<div id="importText" class="collapse">
+					<div class="form-group">
+						<label for="importString">Text:</label>
+						<textarea class="form-control" rows="5" id="importString"></textarea>
+					</div>
+					<div class="bPad">
+						<button type="button" class="btn btn-default" onclick="importEmail()">Import</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 sidebar">
+				<h4 data-toggle="collapse" href="#importAbout" data-parent="#accordian">Import Format</h4>
+				<div id="importAbout" class="collapse">
+					<p>
+						<b>Date</b>: The import feature will assume that date used will be today's date.
+						<br>
+						<b>Title</b>: The first line of the file will be the title.
+						<br>
+						<b>Logo & Button</b>: Will always be included.
+						<br>
+						<b>Section Headers</b>: These will be on its own line in [brackets].
+						<br> 
+						<b>Sub-Section Headers</b>: These will also be on its own line in (parenthesis).
+						<br>
+						<b>Text</b>: Can use formatting as described in the Cheat Sheet above.
+					</p>
 				</div>
 			</div>
 				

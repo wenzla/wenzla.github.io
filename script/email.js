@@ -26,14 +26,14 @@ outputString.push("<!DOCTYPE html><html><body>");
 // generate header button
 function makeHeading(){
 	// get needed variables
-	var title = $("#titleGen").val();
-	var date = $("#dateGen").val();
-	var color = $("#TitleColor").val();
-	var textColor = $("#TextColor").val();
-	var headColor = $("#HeadingColor").val();
-	var isDateChecked = $('.dateCheckbox').is(':checked');
-	var isLogoChecked = $('.logoCheckbox').is(':checked');
-	var isButtonChecked = $('.buttonCheckbox').is(':checked');
+	var 	title = $("#titleGen").val();
+			date = $("#dateGen").val();
+			color = $("#TitleColor").val();
+			textColor = $("#TextColor").val();
+			headColor = $("#HeadingColor").val();
+			isDateChecked = $('.dateCheckbox').is(':checked');
+			isLogoChecked = $('.logoCheckbox').is(':checked');
+			isButtonChecked = $('.buttonCheckbox').is(':checked');
 	if (isDateChecked){
 		// Gets todays date
 		var today = new Date();
@@ -65,11 +65,11 @@ function makeHeading(){
 // generate section button
 function makeSection(){
 	// get needed variables
-	var title = $("#StitleGen").val();
-	var color = $("#TitleColor").val();
-	var backColor = $("#BackGroundColor").val();
+	var 	title = $("#StitleGen").val();
+			color = $("#TitleColor").val();
+			backColor = $("#BackGroundColor").val();
 	// creates html code used for section header of email
-	var stringGen = "<div id=\"section" + sectionCounter + "\" style=\"font-size: 3.5ex; font-weight: bold; text-align: center; padding-bottom: 1ex; padding-top: 1ex; background-color: " + backColor + "; color: " + color + "\" class=\"SectionClass faded\">" + title + "<hr></div>";
+			stringGen = "<div id=\"section" + sectionCounter + "\" style=\"font-size: 3.5ex; font-weight: bold; text-align: center; padding-bottom: 1ex; padding-top: 1ex; background-color: " + backColor + "; color: " + color + "\" class=\"SectionClass faded\">" + title + "<hr></div>";
 	// puts the html in the email preview area
 	$("#buildArea").append(stringGen);
 	// pushes html onto email generation stack
@@ -87,12 +87,12 @@ function makeSection(){
 // generate subsection button
 function makeSSection(){
 	// get needed variables
-	var SSname = $("#SSnameGen").val();
-	var SStext = $("#SStextGen").val();
-	var backColor = $("#BackGroundColor").val();
-	var textColor = $("#TextColor").val();
+	var 	SSname = $("#SSnameGen").val();
+			SStext = $("#SStextGen").val();
+			backColor = $("#BackGroundColor").val();
+			textColor = $("#TextColor").val();
 	// creates html code used for subsection of email
-	var stringGen = "<div id=\"Ssection" + SsectionCounter + "\" style=\"color: " + textColor + ";\" class=\"TextClass faded\"><div class=\"SSectionClass\" style=\"padding-left: 5%; padding-right: 5%; font-size: 2ex; background-color: " + backColor + "; font-weight: bold; padding-bottom: 0.5ex;\">" + SSname + "</div><p class=\"SSectionClass\" style=\"padding-left: 5%; padding-right: 5%; background-color: " + backColor + ";\">" + SStext + "</p></div>";
+			stringGen = "<div id=\"Ssection" + SsectionCounter + "\" style=\"color: " + textColor + ";\" class=\"TextClass faded\"><div class=\"SSectionClass\" style=\"padding-left: 5%; padding-right: 5%; font-size: 2ex; background-color: " + backColor + "; font-weight: bold; padding-bottom: 0.5ex;\">" + SSname + "</div><p class=\"SSectionClass\" style=\"padding-left: 5%; padding-right: 5%; background-color: " + backColor + ";\">" + SStext + "</p></div>";
 	// puts the html in the email preview area
 	$("#buildArea").append(stringGen);
 	// pushes html onto email generation stack
@@ -146,6 +146,36 @@ function undo(){
 	}	
 	
 }
+
+function importEmail() {
+	
+	var 	imported = $("#importString").val();
+			lines = imported.split('\n');
+			heading = lines.shift();
+			sectionFormat = /^ *\[.*\] *$/mg;
+			subsectionFormat = /^ *\(.*\) *$/mg;
+	
+	$('input[name=dateCheckbox]').attr('checked', true);
+	$('input[name=logoCheckbox]').attr('checked', true);
+	$('input[name=buttonCheckbox]').attr('checked', true);
+	$("#titleGen").val(heading);
+	makeHeading();
+	
+	for(var i = 0; i < lines.length; i++){
+		if(lines[i].match(sectionFormat)){
+			$("#StitleGen").val(lines[i]);
+			makeSection();
+			
+		} else if(lines[i].match(subsectionFormat)){
+			$("#SSnameGen").val(lines[i]);
+			
+		} else {
+			$("#SStextGen").append(lines[i]);
+		}
+	}
+
+}
+
 // output HTML button
 function output(){
 	// finishes html stack

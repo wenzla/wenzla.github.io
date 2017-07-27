@@ -152,6 +152,7 @@ function checkForm() {
 		returnValue =  false;
 	}
 	// checks if user inputted numbers correctly
+	// $('.checkVals input[type="text"]').each(function()
 	$('.checkVals input[type="text"]').each(function(){
         if (!this.value.match(numRegex)){
 			// the box with the wrong number gets a red outline
@@ -217,8 +218,8 @@ function calculate() {
 	for (var i = 0; i < loopIndex; i++){
 		npshrpsis[i] = (((pump * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 0.5) * 32.2 * density) / 144.0;
 	}
-	
-	var kinematicViscosity = $("#kViscosity").val();
+	// convert it to ft^2/s
+	var kinematicViscosity = ($("#kViscosity").val())*0.0000108;
 	// There can be a variable amount of pipes so we need a dynamically sized array to keep track of them
 	var pipesDValue = new Array();
 	var roughnesses = new Array();
@@ -245,9 +246,11 @@ function calculate() {
 		} else if (pump == 8.5){
 			// 4" flowrate
 			qs[i] = (-0.626 * dPressure) + (0.296 * (freqs[i]*30));
-		} else {
+		} else if (pump == 7){
 			// 3" flowrate
 			qs[i] = (3.853 * freqs[i]) - (0.1585 * dPressure) + 1.0701;
+		} else {
+			qs[i] = (pump * freqs[i]);
 		}
 	}
 	// flow rate used if setup has parallel elements
