@@ -2,9 +2,9 @@
 flowCalculations.js - contains all the javascript and calculations for flowCalc.html
 
 Note: this was originally a small calculator but later had to be expanded to include more features.
-Because of this, there may be some sections commented out (or not) that MAY be used later but never actually
-did by the time my employment was finished.  Also, this caclulator originally only had bootstrap as a 
-dependency.  So when jquery was added later, not all the original javascript was converted. (still works however)
+Because of this, there may be some sections commented out (or not) that MAY be used later or not.  Also, 
+this caclulator originally only had bootstrap as a dependency.  So when jquery was added later, not all 
+the original javascript was converted. (still works however)
 
 Dependencies:
 angular.js - used to generate "pipes" and "fittings" under the line losses info and fittings info sections, respectively
@@ -19,11 +19,11 @@ Original Author: Allen Wenzl
 Calculations provided by: Heston Smith, Charles El-Helou, and Andy Meyers (slightly modified by Allen Wenzl)
 
 Originally created: 6/26/17
-Last modified: 7/19/17
+Last modified: 7/21/17
 Last modified by: Allen Wenzl
 
 **/
-// scroll to top on page load
+// scroll to top on page load, used for easier testing
 //$(window).on('beforeunload', function() {
     //$(window).scrollTop(0);
 //});
@@ -43,7 +43,7 @@ for (var o = 0; o < 36; o++){
 
 var ctx = $("#flowChart");
 var myChart = new Chart(ctx, {});
-// loads images for the schematic;  MOSTLY OBSOLETE
+// loads images for the schematic;  MOSTLY OBSOLETE - will probably delete later
 imgArray[0].src = 'schem/180.png';
 imgArray[1].src = 'schem/180.png';
 imgArray[2].src = 'schem/angle valve.PNG';
@@ -80,13 +80,12 @@ imgArray[32].src = 'schem/tees.PNG';
 imgArray[33].src = 'schem/tees.PNG';
 imgArray[34].src = 'schem/threaded union.png';
 
-  /**   OBSOLETE
+  /**   OBSOLETE - This method will probably be deleted later.
 	* getImage(sender): retrieves an image in the above image array depending on the index selected 
 	* under the fittings info section of the webpage.
 	*
 	* sender - the dropdown menu which activated the function
 	**/
-
 function getImage(sender){
 	// The if statement commented out below would make the image appear in the schematic builder area
 	// only when the fitting and the fitting row is different
@@ -110,12 +109,14 @@ function getImage(sender){
 		fNums.push(document.getElementById("fNum" + i).value);
 	//}
 }
-// makes the tank and pump picture draggable within the area
+// makes the tank and pump picture draggable within the area on page load - OBSOLETE
 $( function() {
     $( "#tankPic" ).draggable({  opacity: 0.6, snap: true, containment: "#dropArea", scroll: false });
     $( "#pumpPic" ).draggable({ opacity: 0.6, snap: true, containment: "#dropArea", scroll: false });
 } );
-// Appends a new div to the lines section
+// Appends a new div to the lines section.
+// Note: This can also be done in angular but the css is a bit different than the other lines so it would 
+// be a bit of a pain to do. 
 function addLine(){
 	lines.push(true);
 	$("#lineLosses").append(" <div class=\"col-sm-4 faded line" + lines.length + "\"><label for=\"pDiam" + lines.length + "\">Diameter of Pipe (Inches)</label><br>	<select class=\"selectpicker col-sm-12\" style=\"height: 4.5ex\" id=\"pDiam" + lines.length + "\"> <option>0</option> <option>2</option> <option>3</option> <option>4</option> <option>6</option> </select></div> <div class=\"col-sm-3 faded line" + lines.length + "\"> <label for=\"pLength" + lines.length + "\">Length of Pipe</label> <div class=\"input-group\"> <input type=\"text\" class=\"form-control\" id=\"pLength" + lines.length + "\"> <span class=\"input-group-addon\">ft</span> </div> </div>  <div class=\"col-sm-3 faded line" + lines.length + "\"> <label for=\"roughness" + lines.length + "\">Roughness of Pipe</label>  <div class=\"input-group\"> <input type=\"text\" class=\"form-control\" id=\"roughness" + lines.length + "\"> <span class=\"input-group-addon\">in</span> </div> </div> <div class=\"col-sm-1 faded bottomPad line" + lines.length + "\"> <p>&nbsp;</p> <button type=\"button\" class=\"btn btn-xs btn-default customBtn\" onclick=\"deleteLine(" + lines.length + ")\"> <span class=\"glyphicon glyphicon-remove\"></span>	</button> </div>");	
@@ -126,6 +127,7 @@ function addFitting(){
 	$("#fittingsection").append("<div class=\"col-sm-4 faded fitting" + fittings.length + "\"> <label for=\"fType" + fittings.length + "\">Type of Fitting</label><br> <select class=\"selectpicker col-sm-12\" style=\"height: 4.5ex\" id=\"fType" + fittings.length + "\" onchange=\"getImage(this)\" name=" + fittings.length + "> <option>180°  Return Bend, Flanged</option> <option>180°  Return Bend, Threaded</option> <option>Angle Valve Fully Open</option> <option>Ball Valve </option> <option>Ball Valve (1/2 Closed)</option> <option>Ball Valve (2/3 Closed)</option> <option>Branch Flow, Threaded</option> <option>Butterfly Valve</option> <option>Close Return Bend</option> <option>Gate Valve  </option> <option>Gate Valve (1/2 closed)</option> <option>Gate Valve (1/4 closed)</option> <option>Gate Valve (3/4 closed)</option> <option>Globe Valve</option> <option>Long Radius 45° Flanged</option> <option>Long Radius 90° Flanged</option> <option>Long Radius 90° Threaded</option> <option>Pipe Entrance (inward Projecting)</option> <option>Pipe Entrance (Sharp Edged)</option> <option>Pipe Exit</option> <option>Plug Valve 3-Way Thru-Flow</option> <option>Plug Valve Branch Flow</option> <option>Plug Valve Straightaway</option> <option>Regular 45° Threaded</option> <option>Regular 90° Flanged </option> <option>Regular 90° Threaded </option> <option>Standard Elbow 45°</option> <option>Standard Elbow Long Radius 90°</option> <option>Sudden Expander</option> <option>Sudden Reducer</option> <option>Swing Check Valve</option> <option>Tees, Branch Flow, Flanged</option> <option>Tees, Line Flow, Flanged</option> <option>Tees, Line Flow, Threaded</option> <option>Threaded Union</option> </select> </div> <div class=\"col-sm-3 faded fitting" + fittings.length + "\"> <label for=\"fDiam" + fittings.length + "\">Diameter (Inches)</label><br> <select class=\"selectpicker col-sm-12\" style=\"height: 4.5ex\" id=\"fDiam" + fittings.length + "\"> <option>2</option> <option>3</option> <option>4</option> <option>6</option> </select> </div> <div class=\"col-sm-3 faded fitting" + fittings.length + "\"> <div class=\"form-group \"> <label for=\"fNum" + fittings.length + "\">Number of Fittings</label> <input type=\"text\" class=\"form-control \" id=\"fNum" + fittings.length + "\"> </div> </div> </div> <div class=\"col-sm-1 faded fitting" + fittings.length + "\"> <div class=\"col-xs-12\">&nbsp;</div> <label class=\"checkbox-inline fitting" + fittings.length + "\"> <input type=\"checkbox\" value=\"\" id=\"check" + fittings.length + "\">Parallel</label> </div> <div class=\"col-sm-1 faded bottomPad fitting" + fittings.length + "\"> <p>&nbsp;</p> <button type=\"button\" class=\"btn btn-xs btn-default customBtn\" onclick=\"deleteFitting(" + fittings.length +")\"> <span class=\"glyphicon glyphicon-remove\"></span>	</button> </div>");
 }
 // Deletes a div from the lines section
+// Note: this can also be done in angular like above.
 function deleteLine(line){
 	$(".line" + line).remove();	
 	lines[line - 1] = false;
@@ -136,7 +138,7 @@ function deleteFitting(fit){
 	$("#imgfType" + fit).remove();
 	fittings[fit - 1] = false;
 }
-// Validates that the user inputted valid values
+// Validates that the user inputted valid values for certain sections
 function checkForm() {
 	var returnValue = true;
 	// regex for all integers and decimals that are not negative
@@ -150,6 +152,7 @@ function checkForm() {
 		returnValue =  false;
 	}
 	// checks if user inputted numbers correctly
+	// $('.checkVals input[type="text"]').each(function()
 	$('.checkVals input[type="text"]').each(function(){
         if (!this.value.match(numRegex)){
 			// the box with the wrong number gets a red outline
@@ -165,10 +168,10 @@ function checkForm() {
 			this.style = "border-color: none; box-shadow: none;"
 		}			
 	});
-	
+	// Makes sure the frequency is between 1 and 90
 	var freq = $("#frequency");
-	if(freq.val() > 90 || freq.val() < 0){
-		$("#alertMessage").text("Please select a frequency in the valid range of 0-90");
+	if(freq.val() > 90 || freq.val() < 1){
+		$("#alertMessage").text("Please select a frequency in the valid range of 1-90");
 		if(!$("#alert").is(":visible")){
 			$("#alert").fadeIn("slow");
 		}
@@ -182,14 +185,15 @@ function checkForm() {
 	return returnValue;
 }
 
+// Was originally calculating at one frequency but a graph was later added to the page which means I had
+// to calculate an array of values to graph.  The javascript was converted from single value to array, but
+// the loops are probably not as effecient as they could be.
 function calculate() {
-	var canCalc = true;
-	canCalc = checkForm();
 	// Doesn't even bother with calculations if the user inputted questionable values
-	if (!canCalc){
+	if (!checkForm()){
 		return;
 	}
-	// removes then adds the graph back in for it to work correctly
+	// removes then (later) adds the graph from the DOM for it to work correctly
 	$("#flowChart").remove()
 	// Gets variables used for calculations
 	var height = $("#height").val();
@@ -214,8 +218,8 @@ function calculate() {
 	for (var i = 0; i < loopIndex; i++){
 		npshrpsis[i] = (((pump * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 0.5) * 32.2 * density) / 144.0;
 	}
-	
-	var kinematicViscosity = $("#kViscosity").val();
+	// convert it to ft^2/s
+	var kinematicViscosity = ($("#kViscosity").val())*0.0000108;
 	// There can be a variable amount of pipes so we need a dynamically sized array to keep track of them
 	var pipesDValue = new Array();
 	var roughnesses = new Array();
@@ -234,7 +238,7 @@ function calculate() {
 	}
 	
 	var qs = new Array();
-	// Flowrate used in this calculation
+	// Theoretical flowrates used in this calculation
 	for (var i = 0; i < loopIndex; i++){
 		// RVP flowrate
 		if (pump == 3){
@@ -242,9 +246,11 @@ function calculate() {
 		} else if (pump == 8.5){
 			// 4" flowrate
 			qs[i] = (-0.626 * dPressure) + (0.296 * (freqs[i]*30));
-		} else {
+		} else if (pump == 7){
 			// 3" flowrate
 			qs[i] = (3.853 * freqs[i]) - (0.1585 * dPressure) + 1.0701;
+		} else {
+			qs[i] = (pump * freqs[i]);
 		}
 	}
 	// flow rate used if setup has parallel elements
@@ -252,8 +258,7 @@ function calculate() {
 	for (var i = 0; i < loopIndex; i++){
 		pqs[i] = qs[i]/2;
 	}
-	
-	
+		
 	// Area of each pipe
 	var pipeAreas = new Array();
 	for (var i = 0; i < pipesDValue.length; i++){
@@ -351,6 +356,7 @@ function calculate() {
 		}
 	}
 	// get strainer and breakaway valve variables
+	// Note: the DValues would not work with jQuery Selectors
 	var StrainerDValue = document.getElementById("sDiam").options[document.getElementById("sDiam").selectedIndex].text;
 	var BreakawayDValue = document.getElementById("bDiam").options[document.getElementById("bDiam").selectedIndex].text;
 	var breakawayNum = $("#bNum").val();
@@ -449,18 +455,18 @@ function calculate() {
 			pheadLosses[i] += pkDiams[i][j] * pheadVelocityM[i][j];
 		}
 	}	
-	var pheadLossPsis = new Array();
-	for (var i = 0; i < loopIndex; i++){
-		pheadLossPsis[i] = (pheadLosses[i] * density * 32.2) / 144.0;
-	}
+	
 	// gets total headloss of setup
+	var pheadLossPsis = new Array();
 	var totalHeadLossPsis = new Array();
 	for (var i = 0; i < loopIndex; i++){
+		pheadLossPsis[i] = (pheadLosses[i] * density * 32.2) / 144.0;
 		totalHeadLossPsis[i] = headLossPsis[i] + BPressureDrops[i] + SPressureDrops[i] + pheadLossPsis[i];
 	}
 	
 	var staticHead = ((density * 32.2 * height)/144);
-	// had to use parse statements else it just appended strings to each other then minused creating a NaN
+	// had to use parse statements else it just appended strings to each other then subtracted a number from 
+	// a string creating a NaN
 	var pfCalcs = new Array();
 	for (var i = 0; i < loopIndex; i++){
 		pfCalcs[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsis[i]);
@@ -485,32 +491,33 @@ function calculate() {
 	var VLs = new Array();
 	for (var i = 0; i < loopIndex; i++){
 		VLs[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVP);
-		// slightly corrects the VL ratio when under 20 hz, since the flow model isn't good at low frequencies
-		if (VLs[i] < 0 && freqs[i] < 15){
-			VLs[i] = 0;
-		}
 	}
 	
 	// The estimated flow shown on the page
-	//var ans = q*VLratio;
+	// var ans = q*VLratio;
 	var answers = new Array();
 	for (var i = 0; i < loopIndex; i++){
 		answers[i] = qs[i]*(1.0/(VLs[i] + 1));
+		// if the answer is < 0, makes it 0 since < 0 is impossible
 		if (answers[i] < 0){
 			answers[i] = 0;
 		}
+		// if the V/L is < 0, you have defied the laws of physics
 		if (VLs[i] < 0){
 			VLs[i] = 0;
 		}
+		// if the theoretical flow is < 0, correct it to 0 for more visually pleasing graph and realism
 		if (qs[i] < 0){
 			qs[i] = 0;
 		}
+		// Again, laws of fluid dynamics are broken if answer > q
 		if (answers[i] > qs[i]){
 			answers[i] = qs[i];
 		}
 	}
 	// Adds a fade animation when the answer shows up
 	$('#resultText').fadeOut(200, function() {
+		// toFixed(n) rounds the answer to n decimal places
         $(this).text(parseFloat(answers[freq-1]).toFixed(6) + " GPM").fadeIn("slow");
     });
 	$('#result2Text').fadeOut(200, function() {
@@ -525,19 +532,28 @@ function calculate() {
 	$(".graph").append("<canvas id=\"flowChart\" width=\"80%\" height=\"30%\"></canvas>");
 	var ctx = $("#flowChart");
 	var myChart = new Chart(ctx, {
+		// the type of graph
 		type: 'line',
+		// graphs x-axis then y-axis
 		data: {
 			labels: freqs,
 			datasets: [{
+				// name shown in legend
 				label: 'Theoretical Flow',
+				// array of q values
 				data: qs,
+				// the coloring under the curve
 				backgroundColor: [
 					'rgba(0,19,66,0.1)'
 				],
+				// NOTE: hex colors MUST use the 6-digit format in chart.js
+				// color of the line connecting the points
 				borderColor: [
 					'#001342'
 				],
+				// thickness of the line connecting the points
 				borderWidth: 1,
+				// color of the points
 				pointBackgroundColor: '#001342'
 			},
 			{
@@ -559,7 +575,7 @@ function calculate() {
 				yAxes: [{
 					scaleLabel: {
 						display: true,
-						labelString: 'Flow [GPM]'
+						labelString: 'Flow (GPM)'
 					}
 				}],
 				xAxes: [{
@@ -585,3 +601,28 @@ angular.module('flowApp', []).controller('FlowListController', function() {
 		{text:'3', show: false}];
 });
 
+/** Function I use that is in common.js
+An example call would be var matrix = createMatrix(5,4)
+The variable matrix will be:
+		[], [], [], []
+		[], [], [], []
+		[], [], [], []
+		[], [], [], []
+		[], [], [], []
+		
+The [] represents an empty array.  This function is a thing since
+declaring matrices in javascript is annoying.
+
+Also works with one argument (or 3+ but I wouldn't do that) to create an n x 1 matrix (an array).
+function createMatrix(length) {
+    var arr = new Array(length || 0),
+        i = length;
+	// recursively creates an array at each index of the originally produced array 
+    if (arguments.length > 1) {
+		// Type conversion from arguements array to a regualar array (which are apparently different)
+        var args = Array.prototype.slice.call(arguments, 1);
+        while(i--) arr[length-1 - i] = createMatrix.apply(this, args);
+    }
+    return arr;
+}
+**/
