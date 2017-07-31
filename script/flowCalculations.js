@@ -38,7 +38,7 @@ var imgArray = new Array();
 // load default image into array
 for (var o = 0; o < 36; o++){
 	imgArray[o] = new Image();
-	imgArray[o].src = 'schem/logo.jpg';
+	imgArray[o].src = 'images/logo.jpg';
 }
 
 var ctx = $("#flowChart");
@@ -109,14 +109,20 @@ function getImage(sender){
 		fNums.push(document.getElementById("fNum" + i).value);
 	//}
 }
-// makes the tank and pump picture draggable within the area on page load - OBSOLETE
+
+// doesn't work :/
+$("#frequncy").on("change paste keyup", function() {
+   //alert($(this).val()); 
+});
+
+/** makes the tank and pump picture draggable within the area on page load - OBSOLETE
 $( function() {
-    $( "#tankPic" ).draggable({  opacity: 0.6, snap: true, containment: "#dropArea", scroll: false });
-    $( "#pumpPic" ).draggable({ opacity: 0.6, snap: true, containment: "#dropArea", scroll: false });
+	$( "#tankPic" ).draggable({  opacity: 0.6, snap: true, containment: "#dropArea", scroll: false });
+	$( "#pumpPic" ).draggable({ opacity: 0.6, snap: true, containment: "#dropArea", scroll: false });
 } );
 // Appends a new div to the lines section.
 // Note: This can also be done in angular but the css is a bit different than the other lines so it would 
-// be a bit of a pain to do. 
+// be a bit of a pain to do. **/
 function addLine(){
 	lines.push(true);
 	$("#lineLosses").append(" <div class=\"col-sm-4 faded line" + lines.length + "\"><label for=\"pDiam" + lines.length + "\">Diameter of Pipe (Inches)</label><br>	<select class=\"selectpicker col-sm-12\" style=\"height: 4.5ex\" id=\"pDiam" + lines.length + "\"> <option>0</option> <option>2</option> <option>3</option> <option>4</option> <option>6</option> </select></div> <div class=\"col-sm-3 faded line" + lines.length + "\"> <label for=\"pLength" + lines.length + "\">Length of Pipe</label> <div class=\"input-group\"> <input type=\"text\" class=\"form-control\" id=\"pLength" + lines.length + "\"> <span class=\"input-group-addon\">ft</span> </div> </div>  <div class=\"col-sm-3 faded line" + lines.length + "\"> <label for=\"roughness" + lines.length + "\">Roughness of Pipe</label>  <div class=\"input-group\"> <input type=\"text\" class=\"form-control\" id=\"roughness" + lines.length + "\"> <span class=\"input-group-addon\">in</span> </div> </div> <div class=\"col-sm-1 faded bottomPad line" + lines.length + "\"> <p>&nbsp;</p> <button type=\"button\" class=\"btn btn-xs btn-default customBtn\" onclick=\"deleteLine(" + lines.length + ")\"> <span class=\"glyphicon glyphicon-remove\"></span>	</button> </div>");	
@@ -142,7 +148,7 @@ function deleteFitting(fit){
 function checkForm() {
 	var returnValue = true;
 	// regex for all integers and decimals that are not negative
-	var numRegex = /(^[0-9]+$|^[0-9]*\.[0-9]+$)/g;
+	var numRegex = /(^-?[0-9]+$|^[0-9]*\.[0-9]+$)/g;
 	// checks if user selected a pump
 	if($('input[name="pumps"]:checked').val() == null){
 		$("#alertMessage").text("Please select a pump under \"Pump Options.\"");
@@ -242,7 +248,7 @@ function calculate() {
 	for (var i = 0; i < loopIndex; i++){
 		// RVP flowrate
 		if (pump == 3){
-			qs[i] = (3.83 * freqs[i]) - (2.39 * dPressure) + 0.8155;
+			qs[i] = (3.72 * freqs[i]) - (0.132 * dPressure);
 		} else if (pump == 8.5){
 			// 4" flowrate
 			qs[i] = (-0.626 * dPressure) + (0.296 * (freqs[i]*30));

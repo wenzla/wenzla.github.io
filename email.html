@@ -4,7 +4,7 @@ email.html - An email generator used to help others make nice looking emails wit
 Original Author: Allen Wenzl
 
 Originally created: 7/6/17
-Last modified: 7/13/17
+Last modified: 7/27/17
 Last modified by: Allen Wenzl
 
 -->
@@ -25,7 +25,7 @@ Last modified by: Allen Wenzl
 			<h2> Email Generator</h2> <hr>
 		</div>
 		<!-- The side menu/toolbox -->
-		<div class="col-xs-3" id="accordian">
+		<div class="col-xs-4 col-md-3" id="accordian">
 			<div class="col-xs-12 sideHead">
 				<h3>Components</h3>
 			</div>
@@ -186,28 +186,28 @@ Last modified by: Allen Wenzl
 				&nbsp;
 			</div>
 			<div class="col-xs-12 sideHead Pad">
-				<h3>Options</h3>
-			</div>
-			<div class="col-xs-12 optionBox">
-				<div class="col-xs-12 undo">
-					<button type="button" class="btn btn-default" onclick="output()" data-target="#copyPopup">Output HTML</button>
-				</div>
-				<div class="col-xs-12 undo">
-					<button type="button" class="btn btn-default" onclick="undo()">Undo</button>
-				</div>	
-			</div>
-			
-			<div class="col-xs-12 tPad">
-				&nbsp;
-			</div>
-			<div class="col-xs-12 sideHead Pad">
 				<h3>Import</h3>
+			</div>
+			<div class="col-xs-12 sidebar">
+				<h4 data-toggle="collapse" href="#importLogo" data-parent="#accordian">Import Logo</h4>
+				<div id="importLogo" class="collapse">
+					<small class="bPad">
+						Note: Will change logo on generation.
+					</small>
+					<div class="form-group">
+							<label for="imgURL">Image URL</label>
+							<input type="text" class="form-control" id="imgURL">
+						</div>
+					<div class="bPad">
+						<button type="button" class="btn btn-default" onclick="importLogo()">Import Logo</button>
+					</div>
+				</div>
 			</div>
 			<div class="col-xs-12 sidebar">
 				<h4 data-toggle="collapse" href="#importText" data-parent="#accordian">Import Email</h4>
 				<div id="importText" class="collapse">
 					<div class="form-group">
-						<label for="importString">Text:</label>
+						<label for="importString">Formatted Text:</label>
 						<textarea class="form-control" rows="5" id="importString"></textarea>
 					</div>
 					<div class="bPad">
@@ -233,11 +233,29 @@ Last modified by: Allen Wenzl
 					</p>
 				</div>
 			</div>
+			
+			<div class="col-xs-12 tPad">
+				&nbsp;
+			</div>
+			<div class="col-xs-12 sideHead Pad">
+				<h3>Options</h3>
+			</div>
+			<div class="col-xs-12 optionBox">
+				<div class="col-md-6 col-xs-12 option">
+					<button type="button" class="btn btn-default" onclick="output()" data-target="#copyPopup">Output HTML</button>
+				</div>
+				<div class="col-md-6 col-xs-12 option">
+					<button type="button" class="btn btn-default" onclick="exportEmail()">Create Export</button>
+				</div>	
+				<div class="col-xs-12 option">
+					<button type="button" class="btn btn-default" onclick="undo()">Undo</button>
+				</div>
+			</div>
 				
 		</div>
 		
 		<!-- Where the email preview is shown -->
-		<div class="col-xs-9 buildOuter">
+		<div class="col-md-9 col-xs-8 buildOuter">
 			<div class="col-xs-12" id="buildArea">
 		
 			</div>

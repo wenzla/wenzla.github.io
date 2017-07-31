@@ -9,19 +9,20 @@ clipboard.js - allows me to copy html code (the email) to a user's clipboard
 Original Author: Allen Wenzl
 
 Originally created: 7/6/17
-Last modified: 7/13/17
+Last modified: 7/31/17
 Last modified by: Allen Wenzl
 
 **/
 // variables used to keep track of the undo feature
-var headingCounter = 0;
-var sectionCounter = 0;
-var SsectionCounter = 0;
-var latest = [false, false, false];
-var last = new Array();
-var lastIndex = 0;
-// stack used to generate the html email
-var outputString = new Array();
+var 	headingCounter = 0;
+		sectionCounter = 0;
+		SsectionCounter = 0;
+		latest = [false, false, false];
+		last = new Array();
+		lastIndex = 0;
+		logo = "images/calcTooltip.png"
+		outputString = new Array(); // stack used to generate the html email
+		exportString = new Array();
 outputString.push("<!DOCTYPE html><html><body>");
 // generate header button
 function makeHeading(){
@@ -42,7 +43,7 @@ function makeHeading(){
 	var logoText = " ";
 	if (isLogoChecked){
 		// adds logo string
-		logoText = "<div> <img title=\"This is our logo; if you can make a better one, do it and sent it to me!\" style=\"display: block;  max-height: 20ex; margin-left: auto;  margin-right: auto; padding-bottom: 1.5ex;\" src=\"images/calcTooltip.png\"> </div>";
+		logoText = "<div> <img title=\"This is our logo; if you can make a better one, do it and sent it to me!\" style=\"display: block;  max-height: 20ex; margin-left: auto;  margin-right: auto; padding-bottom: 1.5ex;\" src=\"" + logo + "\"> </div>";
 	}
 	var buttonText = " ";
 	if (isButtonChecked){
@@ -60,6 +61,8 @@ function makeHeading(){
 	latest = [true, false, false];
 	last[lastIndex] = 0;
 	lastIndex += 1;
+	exportString.push(title);
+	$('#buttonGen').addClass("disabled");
 	
 }
 // generate section button
@@ -79,6 +82,7 @@ function makeSection(){
 	latest = [false, true, false];
 	last[lastIndex] = 1;
 	lastIndex += 1;
+	exportString.push("[" + title + "]");
 	
 }
 
@@ -102,6 +106,8 @@ function makeSSection(){
 	latest = [false, false, true];
 	last[lastIndex] = 2;
 	lastIndex += 1;
+	exportString.push("(" + SSname + ")");
+	exportString.push(SStext);
 	
 }
 // undo button function
@@ -116,6 +122,7 @@ function undo(){
 		headingCounter -= 1;
 		latest[0] = false;
 		changed = true;
+		$('#buttonGen').removeClass("disabled");
 	}
 	if(latest[1]){
 		// if section header, last section header is removed
@@ -146,31 +153,53 @@ function undo(){
 	}	
 	
 }
-
-function importEmail() {
-	
+// Allows user to import an email given a certain text format
+function importEmail() {	
 	var 	imported = $("#importString").val();
 			lines = imported.split('\n');
 			heading = lines.shift();
 			sectionFormat = /^ *\[.*\] *$/mg;
 			subsectionFormat = /^ *\(.*\) *$/mg;
+			subsectionDone = false;
 	
 	$('input[name=dateCheckbox]').attr('checked', true);
 	$('input[name=logoCheckbox]').attr('checked', true);
 	$('input[name=buttonCheckbox]').attr('checked', true);
 	$("#titleGen").val(heading);
 	makeHeading();
+	// Let loop know to end
+	lines.push("EOF");
 	
 	for(var i = 0; i < lines.length; i++){
+		
+		if (lines[i] == "EOF"){
+			break;
+		}	
 		if(lines[i].match(sectionFormat)){
-			$("#StitleGen").val(lines[i]);
+			var formatedSTitle = lines[i].replace(/\[|\]/g, '');
+			$("#StitleGen").val(formatedSTitle);
+			$("#SStextGen").val('');
 			makeSection();
-			
 		} else if(lines[i].match(subsectionFormat)){
-			$("#SSnameGen").val(lines[i]);
-			
-		} else {
-			$("#SStextGen").append(lines[i]);
+			var formatedSSTitle = lines[i].replace(/\(|\)/g, '');
+			$("#SSnameGen").val(formatedSSTitle);
+			$("#SStextGen").val('');
+		} else {	
+			// the "EOF" was mainly for this:  so I can call i+1 on lines and not error out
+			if (lines[i + 1] == "EOF" || lines[i + 1].match(subsectionFormat) || lines[i + 1].match(sectionFormat)){
+				$('#SStextGen').val(function(x, text) {
+					return text + lines[i] + "<br>";
+				});
+				subsectionDone = true;
+			} else {
+				$('#SStextGen').val(function(x, text) {
+					return text + lines[i] + "<br>";
+				});
+			}
+		}		
+		if (subsectionDone){
+			subsectionDone = false;
+			makeSSection();
 		}
 	}
 
@@ -223,12 +252,25 @@ function addAtag(){
 	var Htext = $("#Htext").val();
 	var Hlink = $("#Hlink").val();
 	// This regex works in theory, not in practice :/
-	//var correctURLFormat = new RegExp("\b(http)s?(:\/\/).*\..*\b");
-	//if(!correctURLFormat.test(Hlink)){
-	//	Hlink = "http://" + Hlink;
-	//}
+	var correctURLFormat = /\b(http)s?(:\/\/).*\..*\b/mg
+	if(!correctURLFormat.test(Hlink)){
+		Hlink = "http://" + Hlink;
+	}
 	// adds hyperlink code to subsection textbox
 	$( "#SStextGen" ).append( '&lt;' + "a href=\"" + Hlink + "\">" + Htext + '&lt;' + "/a>");
 }
 
+function importLogo(){
+	logo = $("#imgURL").val();
+}
 
+function exportEmail(){
+
+	for (var i = 0; i < exportString.length; i++){
+		$("#popupText").append(exportString[i] + '<br>');
+	}
+	// opens popup
+	$('#copyPopup').modal({
+		backdrop: 'static'
+	});
+}
