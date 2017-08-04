@@ -108,30 +108,4 @@ body{
 	vertical-align: middle;
 }
 
-.typewriter {
-	overflow: hidden; /* Ensures the content is not revealed until the animation */
-	border-right: .15em solid transparent; /* The typwriter cursor */
-	white-space: nowrap; /* Keeps the content on a single line */
-	margin: 0 auto; /* Gives that scrolling effect as the typing happens */
-	animation: 
-	typing 3.5s steps(40, end),
-	blink-caret .75s step-end 5;
-	-webkit-animation: fadein 1s linear 0s; /* Safari, Chrome and Opera > 12.1 */
-	-moz-animation: fadein 1s linear 0s; /* Firefox < 16 */
-	-ms-animation: fadein 1s linear 0s; /* Internet Explorer */
-	-o-animation: fadein 1s linear 0s; /* Opera < 12.1 */
-	animation: fadein 1s linear 0s;
-}
-
-/* The typing effect */
-@keyframes typing {
-	from { width: 0 }
-	to { width: 100% }
-}
-
-/* The typewriter cursor effect */
-@keyframes blink-caret {
-	from, to { border-color: transparent }
-	50% { border-color: lime; }
-}
 

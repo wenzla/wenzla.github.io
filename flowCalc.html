@@ -4,10 +4,11 @@ flowCalc.html - Calculator used to estimate flow given a certain setup using Par
 Used to show customers what flow to expect given their plumbing.
 
 Original Author: Allen Wenzl
-Calculations provided by: Heston Smith, Charles El-Helou, and Andy Meyers (slightly modified by Allen Wenzl)
+Calculations provided by: Heston Smith, Charles El-Helou, and Andy Meyers (slightly modified by Allen Wenzl).
+Authors on webpage: Allen Wenzl, Heston Smith, Charles El-Helou
 
 Originally created: 6/26/17
-Last modified: 7/21/17
+Last modified: 8/3/17
 Last modified by: Allen Wenzl
 
 -->
@@ -33,10 +34,10 @@ Last modified by: Allen Wenzl
 	<div class="col-sm-2 col-xs-12 header">
 		<!-- Logo links to parkers website -->
 		<a href="http://parker.com"><img src="images/logo.jpg" class="logo"/></a> 
-	</div>
+	</div><!--  Might not have heading since it doesn't look very professional
 	<div class="col-sm-8 col-xs-12 header">
-		<h3>Flow Predictor</h3>
-	</div>
+		<h3>Pump Flow Calculator</h3>
+	</div>-->
 </div>
 <!--  Space between header and body of webapp -->
 <div class="col-xs-12">&nbsp;</div>
@@ -64,7 +65,7 @@ Last modified by: Allen Wenzl
 		</div>
 		<label for="kViscosity" class="extraSpace">Kinematic Viscosity</label>
 		<div class="input-group">
-			<input type="text" class="form-control" id="kViscosity" placeholder="Example value: 0.0000124">
+			<input type="text" class="form-control" id="kViscosity" placeholder="Example value: 2">
 			<span class="input-group-addon">cSt</span>
 		</div>
 		<label for="Temperature" class="extraSpace">Temperature</label>
@@ -123,7 +124,7 @@ Last modified by: Allen Wenzl
 		<label for="tPressure">Pressure in tank</label>
 		<div class="input-group">
 			<input type="text" class="form-control" id="tPressure" placeholder="Example value: 0">
-			<span class="input-group-addon">psia</span>
+			<span class="input-group-addon">psig</span>
 		</div>
 		<label for="atm">Atmospheric Pressure</label>
 		<div class="input-group">			
@@ -133,34 +134,32 @@ Last modified by: Allen Wenzl
 	</div>
 </div>
 <!--  Angular.js controller generates the three initial pumps in the line losses info section-->
-<div ng-controller="FlowListController as flowList" class="col-xs-12 addingSection boxed topPad">
+<div class="col-xs-12 addingSection boxed topPad">
 	<div class="goldStrip"></div>
 	<div class="col-xs-12 parkerBox addPad" id="lineLosses">	
-		<div ng-repeat="flow in flowList.flows">
-			<h4 class="show-{{flow.show}}"> Line Losses Info</h4>
-			<div class="col-sm-4">
-				<label for="pDiam{{flow.text}}">Diameter of Pipe (Inches)</label><br>
-				<select class="selectpicker col-sm-12" style="height: 4.5ex" id="pDiam{{flow.text}}">
-				  <option>0</option>
-				  <option>2</option>
-				  <option>3</option>
-				  <option>4</option>
-				  <option>6</option>
-				</select>
+		<h4> Line Losses Info</h4>
+		<div class="col-sm-4">
+			<label for="pDiam1">Diameter of Pipe Section (Inches)</label><br>
+			<select class="selectpicker col-sm-12" style="height: 4.5ex" id="pDiam1">
+			  <option>0</option>
+			  <option>2</option>
+			  <option>3</option>
+			  <option>4</option>
+			  <option>6</option>
+			</select>
+		</div>
+		<div class="col-sm-3">
+			<label for="pLength1">Length of Pipe Section</label>
+			<div class="input-group">
+				<input type="text" class="form-control pLength" id="pLength1">
+				<span class="input-group-addon">ft</span>
 			</div>
-			<div class="col-sm-3">
-				<label for="pLength{{flow.text}}">Length of Pipe</label>
-				<div class="input-group">
-					<input type="text" class="form-control pLength" id="pLength{{flow.text}}">
-					<span class="input-group-addon">ft</span>
-				</div>
-			</div>	
-			<div class="col-sm-3">
-				<label for="roughness{{flow.text}}">Roughness of Pipe</label>
-				<div class="input-group">		
-					<input type="text" class="form-control" id="roughness{{flow.text}}">
-					<span class="input-group-addon">in</span>
-				</div>
+		</div>	
+		<div class="col-sm-3">
+			<label for="roughness1">Roughness of Pipe</label>
+			<div class="input-group">		
+				<input type="text" class="form-control" id="roughness1" placeholder="Example value: 0.01">
+				<span class="input-group-addon">in</span>
 			</div>
 		</div>
 	</div>	
@@ -168,7 +167,7 @@ Last modified by: Allen Wenzl
 	the first three in css and has additional javascript functionality)  -->
 	<div class = "col-xs-12 addButton">
 		<button type="button" class="btn btn-default btn-sm customBtn" onclick="addLine()">
-			<span class="glyphicon glyphicon-plus"></span> ADD A NEW PIPE
+			<span class="glyphicon glyphicon-plus"></span> ADD A NEW SECTION
 		</button>
 	<div class="col-xs-12">&nbsp;</div>
 	</div>
@@ -236,12 +235,18 @@ Last modified by: Allen Wenzl
 				</div>
 			</div>
 			<div class="col-sm-1">
-			<!-- These blank divs help with spacing that padding and margin css wouldn't fix -->
-			<div class="col-sm-12 col-xs-0">&nbsp;</div>
-			<label class="checkbox-inline">
-				<input type="checkbox" value="" id="check{{flow.text}}">Parallel
-			</label>
-			<div class="col-xs-12">&nbsp;</div>
+				<!-- These blank divs help with spacing that padding and margin css wouldn't fix -->
+				<div class="col-sm-12 col-xs-0">&nbsp;</div>
+				<div class="col-xs-12">
+					<label class="checkbox-inline PSCheckbox">
+						<input type="checkbox" value="" id="check{{flow.text}}" class="fitCheck{{flow.text}}" onchange="checkboxOne(this)">Parallel
+					</label>
+				</div>
+				<div class="col-xs-12">
+					<label class="checkbox-inline PSCheckbox">
+						<input type="checkbox" value="" class="fitCheck{{flow.text}}" onchange="checkboxOne(this)">Series
+					</label>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -303,10 +308,16 @@ Last modified by: Allen Wenzl
 		</div>
 		<div class="col-sm-2">
 		<div class="col-xs-12">&nbsp;</div>
-			<label class="checkbox-inline">
-				<input type="checkbox" value="" id="checkStrainer">Parallel
-			</label>
-			<div class="col-xs-12">&nbsp;</div>
+			<div class="col-xs-12">
+				<label class="checkbox-inline PSCheckbox">
+					<input type="checkbox" value="" id="checkStrainer" class="strainCheck" onchange="checkboxOne(this)" >Parallel
+				</label>
+			</div>
+			<div class="col-xs-12">
+				<label class="checkbox-inline PSCheckbox">
+					<input type="checkbox" value="" class="strainCheck" onchange="checkboxOne(this)">Series
+				</label>
+			</div>
 			<div class="col-xs-12">&nbsp;</div>
 		</div>
 		<h4> Breakaway valve Info</h4>
@@ -325,9 +336,16 @@ Last modified by: Allen Wenzl
 		</div>
 		<div class="col-sm-2">
 		<div class="col-xs-12">&nbsp;</div>
-			<label class="checkbox-inline">
-				<input type="checkbox" value="" id="checkBreak">Parallel
-			</label>
+			<div class="col-xs-12">
+				<label class="checkbox-inline PSCheckbox">
+					<input type="checkbox" value="" id="checkBreak" class="breakCheck" onchange="checkboxOne(this)">Parallel
+				</label>
+			</div>
+			<div class="col-xs-12">
+				<label class="checkbox-inline PSCheckbox">
+					<input type="checkbox" value="" class="breakCheck" onchange="checkboxOne(this)">Series
+				</label>
+			</div>
 		</div>
 	</div>
 	<div class="col-xs-12">&nbsp;</div>
@@ -341,17 +359,21 @@ Last modified by: Allen Wenzl
 	</div>
 	<!-- Where the final answers show up -->
 	<div class="col-xs-12">
-		<div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-0">
+		<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
 			<p class="center resultLabel">Estimated Flow</p>
 			<p class="result"><font id="resultText">XXX.XXXXXX GPM</font></p>
 		</div>
-		<div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-0">
+		<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+			<p class="center resultLabel">Theoretical Flow</p>
+			<p class="result"><font id="result3Text">XXX.XXXXXX GPM</font></p>
+		</div>
+		<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
 			<p class="center resultLabel">V/L</p>
 			<p class="result"><font id="result2Text">XX.XXXX%</font></p>
 		</div>
-		<div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-0">
-			<p class="center resultLabel">Theoretical Flow</p>
-			<p class="result"><font id="result3Text">XXX.XXXXXX GPM</font></p>
+		<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+			<p class="center resultLabel">NPSHR</p>
+			<p class="result"><font id="result4Text">XXX.XXXXXX PSI</font></p>
 		</div>
 	</div>	
 	<div class="col-xs-12">&nbsp;</div>

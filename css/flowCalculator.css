@@ -108,6 +108,16 @@ img{
 #alert{
 	display: none;
 }
+.dropText{
+	color: black;
+}
+
+}
+.PSCheckbox{
+	vertical-align: left;
+	position:relative;
+}
+
 /* Gives each selection box a grey background */
 input[type="text"], option, select{
 	background-color: #EEEEEE;
@@ -118,6 +128,10 @@ select, .btn:focus, .btn:active{
 
 select{
 	width: 100%;
+}
+
+.checkbox-inline{
+	text-align: center;
 }
 
 /* Parker gold outline when a box is clicked on */
@@ -135,6 +149,18 @@ select{
 	background-color: rgb(255,185,29);
 	
 }
+
+.blockMenu{
+	text-align: left;
+	color: black;
+	background-color: #eee;
+	border-color: #bbb;
+}
+
+.rightAlign{
+	padding-left: 94%;
+}
+
 
 /* Parker site buttons and its hover effects */
 .btn-default:hover, .btn-default:active, .btn-default:focus, .btn-defualt.active, .btn-defualt, .customBtn, .btn-default:active:focus {

@@ -110,6 +110,11 @@ function getImage(sender){
 	//}
 }
 
+function testing(label, val){
+	$(label).html(val + " <span class = \"rightAlign\"><span class=\"caret\"></span></span>");
+};
+
+
 // doesn't work :/
 $("#frequncy").on("change paste keyup", function() {
    //alert($(this).val()); 
@@ -125,25 +130,34 @@ $( function() {
 // be a bit of a pain to do. **/
 function addLine(){
 	lines.push(true);
-	$("#lineLosses").append(" <div class=\"col-sm-4 faded line" + lines.length + "\"><label for=\"pDiam" + lines.length + "\">Diameter of Pipe (Inches)</label><br>	<select class=\"selectpicker col-sm-12\" style=\"height: 4.5ex\" id=\"pDiam" + lines.length + "\"> <option>0</option> <option>2</option> <option>3</option> <option>4</option> <option>6</option> </select></div> <div class=\"col-sm-3 faded line" + lines.length + "\"> <label for=\"pLength" + lines.length + "\">Length of Pipe</label> <div class=\"input-group\"> <input type=\"text\" class=\"form-control\" id=\"pLength" + lines.length + "\"> <span class=\"input-group-addon\">ft</span> </div> </div>  <div class=\"col-sm-3 faded line" + lines.length + "\"> <label for=\"roughness" + lines.length + "\">Roughness of Pipe</label>  <div class=\"input-group\"> <input type=\"text\" class=\"form-control\" id=\"roughness" + lines.length + "\"> <span class=\"input-group-addon\">in</span> </div> </div> <div class=\"col-sm-1 faded bottomPad line" + lines.length + "\"> <p>&nbsp;</p> <button type=\"button\" class=\"btn btn-xs btn-default customBtn\" onclick=\"deleteLine(" + lines.length + ")\"> <span class=\"glyphicon glyphicon-remove\"></span>	</button> </div>");	
+	$("#lineLosses").append(" <div class=\"col-sm-4 faded line" + lines.length + "\"><label for=\"pDiam" + lines.length + "\">Diameter of Pipe Section (Inches)</label><br>	<select class=\"selectpicker col-sm-12\" style=\"height: 4.5ex\" id=\"pDiam" + lines.length + "\"> <option>0</option> <option>2</option> <option>3</option> <option>4</option> <option>6</option> </select></div> <div class=\"col-sm-3 faded line" + lines.length + "\"> <label for=\"pLength" + lines.length + "\">Length of Pipe Section</label> <div class=\"input-group\"> <input type=\"text\" class=\"form-control\" id=\"pLength" + lines.length + "\"> <span class=\"input-group-addon\">ft</span> </div> </div>  <div class=\"col-sm-3 faded line" + lines.length + "\"> <label for=\"roughness" + lines.length + "\">Roughness of Pipe</label>  <div class=\"input-group\"> <input type=\"text\" class=\"form-control\" id=\"roughness" + lines.length + "\" placeholder=\"Example value: 0.01 \"> <span class=\"input-group-addon\">in</span> </div> </div> <div class=\"col-sm-1 faded bottomPad line" + lines.length + "\"> <p>&nbsp;</p> <button type=\"button\" class=\"btn btn-xs btn-default customBtn\" onclick=\"deleteLine(" + lines.length + ")\"> <span class=\"glyphicon glyphicon-remove\"></span>	</button> </div>");	
 }
 // Appends a new div to the fittings section
 function addFitting(){
 	fittings.push(true);
-	$("#fittingsection").append("<div class=\"col-sm-4 faded fitting" + fittings.length + "\"> <label for=\"fType" + fittings.length + "\">Type of Fitting</label><br> <select class=\"selectpicker col-sm-12\" style=\"height: 4.5ex\" id=\"fType" + fittings.length + "\" onchange=\"getImage(this)\" name=" + fittings.length + "> <option>180°  Return Bend, Flanged</option> <option>180°  Return Bend, Threaded</option> <option>Angle Valve Fully Open</option> <option>Ball Valve </option> <option>Ball Valve (1/2 Closed)</option> <option>Ball Valve (2/3 Closed)</option> <option>Branch Flow, Threaded</option> <option>Butterfly Valve</option> <option>Close Return Bend</option> <option>Gate Valve  </option> <option>Gate Valve (1/2 closed)</option> <option>Gate Valve (1/4 closed)</option> <option>Gate Valve (3/4 closed)</option> <option>Globe Valve</option> <option>Long Radius 45° Flanged</option> <option>Long Radius 90° Flanged</option> <option>Long Radius 90° Threaded</option> <option>Pipe Entrance (inward Projecting)</option> <option>Pipe Entrance (Sharp Edged)</option> <option>Pipe Exit</option> <option>Plug Valve 3-Way Thru-Flow</option> <option>Plug Valve Branch Flow</option> <option>Plug Valve Straightaway</option> <option>Regular 45° Threaded</option> <option>Regular 90° Flanged </option> <option>Regular 90° Threaded </option> <option>Standard Elbow 45°</option> <option>Standard Elbow Long Radius 90°</option> <option>Sudden Expander</option> <option>Sudden Reducer</option> <option>Swing Check Valve</option> <option>Tees, Branch Flow, Flanged</option> <option>Tees, Line Flow, Flanged</option> <option>Tees, Line Flow, Threaded</option> <option>Threaded Union</option> </select> </div> <div class=\"col-sm-3 faded fitting" + fittings.length + "\"> <label for=\"fDiam" + fittings.length + "\">Diameter (Inches)</label><br> <select class=\"selectpicker col-sm-12\" style=\"height: 4.5ex\" id=\"fDiam" + fittings.length + "\"> <option>2</option> <option>3</option> <option>4</option> <option>6</option> </select> </div> <div class=\"col-sm-3 faded fitting" + fittings.length + "\"> <div class=\"form-group \"> <label for=\"fNum" + fittings.length + "\">Number of Fittings</label> <input type=\"text\" class=\"form-control \" id=\"fNum" + fittings.length + "\"> </div> </div> </div> <div class=\"col-sm-1 faded fitting" + fittings.length + "\"> <div class=\"col-xs-12\">&nbsp;</div> <label class=\"checkbox-inline fitting" + fittings.length + "\"> <input type=\"checkbox\" value=\"\" id=\"check" + fittings.length + "\">Parallel</label> </div> <div class=\"col-sm-1 faded bottomPad fitting" + fittings.length + "\"> <p>&nbsp;</p> <button type=\"button\" class=\"btn btn-xs btn-default customBtn\" onclick=\"deleteFitting(" + fittings.length +")\"> <span class=\"glyphicon glyphicon-remove\"></span>	</button> </div>");
+	$("#fittingsection").append("<div class=\"col-sm-4 faded fitting" + fittings.length + "\"> <label for=\"fType" + fittings.length + "\">Type of Fitting</label><br> <select class=\"selectpicker col-sm-12\" style=\"height: 4.5ex\" id=\"fType" + fittings.length + "\" onchange=\"getImage(this)\" name=" + fittings.length + "> <option>180°  Return Bend, Flanged</option> <option>180°  Return Bend, Threaded</option> <option>Angle Valve Fully Open</option> <option>Ball Valve </option> <option>Ball Valve (1/2 Closed)</option> <option>Ball Valve (2/3 Closed)</option> <option>Branch Flow, Threaded</option> <option>Butterfly Valve</option> <option>Close Return Bend</option> <option>Gate Valve  </option> <option>Gate Valve (1/2 closed)</option> <option>Gate Valve (1/4 closed)</option> <option>Gate Valve (3/4 closed)</option> <option>Globe Valve</option> <option>Long Radius 45° Flanged</option> <option>Long Radius 90° Flanged</option> <option>Long Radius 90° Threaded</option> <option>Pipe Entrance (inward Projecting)</option> <option>Pipe Entrance (Sharp Edged)</option> <option>Pipe Exit</option> <option>Plug Valve 3-Way Thru-Flow</option> <option>Plug Valve Branch Flow</option> <option>Plug Valve Straightaway</option> <option>Regular 45° Threaded</option> <option>Regular 90° Flanged </option> <option>Regular 90° Threaded </option> <option>Standard Elbow 45°</option> <option>Standard Elbow Long Radius 90°</option> <option>Sudden Expander</option> <option>Sudden Reducer</option> <option>Swing Check Valve</option> <option>Tees, Branch Flow, Flanged</option> <option>Tees, Line Flow, Flanged</option> <option>Tees, Line Flow, Threaded</option> <option>Threaded Union</option> </select> </div> <div class=\"col-sm-3 faded fitting" + fittings.length + "\"> <label for=\"fDiam" + fittings.length + "\">Diameter (Inches)</label><br> <select class=\"selectpicker col-sm-12\" style=\"height: 4.5ex\" id=\"fDiam" + fittings.length + "\"> <option>2</option> <option>3</option> <option>4</option> <option>6</option> </select> </div> <div class=\"col-sm-3 faded fitting" + fittings.length + "\"> <div class=\"form-group \"> <label for=\"fNum" + fittings.length + "\">Number of Fittings</label> <input type=\"text\" class=\"form-control \" id=\"fNum" + fittings.length + "\"> </div> </div> </div> <div class=\"col-sm-1 faded fitting" + fittings.length + "\"> <div class=\"col-xs-12\">&nbsp;</div> <div class=\"col-xs-12\"> <label class=\"checkbox-inline PSCheckbox fitting" + fittings.length + "\"> <input type=\"checkbox\" value=\"\"  class=\"fitCheck" + fittings.length + "\" onchange=\"checkboxOne(this)\" id=\"check" + fittings.length + "\">Parallel</label> </div> <div class=\"col-xs-12\"> <label class=\"checkbox-inline PSCheckbox fitting" + fittings.length + "\"> <input type=\"checkbox\" value=\"\"  class=\"fitCheck" + fittings.length + "\" onchange=\"checkboxOne(this)\">Series</label> </div></div> <div class=\"col-sm-1 faded bottomPad fitting" + fittings.length + "\"> <p>&nbsp;</p> <button type=\"button\" class=\"btn btn-xs btn-default customBtn\" onclick=\"deleteFitting(" + fittings.length +")\"> <span class=\"glyphicon glyphicon-remove\"></span>	</button> </div>");
 }
 // Deletes a div from the lines section
 // Note: this can also be done in angular like above.
 function deleteLine(line){
-	$(".line" + line).remove();	
+	$(".line" + line).fadeOut("slow", function(){
+		$(".line" + line).remove();
+	});	
 	lines[line - 1] = false;
 }
 // Deletes a div from the fittings section
 function deleteFitting(fit){
-	$(".fitting" + fit).remove();
-	$("#imgfType" + fit).remove();
+	$(".fitting" + fit).fadeOut("slow", function(){
+		$(".fitting" + fit).remove();
+		$("#imgfType" + fit).remove();
+	});	
 	fittings[fit - 1] = false;
 }
+
+function checkboxOne(obj){
+	$('input.' + obj.className).not(obj).prop('checked', false);
+}
+
 // Validates that the user inputted valid values for certain sections
 function checkForm() {
 	var returnValue = true;
@@ -224,6 +238,7 @@ function calculate() {
 	for (var i = 0; i < loopIndex; i++){
 		npshrpsis[i] = (((pump * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 0.5) * 32.2 * density) / 144.0;
 	}
+	
 	// convert it to ft^2/s
 	var kinematicViscosity = ($("#kViscosity").val())*0.0000108;
 	// There can be a variable amount of pipes so we need a dynamically sized array to keep track of them
@@ -407,6 +422,7 @@ function calculate() {
 			SPressureDrops[i] = (resistance * Math.pow(qs[i],2)) * StrainerNum;
 		} else{
 			SPressureDrops[i] = (resistance * Math.pow(pqs[i],2)) * StrainerNum;
+			SPressureDrops[i] = SPressureDrops[i]/2.0;
 		}
 	}
 	
@@ -467,9 +483,10 @@ function calculate() {
 	var totalHeadLossPsis = new Array();
 	for (var i = 0; i < loopIndex; i++){
 		pheadLossPsis[i] = (pheadLosses[i] * density * 32.2) / 144.0;
-		totalHeadLossPsis[i] = headLossPsis[i] + BPressureDrops[i] + SPressureDrops[i] + pheadLossPsis[i];
+		// NOTE: THIS IS PROBABLY NOT RIGHT BUT BEING IN PARALLEL SHOULD REDUCE THE TOTAL HEAD LOSS AS COMPARED TO IN SERIES
+		totalHeadLossPsis[i] = headLossPsis[i] + BPressureDrops[i] + SPressureDrops[i] + (pheadLossPsis[i] / 2.0);
 	}
-	
+	// alert("Phead: " + pheadLossPsis[freq] + '\n' + "head: " + headLossPsis[freq] + '\n' + "total: " + totalHeadLossPsis[freq]);
 	var staticHead = ((density * 32.2 * height)/144);
 	// had to use parse statements else it just appended strings to each other then subtracted a number from 
 	// a string creating a NaN
@@ -531,6 +548,9 @@ function calculate() {
     });
 	$('#result3Text').fadeOut(200, function() {
         $(this).text(parseFloat(qs[freq-1]).toFixed(4) + " GPM").fadeIn("slow");
+    });
+	$('#result4Text').fadeOut(200, function() {
+        $(this).text(parseFloat(npshrpsis[freq-1]).toFixed(4) + " PSI").fadeIn("slow");
     });
 
 	// graphs the theoretical vs estimated flow

@@ -21,7 +21,7 @@ window.onload = function() {
 		$("<span id=\"inputText\"></span>").hide().appendTo($("#fileName")).show('normal');
 		var label = $("#inputText");
 		if( fileName )	
-			label.text(fileName + " loaded.");
+			label.text("File Selected: " + fileName);
 		else
 			label.text("File chosen was not valid.  Please select again");		
 	
@@ -47,7 +47,7 @@ function parseText(file) {
 	file += '\n';
 	var 	beginBracket = /.*[\w]+ ?\n?{ *\n/mg;
 			cssAttributes = /{\n?(.*{?\:\s?\w*.*;?}?[\n])+}?(\n*\s)*}?/mg;
-			alreadyFormatted = /[\.|#]?\w+[:|-]?\w*\s{15}\s*{.*}/mg;
+			alreadyFormatted = /[\.|#]?\w+[:|-]?\w*\s{7}\s*{.*}/mg;
 	
 	if (file.match(alreadyFormatted)){
 		$("#cssResult").text("Already Formatted.");
@@ -74,7 +74,7 @@ function parseText(file) {
 	formatMatrix(needFormat);
 	addAnimation($('#cssResult'), 'fade')
 	addAnimation($('#copyMessage'), 'fade')
-
+	$("#clipboard").removeClass("disabled");
 }
 
 function addAnimation(id, animation){

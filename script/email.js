@@ -9,7 +9,7 @@ clipboard.js - allows me to copy html code (the email) to a user's clipboard
 Original Author: Allen Wenzl
 
 Originally created: 7/6/17
-Last modified: 7/31/17
+Last modified: 8/1/17
 Last modified by: Allen Wenzl
 
 **/
@@ -23,6 +23,9 @@ var 	headingCounter = 0;
 		logo = "images/calcTooltip.png"
 		outputString = new Array(); // stack used to generate the html email
 		exportString = new Array();
+		isButtonLink = false;
+		buttonURL = "http://google.com";
+		buttonTitle = "Visit Our Site!";
 outputString.push("<!DOCTYPE html><html><body>");
 // generate header button
 function makeHeading(){
@@ -48,7 +51,7 @@ function makeHeading(){
 	var buttonText = " ";
 	if (isButtonChecked){
 		// adds button string
-		buttonText = "<div style=\"display: block;  margin-left: auto;  margin-right: auto; height: 20%; text-align: center; padding-bottom: 2ex; padding-top: 2ex;\"> <a style=\"display:inline-block; white-space: nowrap; vertical-align:middle; font-weight: bold; text-decoration-line: none; color: white; border: solid " + color +"; padding: 0.8em; border-radius: 2em; font-size: 14px; background-color: " + color + ";\" href=\"http://google.com\">Visit our site!</a> </div>";
+		buttonText = "<div style=\"display: block;  margin-left: auto;  margin-right: auto; height: 20%; text-align: center; padding-bottom: 2ex; padding-top: 2ex;\"> <a style=\"display:inline-block; white-space: nowrap; vertical-align:middle; font-weight: bold; text-decoration-line: none; color: white; border: solid " + color +"; padding: 0.8em; border-radius: 2em; font-size: 14px; background-color: " + color + ";\" href=\"" + buttonURL + "\">" + buttonTitle + "</a> </div>";
 	}
 	// creates html code used for header of email
 	var stringGen = "<div id=\"heading" + headingCounter + "\" style=\"background-color: " + headColor + "\" class=\"HeadingClass faded\"><div class=\"HeadingTitleClass\" style=\"text-align: center; font-weight: bold; font-size: 3.5ex; padding-top: 1.5ex; padding-bottom: 1.5ex; color:" + color + "\">" + title + "</div>" + logoText + "<div class=\"TextClass\" style=\"text-align: center; padding-top: 1.5ex; padding-bottom: 1.5ex; color: " + textColor + "; \"> Announcements for " + date + "</div>" + buttonText + "</div>";
@@ -247,17 +250,26 @@ function copy(){
 	});
 
 }
+
+function buttonLink(bool){
+	isButtonLink = bool;
+}
+
 // insert hyperlink button
 function addAtag(){
 	var Htext = $("#Htext").val();
 	var Hlink = $("#Hlink").val();
-	// This regex works in theory, not in practice :/
 	var correctURLFormat = /\b(http)s?(:\/\/).*\..*\b/mg
 	if(!correctURLFormat.test(Hlink)){
 		Hlink = "http://" + Hlink;
 	}
 	// adds hyperlink code to subsection textbox
-	$( "#SStextGen" ).append( '&lt;' + "a href=\"" + Hlink + "\">" + Htext + '&lt;' + "/a>");
+	if (isButtonLink) {
+		$( "#SStextGen" ).append( '&lt;' + "a href=\"" + Hlink + "\">" + Htext + '&lt;' + "/a>");
+	} else {
+		buttonURL = Hlink;
+		buttonTitle = Htext;
+	}
 }
 
 function importLogo(){

@@ -4,7 +4,7 @@ email.html - An email generator used to help others make nice looking emails wit
 Original Author: Allen Wenzl
 
 Originally created: 7/6/17
-Last modified: 7/27/17
+Last modified: 8/1/17
 Last modified by: Allen Wenzl
 
 -->
@@ -51,6 +51,9 @@ Last modified by: Allen Wenzl
 						<label><input type="checkbox" class="buttonCheckbox" name="buttonCheckbox">Add Button</label>
 					</div>
 					<div class="bPad">
+						<button type="button" class="btn btn-default" data-target="#insertHyper" data-toggle="modal" onclick="buttonLink(true)">Button Link</button>
+					</div>
+					<div class="bPad">
 						<button id="buttonGen" type="button" class="btn btn-default" onclick="makeHeading()">Generate</button>
 					</div>
 				</div>
@@ -79,7 +82,7 @@ Last modified by: Allen Wenzl
 						<textarea class="form-control" rows="5" id="SStextGen"></textarea>
 					</div>
 					<div class="bPad">
-						<button type="button" class="btn btn-default" data-target="#insertHyper" data-toggle="modal">Insert Hyperlink</button>
+						<button type="button" class="btn btn-default" data-target="#insertHyper" data-toggle="modal"  onclick="buttonLink(false)">Insert Hyperlink</button>
 					</div>
 					<div class="bPad">
 						<button type="button" class="btn btn-default" onclick="makeSSection()">Generate</button>

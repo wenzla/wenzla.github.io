@@ -22,8 +22,12 @@ Date Modified: 7/17/17
 		<body>
 		
 		<div class="bPad tPad">
-			<h1><span class="typewriter">CSS Formatter</span></h1>
-			<p class="skipButton tPad" ><a class="skip" onclick="scrollDown()">Skip to formatter.</a></p>
+			<div class="col-xs-4 col-xs-offset-4">
+				<h1 class="typewriter">CSS Formatter</h1>
+			</div>
+			<div class="col-xs-12">
+				<p class="skipButton tPad" ><a class="skip" onclick="scrollDown()">Skip to formatter.</a></p>
+			</div>
 		</div>
 			<div class="col-xs-12">
 				
@@ -52,6 +56,9 @@ Date Modified: 7/17/17
 			
 			</div>
 			
+			<div class="col-xs-12 tPad bPad">
+				<button id="clipboard" type="button" class="btn btn-default disabled" onclick="copyClipboard()">Copy to Clipboard</button>
+			</div>
 			
 		</body>
 	</html>
