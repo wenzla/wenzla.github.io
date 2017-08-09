@@ -172,19 +172,29 @@ function importEmail() {
 	makeHeading();
 	// Let loop know to end
 	lines.push("EOF");
-	
+	for (var i = 1; i < lines.length; i++){
+		if (lines[i].match(/\s*\n/mg)){
+			lines.splice(i,1);
+		} else {
+			break;
+		}
+	}
+	var formatedSSTitle;
+	var formatedSTitle;
 	for(var i = 0; i < lines.length; i++){
-		
 		if (lines[i] == "EOF"){
 			break;
 		}	
 		if(lines[i].match(sectionFormat)){
-			var formatedSTitle = lines[i].replace(/\[|\]/g, '');
+			formatedSTitle = lines[i].replace(/\[|\]/g, '');
 			$("#StitleGen").val(formatedSTitle);
 			$("#SStextGen").val('');
 			makeSection();
+			$("#StitleGen").val('');
+			$("#SStextGen").val('');
+			$("#SSnameGen").val('');
 		} else if(lines[i].match(subsectionFormat)){
-			var formatedSSTitle = lines[i].replace(/\(|\)/g, '');
+			formatedSSTitle = lines[i].replace(/\(|\)/g, '');
 			$("#SSnameGen").val(formatedSSTitle);
 			$("#SStextGen").val('');
 		} else {	
@@ -199,13 +209,21 @@ function importEmail() {
 					return text + lines[i] + "<br>";
 				});
 			}
+			
 		}		
 		if (subsectionDone){
 			subsectionDone = false;
 			makeSSection();
+			$("#StitleGen").val('');
+			$("#SStextGen").val('');
+			$("#SSnameGen").val('');
 		}
 	}
-
+	
+	$("#StitleGen").val('');
+	$("#SStextGen").val('');
+	$("#SSnameGen").val('');
+	
 }
 
 // output HTML button
@@ -264,7 +282,7 @@ function addAtag(){
 		Hlink = "http://" + Hlink;
 	}
 	// adds hyperlink code to subsection textbox
-	if (isButtonLink) {
+	if (!isButtonLink) {
 		$( "#SStextGen" ).append( '&lt;' + "a href=\"" + Hlink + "\">" + Htext + '&lt;' + "/a>");
 	} else {
 		buttonURL = Hlink;
