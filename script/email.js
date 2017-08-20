@@ -113,6 +113,12 @@ function makeSSection(){
 	exportString.push(SStext);
 	
 }
+
+function clearPage(){
+	$("#buildArea").empty();
+	exportString = new Array();
+}
+
 // undo button function
 function undo(){
 	// keeps track if something was undone
@@ -126,6 +132,7 @@ function undo(){
 		latest[0] = false;
 		changed = true;
 		$('#buttonGen').removeClass("disabled");
+		exportString.pop();
 	}
 	if(latest[1]){
 		// if section header, last section header is removed
@@ -134,6 +141,7 @@ function undo(){
 		sectionCounter -= 1;
 		latest[1] = false;
 		changed = true;
+		exportString.pop();
 	}
 	if(latest[2]){
 		// if subsection, last subsection is removed
@@ -142,6 +150,8 @@ function undo(){
 		SsectionCounter -= 1;
 		latest[2] = false;
 		changed = true;
+		exportString.pop();
+		exportString.pop();
 	}
 	// if something changed ...
 	if(changed){
@@ -278,16 +288,30 @@ function addAtag(){
 	var Htext = $("#Htext").val();
 	var Hlink = $("#Hlink").val();
 	var correctURLFormat = /\b(http)s?(:\/\/).*\..*\b/mg
+	var message = " Filler ";
 	if(!correctURLFormat.test(Hlink)){
 		Hlink = "http://" + Hlink;
 	}
 	// adds hyperlink code to subsection textbox
 	if (!isButtonLink) {
 		$( "#SStextGen" ).append( '&lt;' + "a href=\"" + Hlink + "\">" + Htext + '&lt;' + "/a>");
+		message = "Added Hyperlink!"
 	} else {
 		buttonURL = Hlink;
 		buttonTitle = Htext;
+		message = "Changed Button!"
 	}
+	
+	var e1 = $('#hyperLinkMessage');
+	e1.text(message);
+	e1.addClass('animate');
+	e1.css('visibility', 'visible');
+	e1.one('webkitAnimationEnd oanimationend msAnimationEnd animationend',
+	function (e) {
+		e1.removeClass('animate');
+		e1.css('visibility', 'hidden');
+	});
+	
 }
 
 function importLogo(){

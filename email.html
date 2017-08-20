@@ -25,7 +25,7 @@ Last modified by: Allen Wenzl
 			<h2> Email Generator</h2> <hr>
 		</div>
 		<!-- The side menu/toolbox -->
-		<div class="col-xs-4 col-md-3" id="accordian">
+		<div class="col-xs-3" id="accordian">
 			<div class="col-xs-12 sideHead">
 				<h3>Components</h3>
 			</div>
@@ -178,6 +178,7 @@ Last modified by: Allen Wenzl
 							</div>
 						</div>
 						<div class="modal-footer">
+							<span id="hyperLinkMessage"> Filler </span> &emsp;
 							<button type="button" class="btn btn-default copy-button" onclick="addAtag()">Insert Hyperlink</button>
 							<button type="button" class="btn btn-default" onclick="dismissPopup()" data-dismiss="modal">Close</button>
 						</div>
@@ -244,21 +245,25 @@ Last modified by: Allen Wenzl
 				<h3>Options</h3>
 			</div>
 			<div class="col-xs-12 optionBox">
-				<div class="col-md-6 col-xs-12 option">
+
+				<div class="col-xs-6 option">
 					<button type="button" class="btn btn-default" onclick="output()" data-target="#copyPopup">Output HTML</button>
 				</div>
-				<div class="col-md-6 col-xs-12 option">
+				<div class="col-xs-6 option">
+					<button type="button" class="btn btn-default" onclick="undo()">Undo</button>
+				</div>
+				<div class="col-xs-6 option">
 					<button type="button" class="btn btn-default" onclick="exportEmail()">Create Export</button>
 				</div>	
-				<div class="col-xs-12 option">
-					<button type="button" class="btn btn-default" onclick="undo()">Undo</button>
+				<div class="col-xs-6 option bPad">
+					<button type="button" class="btn btn-default" onclick="clearPage()">Clear</button>
 				</div>
 			</div>
 				
 		</div>
 		
 		<!-- Where the email preview is shown -->
-		<div class="col-md-9 col-xs-8 buildOuter">
+		<div class="col-xs-9 buildOuter">
 			<div class="col-xs-12" id="buildArea">
 		
 			</div>

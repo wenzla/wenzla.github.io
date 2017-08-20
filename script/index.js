@@ -21,9 +21,10 @@ angular.module('link', [])
     linkList.links = [
       {url:'flowCalc',  id: 'chuCalc', title:'Parker Flow Rate Calculator', text: 'Parker Flow Calculator'},
 	  {url:'video', id: 'videoPage', title:'Parker Long Video', text: 'Parker Long Video'},
+	  {url:'email', id: 'emailGen', title:'Email Generator', text: 'Email Generator'},
+	  {url:'schedule', id: 'schedule', title:'Fall 2017 Schedule', text: 'Fall 2017 Schedule'},
+	  //{url:'email', id: 'cssFormat', title:'CSS Formatter', text: 'CSS Formatter'},
       {url:'test', id: 'testPage', title:'Testing Location', text: 'Test Area'}];
-	  //{url:'email', id: 'emailGen', title:'Email Generator', text: 'Email Generator'}];
-	  //{url:'email', id: 'cssFormat', title:'CSS Formatter', text: 'CSS Formatter'}];
   });
 // loads the tooltips on document load
 $(document).ready(function(){
@@ -53,7 +54,7 @@ $(document).ready(function(){
 		html : true,
 		content : '<p>Flow calculator to determine the flow rate and V/L ratio of Parker FTS series pumps given an environment setup.</p> <img src="images/calcTooltip.png" class="media-object center-block thumbnail">'
 	});
-	/**
+
 	$('#emailGen').popover({
 		placement : 'bottom',
 		trigger : 'hover',
@@ -61,7 +62,15 @@ $(document).ready(function(){
 		html : true,
 		content : '<p>An email generator to let anyone write HTML emails.</p> <img src="images/email.png" class="media-object center-block thumbnail">'
 	});
-	**/
+	
+	$('#schedule').popover({
+		placement : 'bottom',
+		trigger : 'hover',
+		delay: {show: 200, hide: 200},
+		html : true,
+		content : '<p>Schedule for my 2017 Fall Semester.</p> <img src="images/schedule.PNG" class="media-object center-block thumbnail">'
+	});
+	
 	/**
 	$('#cssFormat').popover({
 		placement : 'bottom',
