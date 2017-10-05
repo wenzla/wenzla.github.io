@@ -9,7 +9,7 @@ clipboard.js - allows me to copy html code (the email) to a user's clipboard
 Original Author: Allen Wenzl
 
 Originally created: 7/6/17
-Last modified: 8/1/17
+Last modified: 10/5/17
 Last modified by: Allen Wenzl
 
 **/
@@ -173,13 +173,25 @@ function importEmail() {
 			heading = lines.shift();
 			sectionFormat = /^ *\[.*\] *$/mg;
 			subsectionFormat = /^ *\(.*\) *$/mg;
+			optionsFormat = /{(.*:.+)+}/mg;
 			subsectionDone = false;
 	
 	$('input[name=dateCheckbox]').attr('checked', true);
 	$('input[name=logoCheckbox]').attr('checked', true);
 	$('input[name=buttonCheckbox]').attr('checked', true);
 	$("#titleGen").val(heading);
+	if (lines[0].match(optionsFormat)){
+		var 	options = lines.shift();
+				optionsWanted = options.split(',');
+				OptionLogo = optionsWanted[0].match(/(LOGO):.*[^}\n]/);
+				OptionBtn = optionsWanted[1].match(/(BTN):.*[^}\n]/);
+		logo = OptionLogo[0].substr(5);
+		buttonURL = OptionBtn[0].substr(4);
+				
+	}
 	makeHeading();
+	// parses option line
+
 	// Let loop know to end
 	lines.push("EOF");
 	for (var i = 1; i < lines.length; i++){
