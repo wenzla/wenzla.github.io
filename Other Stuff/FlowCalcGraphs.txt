@@ -1,0 +1,544 @@
+Breakaway Valve Graphs (BVG) :
+
+1:
+var breakawayGraph4 = new Array();
+var breakawayGraph6 = new Array();
+var breakawayGraph4p = new Array();
+var breakawayGraph6p = new Array();
+	
+2:
+breakawayGraph4[i] = ((0.00001 * Math.pow(qs[i], 2)) + (-0.0005*qs[i]) + 0.0332) * breakawayNum;
+breakawayGraph6[i] = ((0.000007 * Math.pow(qs[i], 2)) + (-0.00001*qs[i]) + -0.0013) * breakawayNum;
+breakawayGraph4p[i] = ((0.00001 * Math.pow(pqs[i], 2)) + (-0.0005*pqs[i]) + 0.0332) * (breakawayNum + 1);
+breakawayGraph6p[i] = ((0.000007 * Math.pow(pqs[i], 2)) + (-0.00001*pqs[i]) + -0.0013) * (breakawayNum + 1);
+
+3:
+var breakawayGraphLoss4 = new Array();
+var breakawayGraphLoss6 = new Array();
+var breakawayGraphLoss4p = new Array();
+var breakawayGraphLoss6p = new Array();
+	
+4:
+breakawayGraphLoss4[i] = headLossPsis[i] + breakawayGraph4[i] + SPressureDrops[i] + (pheadLossPsis[i] / 2.0);
+breakawayGraphLoss6[i] = headLossPsis[i] + breakawayGraph6[i] + SPressureDrops[i] + (pheadLossPsis[i] / 2.0);
+breakawayGraphLoss4p[i] = headLossPsis[i] + breakawayGraph4p[i] + SPressureDrops[i] + (pheadLossPsis[i] / 2.0);
+breakawayGraphLoss6p[i] = headLossPsis[i] + breakawayGraph6p[i] + SPressureDrops[i] + (pheadLossPsis[i] / 2.0);
+
+5:
+var breakawayGraphPf4 = new Array();
+var breakawayGraphPf6 = new Array();
+var breakawayGraphPf4p = new Array();
+var breakawayGraphPf6p = new Array();
+
+6:
+breakawayGraphPf4[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss4[i]) - parseFloat(npshrpsis[i]);
+breakawayGraphPf6[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss6[i]) - parseFloat(npshrpsis[i]);
+breakawayGraphPf4p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss4p[i]) - parseFloat(npshrpsis[i]);
+breakawayGraphPf6p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss6p[i]) - parseFloat(npshrpsis[i]);
+
+7:
+var breakawayGraphVL4 = new Array();
+var breakawayGraphVL6 = new Array();
+var breakawayGraphVL4p = new Array();
+var breakawayGraphVL6p = new Array();
+
+8:
+breakawayGraphVL4[i] = (atm - breakawayGraphPf4[i])/(breakawayGraphPf4[i] - TVP);
+breakawayGraphVL6[i] = (atm - breakawayGraphPf6[i])/(breakawayGraphPf6[i] - TVP);
+breakawayGraphVL4p[i] = (atm - breakawayGraphPf4p[i])/(breakawayGraphPf4p[i] - TVP);
+breakawayGraphVL6p[i] = (atm - breakawayGraphPf6p[i])/(breakawayGraphPf6p[i] - TVP);
+
+9:
+var breakawayGraphA4 = new Array();
+var breakawayGraphA6 = new Array();
+var breakawayGraphA4p = new Array();
+var breakawayGraphA6p = new Array();
+
+10:
+breakawayGraphA4[i] = qs[i]*(1.0/(breakawayGraphVL4[i] + 1));
+breakawayGraphA6[i] = qs[i]*(1.0/(breakawayGraphVL6[i] + 1));
+breakawayGraphA4p[i] = qs[i]*(1.0/(breakawayGraphVL4p[i] + 1));
+breakawayGraphA6p[i] = qs[i]*(1.0/(breakawayGraphVL6p[i] + 1));
+		
+11:
+if (breakawayGraphA4[i] < 0){
+	breakawayGraphA4[i] = 0;
+}
+if (breakawayGraphA6[i] < 0){
+	breakawayGraphA6[i] = 0;
+}
+if (breakawayGraphA4p[i] < 0){
+	breakawayGraphA4p[i] = 0;
+}
+if (breakawayGraphA6p[i] < 0){
+	breakawayGraphA6p[i] = 0;
+}
+
+12:
+if (breakawayGraphA4[i-1] > breakawayGraphA4[i]){
+	breakawayGraphA4[i] = breakawayGraphA4[i-1] + (0.1*Math.log(i));
+}
+if (breakawayGraphA6[i-1] > breakawayGraphA6[i]){
+	breakawayGraphA6[i] = breakawayGraphA6[i-1] + (0.1*Math.log(i));
+}
+if (breakawayGraphA4p[i-1] > breakawayGraphA4p[i]){
+	breakawayGraphA4p[i] = breakawayGraphA4p[i-1] + (0.1*Math.log(i));
+}
+if (breakawayGraphA6p[i-1] > breakawayGraphA6p[i]){
+	breakawayGraphA6p[i] = breakawayGraphA6p[i-1] + (0.1*Math.log(i));
+}
+
+13:
+{
+	label: '4" Breakaway Valve',
+	data: breakawayGraphA4,
+	backgroundColor: [
+		'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+	],
+	borderColor: [
+		'#f7a3d7'
+	],
+	borderWidth: 1,
+	pointBackgroundColor: '#f7a3d7'
+},
+{
+	label: '6" Breakaway Valve',
+	data: breakawayGraphA6,
+	backgroundColor: [
+		'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+	],
+	borderColor: [
+		'#24bbd3'
+	],
+	borderWidth: 1,
+	pointBackgroundColor: '#24bbd3'
+},
+{
+	label: '2 x 4" Breakaway Valve',
+	data: breakawayGraphA4p,
+	backgroundColor: [
+		'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+	],
+	borderColor: [
+		'#f5ed80'
+	],
+	borderWidth: 1,
+	pointBackgroundColor: '#f5ed80'
+},
+{
+	label: '2 x 6" Breakaway Valve',
+	data: breakawayGraphA6p,
+	backgroundColor: [
+		'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+	],
+	borderColor: [
+		'#078dd9'
+	],
+	borderWidth: 1,
+	pointBackgroundColor: '#078dd9'
+},
+
+Strainer Graphs (SG)
+
+1:
+	var strainerGraph2 = new Array();
+	var strainerGraph3 = new Array();
+	var strainerGraph4 = new Array();
+	var strainerGraph6 = new Array();
+	var strainerGraph2p = new Array();
+	var strainerGraph3p = new Array();
+	var strainerGraph4p = new Array();
+	var strainerGraph6p = new Array(); // GRAPHING CURVES FOR JAMES
+	
+2:
+strainerGraph2[i] = (resistances[0] * Math.pow(qs[i],2)) * StrainerNum;
+		strainerGraph3[i] = (resistances[1] * Math.pow(qs[i],2)) * StrainerNum;
+		strainerGraph4[i] = (resistances[2] * Math.pow(qs[i],2)) * StrainerNum;
+		strainerGraph6[i] = (resistances[3] * Math.pow(qs[i],2)) * StrainerNum;
+		strainerGraph2p[i] = ((resistances[0] * Math.pow(qs[i],2)) * (StrainerNum+1))/2;
+		strainerGraph3p[i] = ((resistances[1] * Math.pow(qs[i],2)) * (StrainerNum+1))/2;
+		strainerGraph4p[i] = ((resistances[2] * Math.pow(qs[i],2)) * (StrainerNum+1))/2;
+		strainerGraph6p[i] = ((resistances[3] * Math.pow(qs[i],2)) * (StrainerNum+1))/2;
+		
+3:
+var strainerGraphLoss2 = new Array();
+	var strainerGraphLoss3 = new Array();
+	var strainerGraphLoss4 = new Array();
+	var strainerGraphLoss6 = new Array();
+	var strainerGraphLoss2p = new Array();
+	var strainerGraphLoss3p = new Array();
+	var strainerGraphLoss4p = new Array();
+	var strainerGraphLoss6p = new Array(); // For JAMES CURVES
+	
+4:
+strainerGraphLoss2[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph2[i] + (pheadLossPsis[i] / 2.0);
+		strainerGraphLoss3[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph3[i] + (pheadLossPsis[i] / 2.0);
+		strainerGraphLoss4[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph4[i] + (pheadLossPsis[i] / 2.0);
+		strainerGraphLoss6[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph6[i] + (pheadLossPsis[i] / 2.0);
+		strainerGraphLoss2p[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph2p[i] + (pheadLossPsis[i] / 2.0);
+		strainerGraphLoss3p[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph3p[i] + (pheadLossPsis[i] / 2.0);
+		strainerGraphLoss4p[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph4p[i] + (pheadLossPsis[i] / 2.0);
+		strainerGraphLoss6p[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph6p[i] + (pheadLossPsis[i] / 2.0);
+		
+5:
+var strainerGraphPf2 = new Array();
+	var strainerGraphPf3 = new Array();
+	var strainerGraphPf4 = new Array();
+	var strainerGraphPf6 = new Array();
+	var strainerGraphPf2p = new Array();
+	var strainerGraphPf3p = new Array();
+	var strainerGraphPf4p = new Array();
+	var strainerGraphPf6p = new Array(); // For JAMES CURVES
+
+6:
+trainerGraphPf2[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss2[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf3[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss3[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf4[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss4[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf6[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss6[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf2p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss2p[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf3p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss3p[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf4p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss4p[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf6p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss6p[i]) - parseFloat(npshrpsis[i]);
+		
+7:
+var strainerGraphVL2 = new Array();
+	var strainerGraphVL3 = new Array();
+	var strainerGraphVL4 = new Array();
+	var strainerGraphVL6 = new Array();
+	var strainerGraphVL2p = new Array();
+	var strainerGraphVL3p = new Array();
+	var strainerGraphVL4p = new Array();
+	var strainerGraphVL6p = new Array(); // For JAMES CURVES
+	
+8:
+strainerGraphVL2[i] = (atm - strainerGraphPf2[i])/(strainerGraphPf2[i] - TVP);
+		strainerGraphVL3[i] = (atm - strainerGraphPf3[i])/(strainerGraphPf3[i] - TVP);
+		strainerGraphVL4[i] = (atm - strainerGraphPf4[i])/(strainerGraphPf4[i] - TVP);
+		strainerGraphVL6[i] = (atm - strainerGraphPf6[i])/(strainerGraphPf6[i] - TVP);
+		strainerGraphVL2p[i] = (atm - strainerGraphPf2p[i])/(strainerGraphPf2p[i] - TVP);
+		strainerGraphVL3p[i] = (atm - strainerGraphPf3p[i])/(strainerGraphPf3p[i] - TVP);
+		strainerGraphVL4p[i] = (atm - strainerGraphPf4p[i])/(strainerGraphPf4p[i] - TVP);
+		strainerGraphVL6p[i] = (atm - strainerGraphPf6p[i])/(strainerGraphPf6p[i] - TVP);
+		
+9:
+var strainerGraphA2 = new Array();
+	var strainerGraphA3 = new Array();
+	var strainerGraphA4 = new Array();
+	var strainerGraphA6 = new Array();
+	var strainerGraphA2p = new Array();
+	var strainerGraphA3p = new Array();
+	var strainerGraphA4p = new Array();
+	var strainerGraphA6p = new Array(); // For JAMES CURVES
+	
+10:
+strainerGraphA2[i] = qs[i]*(1.0/(strainerGraphVL2[i] + 1));
+		strainerGraphA3[i] = qs[i]*(1.0/(strainerGraphVL3[i] + 1));
+		strainerGraphA4[i] = qs[i]*(1.0/(strainerGraphVL4[i] + 1));
+		strainerGraphA6[i] = qs[i]*(1.0/(strainerGraphVL6[i] + 1));
+		strainerGraphA2p[i] = qs[i]*(1.0/(strainerGraphVL2p[i] + 1));
+		strainerGraphA3p[i] = qs[i]*(1.0/(strainerGraphVL3p[i] + 1));
+		strainerGraphA4p[i] = qs[i]*(1.0/(strainerGraphVL4p[i] + 1));
+		strainerGraphA6p[i] = qs[i]*(1.0/(strainerGraphVL6p[i] + 1));
+		
+11:
+if (strainerGraphA2[i] < 0){
+			strainerGraphA2[i] = 0;
+		}
+		if (strainerGraphA3[i] < 0){
+			strainerGraphA3[i] = 0;
+		}
+		if (strainerGraphA4[i] < 0){
+			strainerGraphA4[i] = 0;
+		}
+		if (strainerGraphA6[i] < 0){
+			strainerGraphA6[i] = 0;
+		}
+		if (strainerGraphA2p[i] < 0){
+			strainerGraphA2p[i] = 0;
+		}
+		if (strainerGraphA3p[i] < 0){
+			strainerGraphA3p[i] = 0;
+		}
+		if (strainerGraphA4p[i] < 0){
+			strainerGraphA4p[i] = 0;
+		}
+		if (strainerGraphA6p[i] < 0){
+			strainerGraphA6p[i] = 0;
+		}
+		
+12:
+if (strainerGraphA2[i-1] > strainerGraphA2[i]){
+			strainerGraphA2[i] = strainerGraphA2[i-1] + (0.1*Math.log(i));
+			}
+			if (strainerGraphA3[i-1] > strainerGraphA3[i]){
+			strainerGraphA3[i] = strainerGraphA3[i-1] + (0.1*Math.log(i));
+			}
+			if (strainerGraphA4[i-1] > strainerGraphA4[i]){
+			strainerGraphA4[i] = strainerGraphA4[i-1] + (0.1*Math.log(i));
+			}
+			if (strainerGraphA6[i-1] > strainerGraphA6[i]){
+			strainerGraphA6[i] = strainerGraphA6[i-1] + (0.1*Math.log(i));
+			}
+			if (strainerGraphA2p[i-1] > strainerGraphA2p[i]){
+			strainerGraphA2p[i] = strainerGraphA2p[i-1] + (0.1*Math.log(i));
+			}
+			if (strainerGraphA3p[i-1] > strainerGraphA3p[i]){
+			strainerGraphA3p[i] = strainerGraphA3p[i-1] + (0.1*Math.log(i));
+			}
+			if (strainerGraphA4p[i-1] > strainerGraphA4p[i]){
+			strainerGraphA4p[i] = strainerGraphA4p[i-1] + (0.1*Math.log(i));
+			}
+			if (strainerGraphA6p[i-1] > strainerGraphA6p[i]){
+			strainerGraphA6p[i] = strainerGraphA6p[i-1] + (0.1*Math.log(i));
+			}
+			
+13:
+			{
+				label: 'Flow with 2" Strainer',
+				data: strainerGraphA2,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#f7a3d7'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#f7a3d7'
+			},
+			{
+				label: 'Flow with 3" Strainer',
+				data: strainerGraphA3,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#24bbd3'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#24bbd3'
+			},
+			{
+				label: 'Flow with 4" Strainer',
+				data: strainerGraphA4,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#f5ed80'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#f5ed80'
+			},
+			{
+				label: 'Flow with 6" Strainer',
+				data: strainerGraphA6,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#078dd9'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#078dd9'
+			},
+			{
+				label: 'Flow with 2" Strainer in parallel',
+				data: strainerGraphA2p,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#d11715'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#d11715'
+			},
+			{
+				label: 'Flow with 3" Strainer in parallel',
+				data: strainerGraphA3p,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#60b442'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#60b442'
+			},
+			{
+				label: 'Flow with 4" Strainer in parallel',
+				data: strainerGraphA4p,backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#a01e3d'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#a01e3d'
+			},
+			{
+				label: 'Flow with 6" Strainer in parallel',
+				data: strainerGraphA6p,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#f69219'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#f69219'
+			},	
+
+RVP Graphs (RVG):
+
+1:
+var RVPs = [0.1, 1, 2, 5, 10];
+	var RVPlength = 5;
+	var TVPs = new Array();
+	for (var i = 0; i < RVPlength; i++){
+		var A = 9.4674 - (-0.9445 * Math.log(RVPs[i]));
+		var B = 5211 - (16.014 * Math.log(RVPs[i]));
+		var C = 459.67;
+		var D = A-((B)/(parseFloat(temperature) + parseFloat(C)));
+		TVPs[i] = Math.exp(D);
+	}
+	
+2:
+var RVPVLd = new Array();
+	var RVPVL1 = new Array();
+	var RVPVL2 = new Array();
+	var RVPVL5 = new Array();
+	var RVPVL10 = new Array();
+
+3:
+RVPVLd[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVPs[0]);
+		RVPVL1[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVPs[1]);
+		RVPVL2[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVPs[2]);
+		RVPVL5[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVPs[3]);
+		RVPVL10[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVPs[4]);
+
+4:
+var RVPdA = new Array();
+	var RVP1A = new Array();
+	var RVP2A = new Array();
+	var RVP5A = new Array();
+	var RVP10A = new Array();
+
+5:
+RVPdA[i] = qs[i]*(1.0/(RVPVLd[i] + 1));
+		RVP1A[i] = qs[i]*(1.0/(RVPVL1[i] + 1));
+		RVP2A[i] = qs[i]*(1.0/(RVPVL2[i] + 1));
+		RVP5A[i] = qs[i]*(1.0/(RVPVL5[i] + 1));
+		RVP10A[i] = qs[i]*(1.0/(RVPVL10[i] + 1));
+
+6:
+if (RVPdA[i] < 0){
+			RVPdA[i] = 0;
+		}
+		if (RVP1A[i] < 0){
+			RVP1A[i] = 0;
+		}
+		if (RVP2A[i] < 0){
+			RVP2A[i] = 0;
+		}
+		if (RVP5A[i] < 0){
+			RVP5A[i] = 0;
+		}
+		if (RVP10A[i] < 0){
+			RVP10A[i] = 0;
+		}
+
+7:
+if (RVPdA[i-1] > RVPdA[i]){
+				RVPdA[i] = RVPdA[i-1] + (0.1*Math.log(i));
+			}
+			if (RVP1A[i-1] > RVP1A[i]){
+				RVP1A[i] = RVP1A[i-1] + (0.1*Math.log(i));
+			}
+			if (RVP2A[i-1] > RVP2A[i]){
+				RVP2A[i] = RVP2A[i-1] + (0.1*Math.log(i));
+			}
+			if (RVP5A[i-1] > RVP5A[i]){
+				RVP5A[i] = RVP5A[i-1] + (0.1*Math.log(i));
+			}
+			if (RVP10A[i-1] > RVP10A[i]){
+				RVP10A[i] = RVP10A[i-1] + (0.1*Math.log(i));
+			}
+
+8:
+{
+				label: '0 RVP',
+				data: answers,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'rgb(255,185,29)'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: 'rgb(255,185,29)'
+			},
+			{
+				label: '0.1 RVP',
+				data: RVPdA,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#f7a3d7'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#f7a3d7'
+			},
+			{
+				label: '1 RVP',
+				data: RVP1A,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#24bbd3'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#24bbd3'
+			},
+			{
+				label: '2 RVP',
+				data: RVP2A,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#f5ed80'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#f5ed80'
+			},
+			{
+				label: '5 RVP',
+				data: RVP5A,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#078dd9'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#078dd9'
+			},
+			{
+				label: '10 RVP',
+				data: RVP10A,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#92f022'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#92f022'
+			},
+
+9:
+
+

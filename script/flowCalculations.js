@@ -114,7 +114,6 @@ function testing(label, val){
 	$(label).html(val + " <span class = \"rightAlign\"><span class=\"caret\"></span></span>");
 };
 
-
 // doesn't work :/
 $("#frequncy").on("change paste keyup", function() {
    //alert($(this).val()); 
@@ -227,7 +226,7 @@ function calculate() {
 	var density = $("#fluid_density").val();
 	
 	var freqs = new Array();
-	// graphs from frequency 1hz to 40hz above what the user inputted
+	// graphs from frequency 1hz to 40hz above what the user inputed
 	var loopIndex = parseInt(freq) + 40;
 	for (var i = 0; i < loopIndex; i++){
 		freqs[i] = (i+1);
@@ -261,7 +260,7 @@ function calculate() {
 	var qs = new Array();
 	// Theoretical flowrates used in this calculation
 	for (var i = 0; i < loopIndex; i++){
-		// RVP flowrate
+		// 3" RVP flowrate
 		if (pump == 3){
 			qs[i] = (3.72 * freqs[i]) - (0.132 * dPressure);
 		} else if (pump == 8.5){
@@ -386,6 +385,7 @@ function calculate() {
 	var breakawaycheck = $("#checkBreak").is(":checked");
 
 	// resistance based on size of the strainer
+	var resistances = [0.0005, 0.00006, 0.0000125, 0.000006]; // GRAPHING CURVES FOR JAMES
 	var resistance;
 	if (StrainerDValue == 2){
 		resistance = 0.0005;
@@ -399,6 +399,8 @@ function calculate() {
 
 	// gets breakaway valve pressure drop value dependant on diameter and if it is in parallel
 	BPressureDrops = new Array();
+	// BVG 1
+	
 	for (var i = 0; i < loopIndex; i++){
 		if(!breakawaycheck){
 			if (BreakawayDValue != 4){
@@ -406,17 +408,19 @@ function calculate() {
 			} else {
 				BPressureDrops[i] = (0.00001 * Math.pow(qs[i], 2)) + (-0.0005*qs[i]) + 0.0332;
 			}
-		} else {
+		} else { // in parallel
 			if (BreakawayDValue != 4){
 				BPressureDrops[i] = (0.000007 * Math.pow(pqs[i], 2)) + (-0.00001*pqs[i]) + -0.0013;
 			} else {
 				BPressureDrops[i] = (0.00001 * Math.pow(pqs[i], 2)) + (-0.0005*pqs[i]) + 0.0332;
 			}
 		}
+		// BVG 2
 		BPressureDrops[i] = BPressureDrops[i] * breakawayNum;
 	}
-	//pressuredrop of the strainer based on number and if in parallel
+	//pressure drop of the strainer based on number and if in parallel
 	var SPressureDrops = new Array();
+	// SG 1
 	for (var i = 0; i < loopIndex; i++){
 		if(!strainerCheck){
 			SPressureDrops[i] = (resistance * Math.pow(qs[i],2)) * StrainerNum;
@@ -424,6 +428,7 @@ function calculate() {
 			SPressureDrops[i] = (resistance * Math.pow(pqs[i],2)) * StrainerNum;
 			SPressureDrops[i] = SPressureDrops[i]/2.0;
 		}
+		// SG2
 	}
 	
 	// will eventually become velocities later
@@ -481,29 +486,40 @@ function calculate() {
 	// gets total headloss of setup
 	var pheadLossPsis = new Array();
 	var totalHeadLossPsis = new Array();
+	// SG 3
+	// BVG 3
 	for (var i = 0; i < loopIndex; i++){
 		pheadLossPsis[i] = (pheadLosses[i] * density * 32.2) / 144.0;
 		// NOTE: THIS IS PROBABLY NOT RIGHT BUT BEING IN PARALLEL SHOULD REDUCE THE TOTAL HEAD LOSS AS COMPARED TO IN SERIES
 		totalHeadLossPsis[i] = headLossPsis[i] + BPressureDrops[i] + SPressureDrops[i] + (pheadLossPsis[i] / 2.0);
+		//SG 4
+		//BVG 4
 	}
 	// alert("Phead: " + pheadLossPsis[freq] + '\n' + "head: " + headLossPsis[freq] + '\n' + "total: " + totalHeadLossPsis[freq]);
 	var staticHead = ((density * 32.2 * height)/144);
 	// had to use parse statements else it just appended strings to each other then subtracted a number from 
 	// a string creating a NaN
 	var pfCalcs = new Array();
+	// SG 5
+	// BVG 5
 	for (var i = 0; i < loopIndex; i++){
 		pfCalcs[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsis[i]);
+		// SG 6
+		// BVG 6
 	}
-	
 	// old TVP formulas
 	// var TVP = RVP * Math.pow(Math.E,(-6622.5 * ((1/((temperature*1.8021)+459.69)) - (1/559.69)))) + (.04*RVP) + (.1 * 27);
 	// var TVP = ((0.7553 - (413/(temperature + 459.6))) * Math.pow(2.5, 0.5) * Math.log10(RVP)) - ((1.854 - (1.042/(temperature + 459.6))) * Math.pow(2.5, 0.5)) + (((2416/(temperature + 459.6)) - 2.013) * Math.log10(RVP)) - ((8.742/(temperature + 459.6)) + 15.64);
 	// New TVP calculation uses A, B, C, and D to make looking and typing the calculation easier
+	
+	// RVG 1
+	
 	var A = 9.4674 - (-0.9445 * Math.log(RVP));
     var B = 5211 - (16.014 * Math.log(RVP));
     var C = 459.67;
     var D = A-((B)/(parseFloat(temperature) + parseFloat(C)));
     var TVP = Math.exp(D);
+	//alert("TVP: " + TVP);
 	/**
 	var VL = (atm - pfCalc)/(pfCalc - TVP);
 	// The v/l ratio shown on the page
@@ -512,30 +528,54 @@ function calculate() {
 		VLratio = 0;
 	}**/
 	var VLs = new Array();
+	// SG 7
+	// BVG 7
+	// RVG 2
 	for (var i = 0; i < loopIndex; i++){
 		VLs[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVP);
+		// RVG 3
+		// SG 8
+		// BVG 8
 	}
 	
 	// The estimated flow shown on the page
 	// var ans = q*VLratio;
 	var answers = new Array();
+	// RVG 4
+	// SG 9
+	// BVG 9
 	for (var i = 0; i < loopIndex; i++){
+		
 		answers[i] = qs[i]*(1.0/(VLs[i] + 1));
+		// RVG 5
+		// SG 10
+		// BVG 10
 		// if the answer is < 0, makes it 0 since < 0 is impossible
 		if (answers[i] < 0){
 			answers[i] = 0;
+		}
+		// RVG 6
+		// SG 11
+		// BVG 11
+		// if the theoretical flow is < 0, correct it to 0 for more visually pleasing graph and realism
+		if (qs[i] < 0){
+			qs[i] = 0;
 		}
 		// if the V/L is < 0, you have defied the laws of physics
 		if (VLs[i] < 0){
 			VLs[i] = 0;
 		}
-		// if the theoretical flow is < 0, correct it to 0 for more visually pleasing graph and realism
-		if (qs[i] < 0){
-			qs[i] = 0;
-		}
 		// Again, laws of fluid dynamics are broken if answer > q
 		if (answers[i] > qs[i]){
 			answers[i] = qs[i];
+		}
+		if (i > 0){
+			if (answers[i-1] > answers[i]){
+				answers[i] = answers[i-1] + (0.1*Math.log(i));
+			}
+			// RVG 7
+			// SG 12
+			// BVG 12
 		}
 	}
 	// Adds a fade animation when the answer shows up
@@ -562,7 +602,7 @@ function calculate() {
 		type: 'line',
 		// graphs x-axis then y-axis
 		data: {
-			labels: freqs,
+			labels: freqs,  // CHANGE TO freqs later
 			datasets: [{
 				// name shown in legend
 				label: 'Theoretical Flow',
@@ -570,7 +610,7 @@ function calculate() {
 				data: qs,
 				// the coloring under the curve
 				backgroundColor: [
-					'rgba(0,19,66,0.1)'
+					'rgba(0,19,66,0.01)' // Change to (0,19,66,.01) to fix
 				],
 				// NOTE: hex colors MUST use the 6-digit format in chart.js
 				// color of the line connecting the points
@@ -594,8 +634,12 @@ function calculate() {
 				borderWidth: 1,
 				pointBackgroundColor: 'rgb(255,185,29)'
 			},
+			// RVG 8
+			// SG 13			
+			// BVG 13
 			]
 		},
+			
 		options: {
 			scales: {
 				yAxes: [{
@@ -610,12 +654,17 @@ function calculate() {
 						labelString: 'Frequency (Hz)'
 					}
 				}],
-			}
+			},
+			/*
+			elements: {
+				point:{
+					radius: 0
+				}
+			}*/
 		}
 	});
 	// autoscrolls to the bottom of the page
-	$('html, body').animate({scrollTop:$(document).height()}, 1200);
-
+	$('html, body').animate({scrollTop:$(document).height()}, 200);
 }
 
 // the angularJS controller used to generate the list of fittings and lines (saves a lot of copy and pasting)
@@ -645,7 +694,7 @@ function createMatrix(length) {
         i = length;
 	// recursively creates an array at each index of the originally produced array 
     if (arguments.length > 1) {
-		// Type conversion from arguements array to a regualar array (which are apparently different)
+		// Type conversion from arguments array to a regular array (which are apparently different)
         var args = Array.prototype.slice.call(arguments, 1);
         while(i--) arr[length-1 - i] = createMatrix.apply(this, args);
     }
