@@ -29,6 +29,7 @@ var 	headingCounter = 0;
 outputString.push("<!DOCTYPE html><html><body>");
 // generate header button
 function makeHeading(){
+	_gaq.push(['_trackEvent', 'Email Generator', 'click', 'generate heading', 1, true]);
 	// get needed variables
 	var 	title = $("#titleGen").val();
 			date = $("#dateGen").val();
@@ -70,6 +71,7 @@ function makeHeading(){
 }
 // generate section button
 function makeSection(){
+	_gaq.push(['_trackEvent', 'Email Generator', 'click', 'generate section', 1, true]);
 	// get needed variables
 	var 	title = $("#StitleGen").val();
 			color = $("#TitleColor").val();
@@ -93,6 +95,7 @@ function makeSection(){
 //color:rgb(78,216,255) - Lighthouse blue
 // generate subsection button
 function makeSSection(){
+	_gaq.push(['_trackEvent', 'Email Generator', 'click', 'generate subsection', 1, true]);
 	// get needed variables
 	var 	SSname = $("#SSnameGen").val();
 			SStext = $("#SStextGen").val();
@@ -250,6 +253,7 @@ function importEmail() {
 
 // output HTML button
 function output(){
+	_gaq.push(['_trackEvent', 'Email Generator', 'click', 'generate email', 5, false]);
 	// finishes html stack
 	outputString.push("</body></html>")
 	// itterates through the stack (in reverse stack order, so I guess it's technically a queue here)

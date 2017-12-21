@@ -60,7 +60,7 @@ $(document).ready(function(){
 		trigger : 'hover',
 		delay: {show: 200, hide: 200},
 		html : true,
-		content : '<p>An email generator to let anyone write HTML emails.</p> <img src="images/email.png" class="media-object center-block thumbnail">'
+		content : '<p>An email generator to let anyone write HTML emails.</p> <img src="images/email.PNG" class="media-object center-block thumbnail">'
 	});
 	
 	$('#schedule').popover({

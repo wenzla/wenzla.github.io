@@ -5,6 +5,7 @@ window.onload = function() {
 	var fileInput = document.getElementById('fileInput');
 	
 	fileInput.addEventListener('change', function(e) {
+		_gaq.push(['_trackEvent', 'CSS Formater', 'click', 'Format', 3, false]);
 		var 	fileIn = fileInput.files[0];
 				textType = /text.*/;
 				fileName = '';

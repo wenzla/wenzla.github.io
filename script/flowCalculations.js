@@ -208,6 +208,8 @@ function checkForm() {
 // to calculate an array of values to graph.  The javascript was converted from single value to array, but
 // the loops are probably not as effecient as they could be.
 function calculate() {
+	// Event tracking for clicking this button
+	_gaq.push(['_trackEvent', 'Flow Calculator', 'click', 'Calculate', 3, false]);
 	// Doesn't even bother with calculations if the user inputted questionable values
 	if (!checkForm()){
 		return;
