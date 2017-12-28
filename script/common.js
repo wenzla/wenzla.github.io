@@ -7,6 +7,16 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 ga('create', 'UA-102508413-1', 'auto');
 ga('send', 'pageview');
 
+var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-102508413-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
 // function to help declare a matrix of arbitrary size for calculations above
 function createMatrix(length) {
     var arr = new Array(length || 0),

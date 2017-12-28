@@ -43,6 +43,7 @@ for (var o = 0; o < 36; o++){
 
 var ctx = $("#flowChart");
 var myChart = new Chart(ctx, {});
+/**
 // loads images for the schematic;  MOSTLY OBSOLETE - will probably delete later
 imgArray[0].src = 'schem/180.png';
 imgArray[1].src = 'schem/180.png';
@@ -79,13 +80,13 @@ imgArray[31].src = 'schem/tees.PNG';
 imgArray[32].src = 'schem/tees.PNG';
 imgArray[33].src = 'schem/tees.PNG';
 imgArray[34].src = 'schem/threaded union.png';
-
+**/
   /**   OBSOLETE - This method will probably be deleted later.
 	* getImage(sender): retrieves an image in the above image array depending on the index selected 
 	* under the fittings info section of the webpage.
 	*
 	* sender - the dropdown menu which activated the function
-	**/
+	**
 function getImage(sender){
 	// The if statement commented out below would make the image appear in the schematic builder area
 	// only when the fitting and the fitting row is different
@@ -109,7 +110,7 @@ function getImage(sender){
 		fNums.push(document.getElementById("fNum" + i).value);
 	//}
 }
-
+**/
 function testing(label, val){
 	$(label).html(val + " <span class = \"rightAlign\"><span class=\"caret\"></span></span>");
 };
@@ -233,13 +234,18 @@ function calculate() {
 	for (var i = 0; i < loopIndex; i++){
 		freqs[i] = (i+1);
 	}
-
+	//loopIndex = 60;
 	// npshr in psi
 	var npshrpsis = new Array();
+	var npshrpsisRVP = new Array(); // 4" RVP Pump
+	var npshrpsisPD = new Array(); // PD Pump Only
 	for (var i = 0; i < loopIndex; i++){
-		npshrpsis[i] = (((pump * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 0.5) * 32.2 * density) / 144.0;
+		npshrpsis[i] = ((pump * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 0.5);
+		npshrpsisRVP[i] = ((3.2 * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)));
+		npshrpsisPD[i] = ((21 * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 1);
+		// npshrpsis[i] = (((pump * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 0.5) * 32.2 * density) / 144.0;
 	}
-	
+	loopIndex = parseInt(freq) + 40;
 	// convert it to ft^2/s
 	var kinematicViscosity = ($("#kViscosity").val())*0.0000108;
 	// There can be a variable amount of pipes so we need a dynamically sized array to keep track of them
@@ -401,20 +407,28 @@ function calculate() {
 
 	// gets breakaway valve pressure drop value dependant on diameter and if it is in parallel
 	BPressureDrops = new Array();
+	BPressureDrops4 = new Array();
+	BPressureDrops6 = new Array();
+	BPressureDrops4p = new Array();
+	BPressureDrops6p = new Array();
 	// BVG 1
 	
 	for (var i = 0; i < loopIndex; i++){
 		if(!breakawaycheck){
 			if (BreakawayDValue != 4){
 				BPressureDrops[i] = (0.000007 * Math.pow(qs[i], 2)) + (-0.00001*qs[i]) + -0.0013;
+				BPressureDrops4[i] = (0.000007 * Math.pow(qs[i], 2)) + (-0.00001*qs[i]) + -0.0013;
 			} else {
 				BPressureDrops[i] = (0.00001 * Math.pow(qs[i], 2)) + (-0.0005*qs[i]) + 0.0332;
+				BPressureDrops6[i] = (0.00001 * Math.pow(qs[i], 2)) + (-0.0005*qs[i]) + 0.0332;
 			}
 		} else { // in parallel
 			if (BreakawayDValue != 4){
 				BPressureDrops[i] = (0.000007 * Math.pow(pqs[i], 2)) + (-0.00001*pqs[i]) + -0.0013;
+				BPressureDrops4p[i] = (0.000007 * Math.pow(pqs[i], 2)) + (-0.00001*pqs[i]) + -0.0013;
 			} else {
 				BPressureDrops[i] = (0.00001 * Math.pow(pqs[i], 2)) + (-0.0005*pqs[i]) + 0.0332;
+				BPressureDrops6p[i] = (0.00001 * Math.pow(pqs[i], 2)) + (-0.0005*pqs[i]) + 0.0332;
 			}
 		}
 		// BVG 2
@@ -423,6 +437,14 @@ function calculate() {
 	//pressure drop of the strainer based on number and if in parallel
 	var SPressureDrops = new Array();
 	// SG 1
+	var strainerGraph2 = new Array();
+	var strainerGraph3 = new Array();
+	var strainerGraph4 = new Array();
+	var strainerGraph6 = new Array();
+	var strainerGraph2p = new Array();
+	var strainerGraph3p = new Array();
+	var strainerGraph4p = new Array();
+	var strainerGraph6p = new Array(); // GRAPHING CURVES FOR JAMES
 	for (var i = 0; i < loopIndex; i++){
 		if(!strainerCheck){
 			SPressureDrops[i] = (resistance * Math.pow(qs[i],2)) * StrainerNum;
@@ -431,6 +453,14 @@ function calculate() {
 			SPressureDrops[i] = SPressureDrops[i]/2.0;
 		}
 		// SG2
+		strainerGraph2[i] = (resistances[0] * Math.pow(qs[i],2)) * StrainerNum;
+		strainerGraph3[i] = (resistances[1] * Math.pow(qs[i],2)) * StrainerNum;
+		strainerGraph4[i] = (resistances[2] * Math.pow(qs[i],2)) * StrainerNum;
+		strainerGraph6[i] = (resistances[3] * Math.pow(qs[i],2)) * StrainerNum;
+		strainerGraph2p[i] = ((resistances[0] * Math.pow(qs[i],2)) * (StrainerNum))/2;
+		strainerGraph3p[i] = ((resistances[1] * Math.pow(qs[i],2)) * (StrainerNum))/2;
+		strainerGraph4p[i] = ((resistances[2] * Math.pow(qs[i],2)) * (StrainerNum))/2;
+		strainerGraph6p[i] = ((resistances[3] * Math.pow(qs[i],2)) * (StrainerNum))/2;
 	}
 	
 	// will eventually become velocities later
@@ -489,12 +519,28 @@ function calculate() {
 	var pheadLossPsis = new Array();
 	var totalHeadLossPsis = new Array();
 	// SG 3
+	var strainerGraphLoss2 = new Array();
+	var strainerGraphLoss3 = new Array();
+	var strainerGraphLoss4 = new Array();
+	var strainerGraphLoss6 = new Array();
+	var strainerGraphLoss2p = new Array();
+	var strainerGraphLoss3p = new Array();
+	var strainerGraphLoss4p = new Array();
+	var strainerGraphLoss6p = new Array(); // For JAMES CURVES
 	// BVG 3
 	for (var i = 0; i < loopIndex; i++){
 		pheadLossPsis[i] = (pheadLosses[i] * density * 32.2) / 144.0;
 		// NOTE: THIS IS PROBABLY NOT RIGHT BUT BEING IN PARALLEL SHOULD REDUCE THE TOTAL HEAD LOSS AS COMPARED TO IN SERIES
 		totalHeadLossPsis[i] = headLossPsis[i] + BPressureDrops[i] + SPressureDrops[i] + (pheadLossPsis[i] / 2.0);
 		//SG 4
+		strainerGraphLoss2[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph2[i] + (pheadLossPsis[i] / 2.0);
+		strainerGraphLoss3[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph3[i] + (pheadLossPsis[i] / 2.0);
+		strainerGraphLoss4[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph4[i] + (pheadLossPsis[i] / 2.0);
+		strainerGraphLoss6[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph6[i] + (pheadLossPsis[i] / 2.0);
+		strainerGraphLoss2p[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph2p[i] + (pheadLossPsis[i] / 2.0);
+		strainerGraphLoss3p[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph3p[i] + (pheadLossPsis[i] / 2.0);
+		strainerGraphLoss4p[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph4p[i] + (pheadLossPsis[i] / 2.0);
+		strainerGraphLoss6p[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph6p[i] + (pheadLossPsis[i] / 2.0);
 		//BVG 4
 	}
 	// alert("Phead: " + pheadLossPsis[freq] + '\n' + "head: " + headLossPsis[freq] + '\n' + "total: " + totalHeadLossPsis[freq]);
@@ -503,10 +549,26 @@ function calculate() {
 	// a string creating a NaN
 	var pfCalcs = new Array();
 	// SG 5
+	var strainerGraphPf2 = new Array();
+	var strainerGraphPf3 = new Array();
+	var strainerGraphPf4 = new Array();
+	var strainerGraphPf6 = new Array();
+	var strainerGraphPf2p = new Array();
+	var strainerGraphPf3p = new Array();
+	var strainerGraphPf4p = new Array();
+	var strainerGraphPf6p = new Array(); // For JAMES CURVES
 	// BVG 5
 	for (var i = 0; i < loopIndex; i++){
 		pfCalcs[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsis[i]);
 		// SG 6
+		strainerGraphPf2[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss2[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf3[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss3[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf4[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss4[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf6[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss6[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf2p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss2p[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf3p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss3p[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf4p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss4p[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf6p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss6p[i]) - parseFloat(npshrpsis[i]);
 		// BVG 6
 	}
 	// old TVP formulas
@@ -531,12 +593,28 @@ function calculate() {
 	}**/
 	var VLs = new Array();
 	// SG 7
+	var strainerGraphVL2 = new Array();
+	var strainerGraphVL3 = new Array();
+	var strainerGraphVL4 = new Array();
+	var strainerGraphVL6 = new Array();
+	var strainerGraphVL2p = new Array();
+	var strainerGraphVL3p = new Array();
+	var strainerGraphVL4p = new Array();
+	var strainerGraphVL6p = new Array(); // For JAMES CURVES
 	// BVG 7
 	// RVG 2
 	for (var i = 0; i < loopIndex; i++){
 		VLs[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVP);
 		// RVG 3
 		// SG 8
+		strainerGraphVL2[i] = (atm - strainerGraphPf2[i])/(strainerGraphPf2[i] - TVP);
+		strainerGraphVL3[i] = (atm - strainerGraphPf3[i])/(strainerGraphPf3[i] - TVP);
+		strainerGraphVL4[i] = (atm - strainerGraphPf4[i])/(strainerGraphPf4[i] - TVP);
+		strainerGraphVL6[i] = (atm - strainerGraphPf6[i])/(strainerGraphPf6[i] - TVP);
+		strainerGraphVL2p[i] = (atm - strainerGraphPf2p[i])/(strainerGraphPf2p[i] - TVP);
+		strainerGraphVL3p[i] = (atm - strainerGraphPf3p[i])/(strainerGraphPf3p[i] - TVP);
+		strainerGraphVL4p[i] = (atm - strainerGraphPf4p[i])/(strainerGraphPf4p[i] - TVP);
+		strainerGraphVL6p[i] = (atm - strainerGraphPf6p[i])/(strainerGraphPf6p[i] - TVP);
 		// BVG 8
 	}
 	
@@ -545,12 +623,28 @@ function calculate() {
 	var answers = new Array();
 	// RVG 4
 	// SG 9
+	var strainerGraphA2 = new Array();
+	var strainerGraphA3 = new Array();
+	var strainerGraphA4 = new Array();
+	var strainerGraphA6 = new Array();
+	var strainerGraphA2p = new Array();
+	var strainerGraphA3p = new Array();
+	var strainerGraphA4p = new Array();
+	var strainerGraphA6p = new Array(); // For JAMES CURVES
 	// BVG 9
 	for (var i = 0; i < loopIndex; i++){
 		
 		answers[i] = qs[i]*(1.0/(VLs[i] + 1));
 		// RVG 5
 		// SG 10
+		strainerGraphA2[i] = qs[i]*(1.0/(strainerGraphVL2[i] + 1));
+		strainerGraphA3[i] = qs[i]*(1.0/(strainerGraphVL3[i] + 1));
+		strainerGraphA4[i] = qs[i]*(1.0/(strainerGraphVL4[i] + 1));
+		strainerGraphA6[i] = qs[i]*(1.0/(strainerGraphVL6[i] + 1));
+		strainerGraphA2p[i] = qs[i]*(1.0/(strainerGraphVL2p[i] + 1));
+		strainerGraphA3p[i] = qs[i]*(1.0/(strainerGraphVL3p[i] + 1));
+		strainerGraphA4p[i] = qs[i]*(1.0/(strainerGraphVL4p[i] + 1));
+		strainerGraphA6p[i] = qs[i]*(1.0/(strainerGraphVL6p[i] + 1));
 		// BVG 10
 		// if the answer is < 0, makes it 0 since < 0 is impossible
 		if (answers[i] < 0){
@@ -558,6 +652,30 @@ function calculate() {
 		}
 		// RVG 6
 		// SG 11
+		if (strainerGraphA2[i] < 0){
+			strainerGraphA2[i] = 0;
+		}
+		if (strainerGraphA3[i] < 0){
+			strainerGraphA3[i] = 0;
+		}
+		if (strainerGraphA4[i] < 0){
+			strainerGraphA4[i] = 0;
+		}
+		if (strainerGraphA6[i] < 0){
+			strainerGraphA6[i] = 0;
+		}
+		if (strainerGraphA2p[i] < 0){
+			strainerGraphA2p[i] = 0;
+		}
+		if (strainerGraphA3p[i] < 0){
+			strainerGraphA3p[i] = 0;
+		}
+		if (strainerGraphA4p[i] < 0){
+			strainerGraphA4p[i] = 0;
+		}
+		if (strainerGraphA6p[i] < 0){
+			strainerGraphA6p[i] = 0;
+		}
 		// BVG 11
 		// if the theoretical flow is < 0, correct it to 0 for more visually pleasing graph and realism
 		if (qs[i] < 0){
@@ -577,6 +695,30 @@ function calculate() {
 			}
 			// RVG 7
 			// SG 12
+			if (strainerGraphA2[i-1] > strainerGraphA2[i]){
+			strainerGraphA2[i] = strainerGraphA2[i-1] + (0.1*Math.log(i));
+			}
+			if (strainerGraphA3[i-1] > strainerGraphA3[i]){
+			strainerGraphA3[i] = strainerGraphA3[i-1] + (0.1*Math.log(i));
+			}
+			if (strainerGraphA4[i-1] > strainerGraphA4[i]){
+			strainerGraphA4[i] = strainerGraphA4[i-1] + (0.1*Math.log(i));
+			}
+			if (strainerGraphA6[i-1] > strainerGraphA6[i]){
+			strainerGraphA6[i] = strainerGraphA6[i-1] + (0.1*Math.log(i));
+			}
+			if (strainerGraphA2p[i-1] > strainerGraphA2p[i]){
+			strainerGraphA2p[i] = strainerGraphA2p[i-1] + (0.1*Math.log(i));
+			}
+			if (strainerGraphA3p[i-1] > strainerGraphA3p[i]){
+			strainerGraphA3p[i] = strainerGraphA3p[i-1] + (0.1*Math.log(i));
+			}
+			if (strainerGraphA4p[i-1] > strainerGraphA4p[i]){
+			strainerGraphA4p[i] = strainerGraphA4p[i-1] + (0.1*Math.log(i));
+			}
+			if (strainerGraphA6p[i-1] > strainerGraphA6p[i]){
+			strainerGraphA6p[i] = strainerGraphA6p[i-1] + (0.1*Math.log(i));
+			}
 			// BVG 12
 		}
 	}
@@ -595,6 +737,8 @@ function calculate() {
         $(this).text(parseFloat(npshrpsis[freq-1]).toFixed(4) + " PSI").fadeIn("slow");
     });
 
+	qs[0] = 0; // to make this look better on the graph
+	npshrpsisPD[59] = 22;
 	// graphs the theoretical vs estimated flow
 	$(".graph").fadeIn("fast");
 	$(".graph").append("<canvas id=\"flowChart\" width=\"80%\" height=\"30%\"></canvas>");
@@ -605,14 +749,15 @@ function calculate() {
 		// graphs x-axis then y-axis
 		data: {
 			labels: freqs,  // CHANGE TO freqs later
-			datasets: [{
+			datasets: [
+			{
 				// name shown in legend
 				label: 'Theoretical Flow',
 				// array of q values
 				data: qs,
 				// the coloring under the curve
 				backgroundColor: [
-					'rgba(0,19,66,0.01)' // Change to (0,19,66,.01) to fix
+					'rgba(0,19,66,0.00)' // Change to (0,19,66,.01) to fix
 				],
 				// NOTE: hex colors MUST use the 6-digit format in chart.js
 				// color of the line connecting the points
@@ -628,7 +773,7 @@ function calculate() {
 				label: 'Flow with Current Setup',
 				data: answers,
 				backgroundColor: [
-					'rgba(255,185,29,0.3)'
+					'rgba(255,185,29,0.0)'
 				],
 				borderColor: [
 					'rgb(255,185,29)'
@@ -636,8 +781,109 @@ function calculate() {
 				borderWidth: 1,
 				pointBackgroundColor: 'rgb(255,185,29)'
 			},
+			
 			// RVG 8
-			// SG 13			
+			// SG 13	
+			/*
+			{
+				label: '2" Strainer',
+				data: strainerGraphA2,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#f7a3d7'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#f7a3d7'
+			}, // ADD STUFF HERE TO SEE THE PSIS
+			{
+				label: '4" PD Pump Only',
+				//data: [{
+				//	x: qs,
+				//y: npshrpsisPD}],
+				data: npshrpsisPD,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#d11715'
+				],
+				borderWidth: 3,
+				pointBackgroundColor: '#d11715'
+			},
+			{
+				label: '4" PD Pump + Impeller',
+				data: npshrpsis,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#24bbd3'
+				],
+				borderWidth: 3,
+				pointBackgroundColor: '#24bbd3'
+			},
+			{
+				label: '4" RVP PD Pump + Impeller + Inducer',
+				data: npshrpsisRVP,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#f5ed80'
+				],
+				borderWidth: 3,
+				pointBackgroundColor: '#f5ed80'
+			},
+			/*
+			{
+				label: 'Flow with 2" Strainer in parallel',
+				data: strainerGraphA2p,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#d11715'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#d11715'
+			},*//*
+			{
+				label: '2 x 6" Breakaway Valve',
+				data: bPressureDrops6p,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#60b442'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#60b442'
+			},/*
+			{
+				label: '2 x 4" Strainer',
+				data: strainerGraph4p,backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#a01e3d'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#a01e3d'
+			},
+			{
+				label: '2 x 6" Strainer',
+				data: strainerGraph6p,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#f69219'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#f69219'
+			},			*/	
 			// BVG 13
 			]
 		},
@@ -647,13 +893,29 @@ function calculate() {
 				yAxes: [{
 					scaleLabel: {
 						display: true,
-						labelString: 'Flow (GPM)'
+						labelString: 'Flow(GPM)' // Flow (GPM)
+					},
+					ticks: {
+						suggestedMax: 20,
+						//stepSize: 2
 					}
 				}],
 				xAxes: [{
+					//type: "linear",
+					display: true,
+					position: 'bottom',
 					scaleLabel: {
 						display: true,
-						labelString: 'Frequency (Hz)'
+						labelString: 'Frequency (Hz)' // Frequency (Hz)
+					},
+					ticks: {
+						callback: function(value, index, values){
+							return value;
+						},
+						autoSkip: true,
+						stepSize: 25,
+						max: 600,
+						min: 0
 					}
 				}],
 			},
