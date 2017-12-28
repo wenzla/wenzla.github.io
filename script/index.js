@@ -22,7 +22,7 @@ angular.module('link', [])
       {url:'flowCalc',  id: 'chuCalc', title:'Parker Flow Rate Calculator', text: 'Parker Flow Calculator'},
 	  {url:'video', id: 'videoPage', title:'Parker Long Video', text: 'Parker Long Video'},
 	  {url:'email', id: 'emailGen', title:'Email Generator', text: 'Email Generator'},
-	  {url:'schedule', id: 'schedule', title:'Fall 2017 Schedule', text: 'Fall 2017 Schedule'},
+	  {url:'Schedule', id: 'schedule', title:'Spring 2018 Schedule', text: 'Spring 2018 Schedule'},
 	  //{url:'email', id: 'cssFormat', title:'CSS Formatter', text: 'CSS Formatter'},
       {url:'test', id: 'testPage', title:'Testing Location', text: 'Test Area'}];
   });
@@ -68,7 +68,7 @@ $(document).ready(function(){
 		trigger : 'hover',
 		delay: {show: 200, hide: 200},
 		html : true,
-		content : '<p>Schedule for my 2017 Fall Semester.</p> <img src="images/schedule.PNG" class="media-object center-block thumbnail">'
+		content : '<p>Schedule for my 2018 Spring Semester.</p> <img src="images/Schedule.PNG" class="media-object center-block thumbnail">'
 	});
 	
 	/**
