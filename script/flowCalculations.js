@@ -40,6 +40,12 @@ for (var o = 0; o < 36; o++){
 	imgArray[o] = new Image();
 	imgArray[o].src = 'images/logo.jpg';
 }
+// checks if output data button is already there
+var toggled = false;
+var dataArray = new Array();
+for(var i = 0; i < 50; i++){
+	dataArray[i] = new Array();
+}
 
 var ctx = $("#flowChart");
 var myChart = new Chart(ctx, {});
@@ -86,7 +92,7 @@ imgArray[34].src = 'schem/threaded union.png';
 	* under the fittings info section of the webpage.
 	*
 	* sender - the dropdown menu which activated the function
-	**
+	**/
 function getImage(sender){
 	// The if statement commented out below would make the image appear in the schematic builder area
 	// only when the fitting and the fitting row is different
@@ -110,7 +116,7 @@ function getImage(sender){
 		fNums.push(document.getElementById("fNum" + i).value);
 	//}
 }
-**/
+
 function testing(label, val){
 	$(label).html(val + " <span class = \"rightAlign\"><span class=\"caret\"></span></span>");
 };
@@ -240,9 +246,9 @@ function calculate() {
 	var npshrpsisRVP = new Array(); // 4" RVP Pump
 	var npshrpsisPD = new Array(); // PD Pump Only
 	for (var i = 0; i < loopIndex; i++){
-		npshrpsis[i] = ((pump * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 0.5);
-		npshrpsisRVP[i] = ((3.2 * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)));
-		npshrpsisPD[i] = ((21 * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 1);
+		npshrpsis[i] = ((pump * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 0.5).toFixed(4);
+		npshrpsisRVP[i] = ((3.2 * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5))).toFixed(4);
+		npshrpsisPD[i] = ((21 * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 1).toFixed(4);
 		// npshrpsis[i] = (((pump * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 0.5) * 32.2 * density) / 144.0;
 	}
 	loopIndex = parseInt(freq) + 40;
@@ -273,7 +279,7 @@ function calculate() {
 			qs[i] = (3.72 * freqs[i]) - (0.132 * dPressure);
 		} else if (pump == 8.5){
 			// 4" flowrate
-			qs[i] = (-0.626 * dPressure) + (0.296 * (freqs[i]*30));
+			qs[i] = Math.round((-0.626 * dPressure) + (0.296 * (freqs[i]*30)));
 		} else if (pump == 7){
 			// 3" flowrate
 			qs[i] = (3.853 * freqs[i]) - (0.1585 * dPressure) + 1.0701;
@@ -412,7 +418,10 @@ function calculate() {
 	BPressureDrops4p = new Array();
 	BPressureDrops6p = new Array();
 	// BVG 1
-	
+	var breakawayGraph4 = new Array();
+	var breakawayGraph6 = new Array();
+	var breakawayGraph4p = new Array();
+	var breakawayGraph6p = new Array();
 	for (var i = 0; i < loopIndex; i++){
 		if(!breakawaycheck){
 			if (BreakawayDValue != 4){
@@ -433,6 +442,10 @@ function calculate() {
 		}
 		// BVG 2
 		BPressureDrops[i] = BPressureDrops[i] * breakawayNum;
+		breakawayGraph4[i] = ((0.00001 * Math.pow(qs[i], 2)) + (-0.0005*qs[i]) + 0.0332) * 1;
+		breakawayGraph6[i] = ((0.000007 * Math.pow(qs[i], 2)) + (-0.00001*qs[i]) + -0.0013) * 1;
+		breakawayGraph4p[i] = ((0.00001 * Math.pow(pqs[i], 2)) + (-0.0005*pqs[i]) + 0.0332) * (1 + 1);
+		breakawayGraph6p[i] = ((0.000007 * Math.pow(pqs[i], 2)) + (-0.00001*pqs[i]) + -0.0013) * (1 + 1);
 	}
 	//pressure drop of the strainer based on number and if in parallel
 	var SPressureDrops = new Array();
@@ -447,20 +460,20 @@ function calculate() {
 	var strainerGraph6p = new Array(); // GRAPHING CURVES FOR JAMES
 	for (var i = 0; i < loopIndex; i++){
 		if(!strainerCheck){
-			SPressureDrops[i] = (resistance * Math.pow(qs[i],2)) * StrainerNum;
+			SPressureDrops[i] = (resistance * Math.pow(qs[i],2)) * StrainerNum * 0;
 		} else{
 			SPressureDrops[i] = (resistance * Math.pow(pqs[i],2)) * StrainerNum;
 			SPressureDrops[i] = SPressureDrops[i]/2.0;
 		}
 		// SG2
-		strainerGraph2[i] = (resistances[0] * Math.pow(qs[i],2)) * StrainerNum;
-		strainerGraph3[i] = (resistances[1] * Math.pow(qs[i],2)) * StrainerNum;
-		strainerGraph4[i] = (resistances[2] * Math.pow(qs[i],2)) * StrainerNum;
-		strainerGraph6[i] = (resistances[3] * Math.pow(qs[i],2)) * StrainerNum;
-		strainerGraph2p[i] = ((resistances[0] * Math.pow(qs[i],2)) * (StrainerNum))/2;
-		strainerGraph3p[i] = ((resistances[1] * Math.pow(qs[i],2)) * (StrainerNum))/2;
-		strainerGraph4p[i] = ((resistances[2] * Math.pow(qs[i],2)) * (StrainerNum))/2;
-		strainerGraph6p[i] = ((resistances[3] * Math.pow(qs[i],2)) * (StrainerNum))/2;
+		strainerGraph2[i] = (resistances[0] * Math.pow(qs[i],2)) * 1;
+		strainerGraph3[i] = (resistances[1] * Math.pow(qs[i],2)) * 1;
+		strainerGraph4[i] = (resistances[2] * Math.pow(qs[i],2)) * 1;
+		strainerGraph6[i] = (resistances[3] * Math.pow(qs[i],2)) * 1;
+		strainerGraph2p[i] = ((resistances[0] * Math.pow(pqs[i],2)) * (1+1));
+		strainerGraph3p[i] = ((resistances[1] * Math.pow(pqs[i],2)) * (1+1));
+		strainerGraph4p[i] = ((resistances[2] * Math.pow(pqs[i],2)) * (1+1));
+		strainerGraph6p[i] = ((resistances[3] * Math.pow(pqs[i],2)) * (1+1));
 	}
 	
 	// will eventually become velocities later
@@ -518,6 +531,10 @@ function calculate() {
 	// gets total headloss of setup
 	var pheadLossPsis = new Array();
 	var totalHeadLossPsis = new Array();
+	var breakawayGraphLoss4 = new Array();
+	var breakawayGraphLoss6 = new Array();
+	var breakawayGraphLoss4p = new Array();
+	var breakawayGraphLoss6p = new Array();
 	// SG 3
 	var strainerGraphLoss2 = new Array();
 	var strainerGraphLoss3 = new Array();
@@ -542,12 +559,22 @@ function calculate() {
 		strainerGraphLoss4p[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph4p[i] + (pheadLossPsis[i] / 2.0);
 		strainerGraphLoss6p[i] = headLossPsis[i] + BPressureDrops[i] + strainerGraph6p[i] + (pheadLossPsis[i] / 2.0);
 		//BVG 4
+		breakawayGraphLoss4[i] = headLossPsis[i] + breakawayGraph4[i] + SPressureDrops[i] + (pheadLossPsis[i] / 2.0);
+		breakawayGraphLoss6[i] = headLossPsis[i] + breakawayGraph6[i] + SPressureDrops[i] + (pheadLossPsis[i] / 2.0);
+		breakawayGraphLoss4p[i] = headLossPsis[i] + breakawayGraph4p[i] + SPressureDrops[i] + (pheadLossPsis[i] / 2.0);
+		breakawayGraphLoss6p[i] = headLossPsis[i] + breakawayGraph6p[i] + SPressureDrops[i] + (pheadLossPsis[i] / 2.0);
 	}
 	// alert("Phead: " + pheadLossPsis[freq] + '\n' + "head: " + headLossPsis[freq] + '\n' + "total: " + totalHeadLossPsis[freq]);
 	var staticHead = ((density * 32.2 * height)/144);
+	var staticHeadLow = ((density * 32.2 * 0)/144);
+	var staticHeadHigh = ((density * 32.2 * 6)/144);
 	// had to use parse statements else it just appended strings to each other then subtracted a number from 
 	// a string creating a NaN
 	var pfCalcs = new Array();
+	var pfCalcsRVP = new Array();
+	var pfCalcsPD = new Array();
+	var pfCalcsLow = new Array();
+	var pfCalcsHigh = new Array();
 	// SG 5
 	var strainerGraphPf2 = new Array();
 	var strainerGraphPf3 = new Array();
@@ -558,8 +585,16 @@ function calculate() {
 	var strainerGraphPf4p = new Array();
 	var strainerGraphPf6p = new Array(); // For JAMES CURVES
 	// BVG 5
+	var breakawayGraphPf4 = new Array();
+	var breakawayGraphPf6 = new Array();
+	var breakawayGraphPf4p = new Array();
+	var breakawayGraphPf6p = new Array();
 	for (var i = 0; i < loopIndex; i++){
 		pfCalcs[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsis[i]);
+		pfCalcsRVP[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsisRVP[i]);
+		pfCalcsPD[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsisPD[i]);
+		pfCalcsLow[i] = parseFloat(atm) + parseFloat(staticHeadLow) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsis[i]);
+		pfCalcsHigh[i] = parseFloat(atm) + parseFloat(staticHeadHigh) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsis[i]);
 		// SG 6
 		strainerGraphPf2[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss2[i]) - parseFloat(npshrpsis[i]);
 		strainerGraphPf3[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss3[i]) - parseFloat(npshrpsis[i]);
@@ -570,6 +605,10 @@ function calculate() {
 		strainerGraphPf4p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss4p[i]) - parseFloat(npshrpsis[i]);
 		strainerGraphPf6p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss6p[i]) - parseFloat(npshrpsis[i]);
 		// BVG 6
+		breakawayGraphPf4[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss4[i]) - parseFloat(npshrpsis[i]);
+		breakawayGraphPf6[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss6[i]) - parseFloat(npshrpsis[i]);
+		breakawayGraphPf4p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss4p[i]) - parseFloat(npshrpsis[i]);
+		breakawayGraphPf6p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss6p[i]) - parseFloat(npshrpsis[i]);
 	}
 	// old TVP formulas
 	// var TVP = RVP * Math.pow(Math.E,(-6622.5 * ((1/((temperature*1.8021)+459.69)) - (1/559.69)))) + (.04*RVP) + (.1 * 27);
@@ -592,6 +631,10 @@ function calculate() {
 		VLratio = 0;
 	}**/
 	var VLs = new Array();
+	var VLRVP = new Array();
+	var VLPD = new Array();
+	var VLLow = new Array();
+	var VLHigh = new Array();
 	// SG 7
 	var strainerGraphVL2 = new Array();
 	var strainerGraphVL3 = new Array();
@@ -602,9 +645,18 @@ function calculate() {
 	var strainerGraphVL4p = new Array();
 	var strainerGraphVL6p = new Array(); // For JAMES CURVES
 	// BVG 7
+	var breakawayGraphVL4 = new Array();
+	var breakawayGraphVL6 = new Array();
+	var breakawayGraphVL4p = new Array();
+	var breakawayGraphVL6p = new Array();
 	// RVG 2
 	for (var i = 0; i < loopIndex; i++){
 		VLs[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVP);
+		VLPD[i] = (atm - pfCalcsPD[i])/(pfCalcsPD[i] - TVP);
+		VLRVP[i] = (atm - pfCalcsRVP[i])/(pfCalcsRVP[i] - TVP);
+		VLLow[i] = (atm - pfCalcsLow[i])/(pfCalcsLow[i] - TVP);
+		VLHigh[i] = (atm - pfCalcsHigh[i])/(pfCalcsHigh[i] - TVP);
+		
 		// RVG 3
 		// SG 8
 		strainerGraphVL2[i] = (atm - strainerGraphPf2[i])/(strainerGraphPf2[i] - TVP);
@@ -616,11 +668,21 @@ function calculate() {
 		strainerGraphVL4p[i] = (atm - strainerGraphPf4p[i])/(strainerGraphPf4p[i] - TVP);
 		strainerGraphVL6p[i] = (atm - strainerGraphPf6p[i])/(strainerGraphPf6p[i] - TVP);
 		// BVG 8
+		breakawayGraphVL4[i] = (atm - breakawayGraphPf4[i])/(breakawayGraphPf4[i] - TVP);
+		breakawayGraphVL6[i] = (atm - breakawayGraphPf6[i])/(breakawayGraphPf6[i] - TVP);
+		breakawayGraphVL4p[i] = (atm - breakawayGraphPf4p[i])/(breakawayGraphPf4p[i] - TVP);
+		breakawayGraphVL6p[i] = (atm - breakawayGraphPf6p[i])/(breakawayGraphPf6p[i] - TVP);
 	}
 	
 	// The estimated flow shown on the page
 	// var ans = q*VLratio;
 	var answers = new Array();
+	var answersPD = new Array();
+	var answersRVP = new Array();
+	var aPD = new Array();
+	var aOther = new Array();
+	var answersLow = new Array();
+	var answersHigh = new Array();
 	// RVG 4
 	// SG 9
 	var strainerGraphA2 = new Array();
@@ -632,9 +694,17 @@ function calculate() {
 	var strainerGraphA4p = new Array();
 	var strainerGraphA6p = new Array(); // For JAMES CURVES
 	// BVG 9
+	var breakawayGraphA4 = new Array();
+	var breakawayGraphA6 = new Array();
+	var breakawayGraphA4p = new Array();
+	var breakawayGraphA6p = new Array();
 	for (var i = 0; i < loopIndex; i++){
 		
-		answers[i] = qs[i]*(1.0/(VLs[i] + 1));
+		answers[i] = (qs[i]*(1.0/(VLs[i] + 1)));
+		answersPD[i] = qs[i] * (1.0/(VLPD[i] + 1));
+		answersRVP[i] = qs[i] * (1.0/(VLRVP[i] + 1));
+		answersLow[i] = (qs[i]*(1.0/(VLLow[i] + 1)));
+		answersHigh[i] = (qs[i]*(1.0/(VLHigh[i] + 1)));
 		// RVG 5
 		// SG 10
 		strainerGraphA2[i] = qs[i]*(1.0/(strainerGraphVL2[i] + 1));
@@ -646,6 +716,10 @@ function calculate() {
 		strainerGraphA4p[i] = qs[i]*(1.0/(strainerGraphVL4p[i] + 1));
 		strainerGraphA6p[i] = qs[i]*(1.0/(strainerGraphVL6p[i] + 1));
 		// BVG 10
+		breakawayGraphA4[i] = qs[i]*(1.0/(breakawayGraphVL4[i] + 1));
+		breakawayGraphA6[i] = qs[i]*(1.0/(breakawayGraphVL6[i] + 1));
+		breakawayGraphA4p[i] = qs[i]*(1.0/(breakawayGraphVL4p[i] + 1));
+		breakawayGraphA6p[i] = qs[i]*(1.0/(breakawayGraphVL6p[i] + 1));
 		// if the answer is < 0, makes it 0 since < 0 is impossible
 		if (answers[i] < 0){
 			answers[i] = 0;
@@ -677,21 +751,63 @@ function calculate() {
 			strainerGraphA6p[i] = 0;
 		}
 		// BVG 11
+		if (breakawayGraphA4[i] < 0){
+			breakawayGraphA4[i] = 0;
+		}
+		if (breakawayGraphA6[i] < 0){
+			breakawayGraphA6[i] = 0;
+		}
+		if (breakawayGraphA4p[i] < 0){
+			breakawayGraphA4p[i] = 0;
+		}
+		if (breakawayGraphA6p[i] < 0){
+			breakawayGraphA6p[i] = 0;
+		}
 		// if the theoretical flow is < 0, correct it to 0 for more visually pleasing graph and realism
 		if (qs[i] < 0){
 			qs[i] = 0;
 		}
 		// if the V/L is < 0, you have defied the laws of physics
-		if (VLs[i] < 0){
-			VLs[i] = 0;
+		if (VLs[i] < 0 && i > 30){
+			VLs[i] = 100;
+		}
+		if (VLPD[i] < 0 && i > 30){
+			VLPD[i] = 100;
+		}
+		if (VLRVP[i] < 0 && i > 30){
+			VLRVP[i] = 100;
 		}
 		// Again, laws of fluid dynamics are broken if answer > q
 		if (answers[i] > qs[i]){
 			answers[i] = qs[i];
 		}
+		if (answersPD[i] > qs[i]){
+			answersPD[i] = qs[i];
+		}
+		if (answersRVP[i] > qs[i]){
+			answersRVP[i] = qs[i];
+		}
 		if (i > 0){
 			if (answers[i-1] > answers[i]){
-				answers[i] = answers[i-1] + (0.1*Math.log(i));
+				//if (aOther.length < 10){
+				//	aOther = answers.slice(0,i+1); 
+				//}
+				answers[i] = parseFloat(answers[i-1]) + (0.1*Math.log(i));
+			}
+			if (answersPD[i-1] > answersPD[i]){
+				//if (aPD.length < 10){
+				//	aPD = answersPD.slice(0,i+1);
+				//}
+				answersPD[i] = answersPD[i-1] + (0.1*Math.log(i));
+			}
+			if (answersRVP[i-1] > answersRVP[i]){
+				answersRVP[i] = answersRVP[i-1] + (0.1*Math.log(i));
+			}
+			if (answersLow[i-1] > answersLow[i]){
+				answersLow[i] = answersLow[i-1] + (0.1*Math.log(i));
+			}
+			if (answersHigh[i-1] > answersHigh[i]){
+				answersHigh[i] = answersHigh[i-1] + (0.1*Math.log(i));
 			}
 			// RVG 7
 			// SG 12
@@ -720,6 +836,18 @@ function calculate() {
 			strainerGraphA6p[i] = strainerGraphA6p[i-1] + (0.1*Math.log(i));
 			}
 			// BVG 12
+			if (breakawayGraphA4[i-1] > breakawayGraphA4[i]){
+				breakawayGraphA4[i] = breakawayGraphA4[i-1] + (0.1*Math.log(i));
+			}
+			if (breakawayGraphA6[i-1] > breakawayGraphA6[i]){
+				breakawayGraphA6[i] = breakawayGraphA6[i-1] + (0.1*Math.log(i));
+			}
+			if (breakawayGraphA4p[i-1] > breakawayGraphA4p[i]){
+				breakawayGraphA4p[i] = breakawayGraphA4p[i-1] + (0.1*Math.log(i));
+			}
+			if (breakawayGraphA6p[i-1] > breakawayGraphA6p[i]){
+				breakawayGraphA6p[i] = breakawayGraphA6p[i-1] + (0.1*Math.log(i));
+			}
 		}
 	}
 	// Adds a fade animation when the answer shows up
@@ -734,21 +862,66 @@ function calculate() {
         $(this).text(parseFloat(qs[freq-1]).toFixed(4) + " GPM").fadeIn("slow");
     });
 	$('#result4Text').fadeOut(200, function() {
-        $(this).text(parseFloat(npshrpsis[freq-1]).toFixed(4) + " PSI").fadeIn("slow");
+        $(this).text(parseFloat(npshrpsis[freq-1] * 2.3066587368787).toFixed(4) + " ft").fadeIn("slow");
     });
 
 	qs[0] = 0; // to make this look better on the graph
 	npshrpsisPD[59] = 22;
+	dataArray[0] = freqs.slice();
+	for (var i = 0; i < freqs.length; i++){
+		freqs[i] = freqs[i] * 30;
+	}
 	// graphs the theoretical vs estimated flow
 	$(".graph").fadeIn("fast");
 	$(".graph").append("<canvas id=\"flowChart\" width=\"80%\" height=\"30%\"></canvas>");
 	var ctx = $("#flowChart");
+	if (!toggled){
+		$("#dataButton").toggle();
+		toggled = true;
+	}
+	dataArray[1] = freqs;
+	dataArray[2] = npshrpsis;
+	dataArray[3] = npshrpsisPD;
+	dataArray[4] = npshrpsisRVP;
+	dataArray[5] = answers;
+	dataArray[6] = answersPD;
+	dataArray[7] = answersRVP;
+	dataArray[8] = qs;
+	dataArray[9] = VLs;
+	dataArray[10] = VLPD;
+	dataArray[11] = VLRVP;
+	dataArray[12] = answersLow;
+	dataArray[13] = answersHigh;
+	dataArray[14] = breakawayGraphA4;
+	dataArray[15] = breakawayGraphA6;
+	dataArray[16] = breakawayGraphA4p;
+	dataArray[17] = breakawayGraphA6p;
+	dataArray[18] = strainerGraphA2;
+	dataArray[19] = strainerGraphA3;
+	dataArray[20] = strainerGraphA4;
+	dataArray[21] = strainerGraphA6;
+	dataArray[22] = strainerGraphA2p;
+	dataArray[23] = strainerGraphA3p;
+	dataArray[24] = strainerGraphA4p;
+	dataArray[25] = strainerGraphA6p;
+	dataArray[26] = strainerGraphLoss2;
+	dataArray[27] = strainerGraphLoss3;
+	dataArray[28] = strainerGraphLoss4;
+	dataArray[29] = strainerGraphLoss6;
+	dataArray[30] = strainerGraphLoss2p;
+	dataArray[31] = strainerGraphLoss3p;
+	dataArray[32] = strainerGraphLoss4p;
+	dataArray[33] = strainerGraphLoss6p;
+	dataArray[34] = breakawayGraphLoss4;
+	dataArray[35] = breakawayGraphLoss6;
+	dataArray[36] = breakawayGraphLoss4p;
+	dataArray[37] = breakawayGraphLoss6p;
 	var myChart = new Chart(ctx, {
 		// the type of graph
 		type: 'line',
 		// graphs x-axis then y-axis
 		data: {
-			labels: freqs,  // CHANGE TO freqs later
+			labels: dataArray[0],  // CHANGE TO freqs later
 			datasets: [
 			{
 				// name shown in legend
@@ -757,7 +930,7 @@ function calculate() {
 				data: qs,
 				// the coloring under the curve
 				backgroundColor: [
-					'rgba(0,19,66,0.00)' // Change to (0,19,66,.01) to fix
+					'rgba(0,19,66,0.05)' // Change to (0,19,66,.01) to fix
 				],
 				// NOTE: hex colors MUST use the 6-digit format in chart.js
 				// color of the line connecting the points
@@ -765,20 +938,20 @@ function calculate() {
 					'#001342'
 				],
 				// thickness of the line connecting the points
-				borderWidth: 1,
+				borderWidth: 2,
 				// color of the points
 				pointBackgroundColor: '#001342'
 			},
 			{
-				label: 'Flow with Current Setup',
+				label: 'Flow no Breakaway Valve', // Flow with Current Setup
 				data: answers,
 				backgroundColor: [
-					'rgba(255,185,29,0.0)'
+					'rgba(255,185,29,0.1)'
 				],
 				borderColor: [
 					'rgb(255,185,29)'
 				],
-				borderWidth: 1,
+				borderWidth: 2,
 				pointBackgroundColor: 'rgb(255,185,29)'
 			},
 			
@@ -786,7 +959,7 @@ function calculate() {
 			// SG 13	
 			/*
 			{
-				label: '2" Strainer',
+				label: 'Flow with 2" Strainer',
 				data: strainerGraphA2,
 				backgroundColor: [
 					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
@@ -796,47 +969,43 @@ function calculate() {
 				],
 				borderWidth: 1,
 				pointBackgroundColor: '#f7a3d7'
-			}, // ADD STUFF HERE TO SEE THE PSIS
-			{
-				label: '4" PD Pump Only',
-				//data: [{
-				//	x: qs,
-				//y: npshrpsisPD}],
-				data: npshrpsisPD,
-				backgroundColor: [
-					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
-				],
-				borderColor: [
-					'#d11715'
-				],
-				borderWidth: 3,
-				pointBackgroundColor: '#d11715'
 			},
 			{
-				label: '4" PD Pump + Impeller',
-				data: npshrpsis,
+				label: 'Flow with 3" Strainer',
+				data: strainerGraphA3,
 				backgroundColor: [
 					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
 				],
 				borderColor: [
 					'#24bbd3'
 				],
-				borderWidth: 3,
+				borderWidth: 1,
 				pointBackgroundColor: '#24bbd3'
 			},
 			{
-				label: '4" RVP PD Pump + Impeller + Inducer',
-				data: npshrpsisRVP,
+				label: 'Flow with 4" Strainer',
+				data: strainerGraphA4,
 				backgroundColor: [
 					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
 				],
 				borderColor: [
 					'#f5ed80'
 				],
-				borderWidth: 3,
+				borderWidth: 1,
 				pointBackgroundColor: '#f5ed80'
 			},
-			/*
+			{
+				label: 'Flow with 6" Strainer',
+				data: strainerGraphA6,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#078dd9'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#078dd9'
+			},
 			{
 				label: 'Flow with 2" Strainer in parallel',
 				data: strainerGraphA2p,
@@ -848,10 +1017,10 @@ function calculate() {
 				],
 				borderWidth: 1,
 				pointBackgroundColor: '#d11715'
-			},*//*
+			},
 			{
-				label: '2 x 6" Breakaway Valve',
-				data: bPressureDrops6p,
+				label: 'Flow with 3" Strainer in parallel',
+				data: strainerGraphA3p,
 				backgroundColor: [
 					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
 				],
@@ -860,10 +1029,10 @@ function calculate() {
 				],
 				borderWidth: 1,
 				pointBackgroundColor: '#60b442'
-			},/*
+			},
 			{
-				label: '2 x 4" Strainer',
-				data: strainerGraph4p,backgroundColor: [
+				label: 'Flow with 4" Strainer in parallel',
+				data: strainerGraphA4p,backgroundColor: [
 					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
 				],
 				borderColor: [
@@ -873,8 +1042,8 @@ function calculate() {
 				pointBackgroundColor: '#a01e3d'
 			},
 			{
-				label: '2 x 6" Strainer',
-				data: strainerGraph6p,
+				label: 'Flow with 6" Strainer in parallel',
+				data: strainerGraphA6p,
 				backgroundColor: [
 					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
 				],
@@ -883,8 +1052,97 @@ function calculate() {
 				],
 				borderWidth: 1,
 				pointBackgroundColor: '#f69219'
-			},			*/	
+			},	*/
+			/*
+			{
+				label: '0 ft',
+				//data: [{
+				//	x: qs,
+				//y: npshrpsisPD}],
+				data: answersLow,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#d11715'
+				],
+				borderWidth: 3,
+				pointBackgroundColor: '#d11715'
+			},
+			{
+				label: '3 ft',
+				data: answers,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#24bbd3'
+				],
+				borderWidth: 3,
+				pointBackgroundColor: '#24bbd3'
+			},
+			{
+				label: '6 ft',
+				data: answersHigh,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#f5ed80'
+				],
+				borderWidth: 3,
+				pointBackgroundColor: '#f5ed80'
+			},*/
 			// BVG 13
+			/*
+			{
+				label: '4" Breakaway Valve',
+				data: breakawayGraphA4,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#f7a3d7'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#f7a3d7'
+			},
+			{
+				label: '6" Breakaway Valve',
+				data: breakawayGraphA6,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#24bbd3'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#24bbd3'
+			},
+			{
+				label: '2 x 4" Breakaway Valve',
+				data: breakawayGraphA4p,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#f5ed80'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#f5ed80'
+			},
+			{
+				label: '2 x 6" Breakaway Valve',
+				data: breakawayGraphA6p,
+				backgroundColor: [
+					'rgba(0,19,66,0.0)' // Change to (0,19,66,.01) to fix
+				],
+				borderColor: [
+					'#078dd9'
+				],
+				borderWidth: 1,
+				pointBackgroundColor: '#078dd9'
+			},*/
 			]
 		},
 			
@@ -893,10 +1151,10 @@ function calculate() {
 				yAxes: [{
 					scaleLabel: {
 						display: true,
-						labelString: 'Flow(GPM)' // Flow (GPM)
+						labelString: 'Flow (GPM)' // Flow (GPM)
 					},
 					ticks: {
-						suggestedMax: 20,
+						//suggestedMax: 20,
 						//stepSize: 2
 					}
 				}],
@@ -913,9 +1171,10 @@ function calculate() {
 							return value;
 						},
 						autoSkip: true,
-						stepSize: 25,
-						max: 600,
-						min: 0
+						maxTicksLimit: 8
+						//stepSize: 25,
+						//max: 600,
+						//min: 0
 					}
 				}],
 			},
@@ -929,6 +1188,155 @@ function calculate() {
 	});
 	// autoscrolls to the bottom of the page
 	$('html, body').animate({scrollTop:$(document).height()}, 200);
+}
+
+function displayData(){
+	var outputString = new Array();
+	outputString.push("<div>");
+	createOutputString(true, outputString);
+	// finishes html stack
+	outputString.push("</div>")
+	// itterates through the stack (in reverse stack order, so I guess it's technically a queue here)
+	for (var i = 0; i < outputString.length; i++){
+		$("#popupText").append(outputString[i]);
+	}
+	// gets rid of closing tags
+	outputString.pop();
+	// opens popup
+	$('#copyPopup').modal({
+		backdrop: 'static'
+	});
+}
+
+function createOutputString(isHTML, outputString){
+	var begin = "";
+	var end = "";
+	if(isHTML){
+		begin = "<div>"
+		end = "</div>"
+	}
+	outputString.push(begin + " Frequency (Hz)," + end + dataArray[0].join());
+	outputString.push(begin + "\n Speed (RPM)," + end + dataArray[1].join());
+	outputString.push(begin + "\n NPSHr (Pump + Impeller) ft," + end + dataArray[2].join());
+	outputString.push(begin + "\n NPSHr (PD Pump Only) ft," + end + dataArray[3].join());
+	outputString.push(begin + "\n NPSHr (RVP Pump + Impeller + Inducer) ft," + end + dataArray[4].join());
+	outputString.push(begin + "\n Flow (Pump + Impeller) GPM," + end + dataArray[5].join());
+	outputString.push(begin + "\n Flow (PD Pump Only) GPM," + end + dataArray[6].join());
+	outputString.push(begin + "\n Flow (RVP Pump + Impeller + Inducer) GPM," + end + dataArray[7].join());
+	outputString.push(begin + "\n Flow (0 ft above center line) GPM," + end + dataArray[12].join());
+	outputString.push(begin + "\n Flow (6 ft above center line) GPM," + end + dataArray[13].join());
+	outputString.push(begin + "\n Flow (With 4\" Breakaway Valve) GPM," + end + dataArray[14].join());
+	outputString.push(begin + "\n Flow (With 6\" Breakaway Valve) GPM," + end + dataArray[15].join());
+	outputString.push(begin + "\n Flow (With two 4\" Breakaway Valves in Parallel) GPM," + end + dataArray[16].join());
+	outputString.push(begin + "\n Flow (With two 6\" Breakaway Valves in Parallel) GPM," + end + dataArray[17].join());
+	outputString.push(begin + "\n Flow (With 2\" Strainers) GPM," + end + dataArray[18].join());
+	outputString.push(begin + "\n Flow (With 3\" Strainers) GPM," + end + dataArray[19].join());
+	outputString.push(begin + "\n Flow (With 4\" Strainers) GPM," + end + dataArray[20].join());
+	outputString.push(begin + "\n Flow (With 6\" Strainers) GPM," + end + dataArray[21].join());
+	outputString.push(begin + "\n Flow (With two 2\" Strainers in Parallel) GPM," + end + dataArray[22].join());
+	outputString.push(begin + "\n Flow (With two 3\" Strainers in Parallel) GPM," + end + dataArray[23].join());
+	outputString.push(begin + "\n Flow (With two 4\" Strainers in Parallel) GPM," + end + dataArray[24].join());
+	outputString.push(begin + "\n Flow (With two 6\" Strainers in Parallel) GPM," + end + dataArray[25].join());
+	outputString.push(begin + "\n Head Loss (With 4\" Breakaway Valve) GPM," + end + dataArray[34].join());
+	outputString.push(begin + "\n Head Loss (With 6\" Breakaway Valve) GPM," + end + dataArray[35].join());
+	outputString.push(begin + "\n Head Loss (With two 4\" Breakaway Valves in Parallel) GPM," + end + dataArray[36].join());
+	outputString.push(begin + "\n Head Loss (With two 6\" Breakaway Valves in Parallel) GPM," + end + dataArray[37].join());
+	outputString.push(begin + "\n Head Loss (With 2\" Strainers) GPM," + end + dataArray[26].join());
+	outputString.push(begin + "\n Head Loss (With 3\" Strainers) GPM," + end + dataArray[27].join());
+	outputString.push(begin + "\n Head Loss (With 4\" Strainers) GPM," + end + dataArray[28].join());
+	outputString.push(begin + "\n Head Loss (With 6\" Strainers) GPM," + end + dataArray[29].join());
+	outputString.push(begin + "\n Head Loss (With two 2\" Strainers in Parallel) GPM," + end + dataArray[30].join());
+	outputString.push(begin + "\n Head Loss (With two 3\" Strainers in Parallel) GPM," + end + dataArray[31].join());
+	outputString.push(begin + "\n Head Loss (With two 4\" Strainers in Parallel) GPM," + end + dataArray[32].join());
+	outputString.push(begin + "\n Head Loss (With two 6\" Strainers in Parallel) GPM," + end + dataArray[33].join());
+	outputString.push(begin + "\n Theoretical Flow GPM," + end + dataArray[8].join());
+	outputString.push(begin + "\n V/L (Pump + Impeller)," + end + dataArray[9].join());
+	outputString.push(begin + "\n V/L (PD Pump Only)," + end + dataArray[10].join());
+	outputString.push(begin + "\n V/L (RVP Pump + Impeller + Inducer)," + end + dataArray[11].join());
+}
+
+// copy to clipboard button
+function copy(){
+	// copies text to clipboard
+	copyToClipboard(document.getElementById("popupText"));
+	// fires off the copied to clipboard animated message
+	e1 = $('.copyMessage');
+	e1.addClass('animate');
+	e1.css('visibility', 'visible');
+	e1.one('webkitAnimationEnd oanimationend msAnimationEnd animationend',
+	function (e) {
+		e1.removeClass('animate');
+		e1.css('visibility', 'hidden');
+	});
+	// autoscrolls to the bottom of the page
+	$('html, body').animate({scrollTop:$(document).height()}, 1);
+
+}
+// https://stackoverflow.com/questions/22581345/click-button-copy-to-clipboard-using-jquery <- The Stackover flow answer here
+function copyToClipboard(elem) {
+	  // create hidden text element, if it doesn't already exist
+    var targetId = "_hiddenCopyText_";
+    var isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
+    var origSelectionStart, origSelectionEnd;
+    if (isInput) {
+        // can just use the original source element for the selection and copy
+        target = elem;
+        origSelectionStart = elem.selectionStart;
+        origSelectionEnd = elem.selectionEnd;
+    } else {
+        // must use a temporary form element for the selection and copy
+        target = document.getElementById(targetId);
+        if (!target) {
+            var target = document.createElement("textarea");
+            target.style.position = "absolute";
+            target.style.left = "-9999px";
+            target.style.top = "0";
+            target.id = targetId;
+            document.body.appendChild(target);
+        }
+        target.textContent = elem.textContent;
+    }
+    // select the content
+    var currentFocus = document.activeElement;
+    target.focus();
+    target.setSelectionRange(0, target.value.length);
+    
+    // copy the selection
+    var succeed;
+    try {
+    	  succeed = document.execCommand("copy");
+    } catch(e) {
+        succeed = false;
+    }
+    // restore original focus
+    if (currentFocus && typeof currentFocus.focus === "function") {
+        currentFocus.focus();
+    }
+    
+    if (isInput) {
+        // restore prior selection
+        elem.setSelectionRange(origSelectionStart, origSelectionEnd);
+    } else {
+        // clear temporary content
+        target.textContent = "";
+    }
+    return succeed;
+}
+// closes out of output html popup
+function dismissPopup(){
+	$("#popupText").empty();
+	$('.copyMessage').removeClass('animate');
+	
+}
+
+function downloadCSV(){
+	var outputString = new Array();
+	createOutputString(false, outputString);
+	var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(outputString);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'pumpData.csv';
+    hiddenElement.click();
 }
 
 // the angularJS controller used to generate the list of fittings and lines (saves a lot of copy and pasting)

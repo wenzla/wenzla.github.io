@@ -1,0 +1,59 @@
+Bar Graph
+
+var ctx = document.getElementById("myChart").getContext("2d");
+
+var data = {
+  labels: ["1268", "3295", "1267"],
+  datasets: [{
+    label: "API Gravity",
+    backgroundColor: "blue",
+    yAxisID: "y-axis-1",
+    data: [22.3, 104.33, 33.9]
+  }, {
+    label: "RVP",
+    backgroundColor: "red",
+    yAxisID: "y-axis-2",
+    data: [0.575, 1.75, 3.4]
+  }]
+};
+
+var myBarChart = new Chart(ctx, {
+  type: 'bar',
+  data: data,
+  options: {
+    responsive: true,
+    title:{
+      display:true,
+      text:"Volatile Fluids"
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      yAxes: [{
+  			display: true,
+  			position: "left",
+  			id: "y-axis-1",
+        min: 0,
+        ticks: {
+                beginAtZero: true
+            }
+      }, {
+  			display: true,
+  			position: "right",
+ 				id: "y-axis-2",
+        min: 0,
+        gridLines: {
+          drawOnChartArea: false
+ 				},
+        ticks: {
+                beginAtZero: true
+            }
+ 			}],
+ 		 }
+   }
+});
+
+HTML:
+<canvas id="myChart" width="400" height="400"></canvas>

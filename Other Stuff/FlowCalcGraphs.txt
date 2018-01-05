@@ -191,7 +191,7 @@ var strainerGraphPf2 = new Array();
 	var strainerGraphPf6p = new Array(); // For JAMES CURVES
 
 6:
-trainerGraphPf2[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss2[i]) - parseFloat(npshrpsis[i]);
+strainerGraphPf2[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss2[i]) - parseFloat(npshrpsis[i]);
 		strainerGraphPf3[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss3[i]) - parseFloat(npshrpsis[i]);
 		strainerGraphPf4[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss4[i]) - parseFloat(npshrpsis[i]);
 		strainerGraphPf6[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss6[i]) - parseFloat(npshrpsis[i]);
