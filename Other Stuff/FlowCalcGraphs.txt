@@ -392,7 +392,7 @@ if (strainerGraphA2[i-1] > strainerGraphA2[i]){
 RVP Graphs (RVG):
 
 1:
-var RVPs = [0.1, 1, 2, 5, 10];
+var RVPs = [1, 5, 10, 14, 16];
 	var RVPlength = 5;
 	var TVPs = new Array();
 	for (var i = 0; i < RVPlength; i++){

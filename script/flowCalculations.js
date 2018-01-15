@@ -87,39 +87,6 @@ imgArray[32].src = 'schem/tees.PNG';
 imgArray[33].src = 'schem/tees.PNG';
 imgArray[34].src = 'schem/threaded union.png';
 **/
-  /**   OBSOLETE - This method will probably be deleted later.
-	* getImage(sender): retrieves an image in the above image array depending on the index selected 
-	* under the fittings info section of the webpage.
-	*
-	* sender - the dropdown menu which activated the function
-	**/
-function getImage(sender){
-	// The if statement commented out below would make the image appear in the schematic builder area
-	// only when the fitting and the fitting row is different
-	//if( (!imgAdder.includes(imgArray[sender.selectedIndex].src) || imgAdder.length  == 0)){
-		// checks if the fitting is already on the schematic
-		if((!imgSource.includes(sender.id) || imgSource.length == 0)){
-			$("#dropArea").append("<img class=\"ui-widget-content fittingImg\" id= img" + sender.id + "></img>");
-			document.getElementById("img" + sender.id).src = imgArray[sender.selectedIndex].src;
-			imgAdder.push(imgArray[sender.selectedIndex].src);
-			imgSource.push(sender.id);
-			for (var i = 0; i < imgSource.length; i++){
-				$("#img" + imgSource[i]).draggable({ opacity: 0.6, snap: true, containment: "#dropArea", scroll: false })
-			}
-		} else {
-			var imgSrc = document.getElementById("img" + sender.id).src;
-			document.getElementById("img" + sender.id).src = imgArray[sender.selectedIndex].src;
-			imgAdder.push(imgArray[sender.selectedIndex].src);
-			var usedPic = $.inArray(imgSrc, imgAdder);
-			imgAdder.splice(usedPic, 1);
-		}
-		fNums.push(document.getElementById("fNum" + i).value);
-	//}
-}
-
-function testing(label, val){
-	$(label).html(val + " <span class = \"rightAlign\"><span class=\"caret\"></span></span>");
-};
 
 // doesn't work :/
 $("#frequncy").on("change paste keyup", function() {
@@ -246,9 +213,9 @@ function calculate() {
 	var npshrpsisRVP = new Array(); // 4" RVP Pump
 	var npshrpsisPD = new Array(); // PD Pump Only
 	for (var i = 0; i < loopIndex; i++){
-		npshrpsis[i] = ((pump * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 0.5).toFixed(4);
-		npshrpsisRVP[i] = ((3.2 * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5))).toFixed(4);
-		npshrpsisPD[i] = ((21 * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 1).toFixed(4);
+		npshrpsis[i] = (((pump * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 0.5).toFixed(4)) / (2.3066587/0.76);
+		npshrpsisRVP[i] = (((3.2 * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5))).toFixed(4)) / (2.3066587/0.76);
+		npshrpsisPD[i] = (((21 * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 1).toFixed(4)) / (2.3066587/0.76);
 		// npshrpsis[i] = (((pump * Math.pow(((freqs[i] * 30.0)/1800.0), 1.5)) + 0.5) * 32.2 * density) / 144.0;
 	}
 	loopIndex = parseInt(freq) + 40;
@@ -326,6 +293,7 @@ function calculate() {
 	var kFittings = new Array();
 	// loop variable
 	var p = 0;
+	var couplingK = 0.0000088;
 	while (p < fittingsT.length){
 		kFittings.push(matrix[fittingsT[p]][fittingsD[p]] * fNums[p]);
 		p += 1;
@@ -335,9 +303,11 @@ function calculate() {
 	// keeps track of k and k in parallel values of each fitting
 	var kDiams = new Array();
 	var pkDiams = new Array();
+	var couplingLoss = new Array();
 	for (var i = 0; i < loopIndex; i++){
 		kDiams[i] = [0,0,0,0];
 		pkDiams[i] = [0,0,0,0];
+		couplingLoss[i] = couplingK * Math.pow(qs[i],2);
 	}
 	
 	// gets which fittings are in parallel
@@ -359,10 +329,9 @@ function calculate() {
 				kDiams[h][2] += parseFloat(k[h][i]);
 			} else if (pipesDValue[i] == 6){
 				kDiams[h][3] += parseFloat(k[h][i]);
-			}
-		}
+			}	 
+		}	
 	}
-	
 	// keeps track of the k values for each of the 4 possible diameters (of fittings this time)
 	for(var h = 0; h < loopIndex; h++){
 		for(var i = 0; i < fittingsDValue.length; i++){
@@ -425,16 +394,17 @@ function calculate() {
 	for (var i = 0; i < loopIndex; i++){
 		if(!breakawaycheck){
 			if (BreakawayDValue != 4){
-				BPressureDrops[i] = (0.000007 * Math.pow(qs[i], 2)) + (-0.00001*qs[i]) + -0.0013;
-				BPressureDrops4[i] = (0.000007 * Math.pow(qs[i], 2)) + (-0.00001*qs[i]) + -0.0013;
+				BPressureDrops[i] = (0.0000122 * Math.pow(qs[i], 2));
+				// 0.000007q^2 - 0.00001q - 0.0013
+				BPressureDrops4[i] = (0.0000122 * Math.pow(qs[i], 2));
 			} else {
 				BPressureDrops[i] = (0.00001 * Math.pow(qs[i], 2)) + (-0.0005*qs[i]) + 0.0332;
 				BPressureDrops6[i] = (0.00001 * Math.pow(qs[i], 2)) + (-0.0005*qs[i]) + 0.0332;
 			}
 		} else { // in parallel
 			if (BreakawayDValue != 4){
-				BPressureDrops[i] = (0.000007 * Math.pow(pqs[i], 2)) + (-0.00001*pqs[i]) + -0.0013;
-				BPressureDrops4p[i] = (0.000007 * Math.pow(pqs[i], 2)) + (-0.00001*pqs[i]) + -0.0013;
+				BPressureDrops[i] = (0.0000122 * Math.pow(qs[i], 2));
+				BPressureDrops4p[i] = (0.0000122 * Math.pow(qs[i], 2));
 			} else {
 				BPressureDrops[i] = (0.00001 * Math.pow(pqs[i], 2)) + (-0.0005*pqs[i]) + 0.0332;
 				BPressureDrops6p[i] = (0.00001 * Math.pow(pqs[i], 2)) + (-0.0005*pqs[i]) + 0.0332;
@@ -442,9 +412,10 @@ function calculate() {
 		}
 		// BVG 2
 		BPressureDrops[i] = BPressureDrops[i] * breakawayNum;
-		breakawayGraph4[i] = ((0.00001 * Math.pow(qs[i], 2)) + (-0.0005*qs[i]) + 0.0332) * 1;
+		breakawayGraph4[i] = (0.0000122 * Math.pow(qs[i], 2)) * 1;
+		// 0.00001q^2
 		breakawayGraph6[i] = ((0.000007 * Math.pow(qs[i], 2)) + (-0.00001*qs[i]) + -0.0013) * 1;
-		breakawayGraph4p[i] = ((0.00001 * Math.pow(pqs[i], 2)) + (-0.0005*pqs[i]) + 0.0332) * (1 + 1);
+		breakawayGraph4p[i] = (0.0000122 * Math.pow(pqs[i], 2)) * (1 + 1);
 		breakawayGraph6p[i] = ((0.000007 * Math.pow(pqs[i], 2)) + (-0.00001*pqs[i]) + -0.0013) * (1 + 1);
 	}
 	//pressure drop of the strainer based on number and if in parallel
@@ -460,7 +431,7 @@ function calculate() {
 	var strainerGraph6p = new Array(); // GRAPHING CURVES FOR JAMES
 	for (var i = 0; i < loopIndex; i++){
 		if(!strainerCheck){
-			SPressureDrops[i] = (resistance * Math.pow(qs[i],2)) * StrainerNum * 0;
+			SPressureDrops[i] = (resistance * Math.pow(qs[i],2)) * StrainerNum;
 		} else{
 			SPressureDrops[i] = (resistance * Math.pow(pqs[i],2)) * StrainerNum;
 			SPressureDrops[i] = SPressureDrops[i]/2.0;
@@ -590,25 +561,25 @@ function calculate() {
 	var breakawayGraphPf4p = new Array();
 	var breakawayGraphPf6p = new Array();
 	for (var i = 0; i < loopIndex; i++){
-		pfCalcs[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsis[i]);
-		pfCalcsRVP[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsisRVP[i]);
-		pfCalcsPD[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsisPD[i]);
-		pfCalcsLow[i] = parseFloat(atm) + parseFloat(staticHeadLow) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsis[i]);
-		pfCalcsHigh[i] = parseFloat(atm) + parseFloat(staticHeadHigh) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsis[i]);
+		pfCalcs[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsis[i]) //- couplingLoss[i];
+		pfCalcsRVP[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsisRVP[i]) //- couplingLoss[i];
+		pfCalcsPD[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsisPD[i]) //- couplingLoss[i];
+		pfCalcsLow[i] = parseFloat(atm) + parseFloat(staticHeadLow) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsis[i]) - couplingLoss[i];
+		pfCalcsHigh[i] = parseFloat(atm) + parseFloat(staticHeadHigh) - parseFloat(totalHeadLossPsis[i]) - parseFloat(npshrpsis[i]) - couplingLoss[i];
 		// SG 6
-		strainerGraphPf2[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss2[i]) - parseFloat(npshrpsis[i]);
-		strainerGraphPf3[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss3[i]) - parseFloat(npshrpsis[i]);
-		strainerGraphPf4[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss4[i]) - parseFloat(npshrpsis[i]);
-		strainerGraphPf6[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss6[i]) - parseFloat(npshrpsis[i]);
-		strainerGraphPf2p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss2p[i]) - parseFloat(npshrpsis[i]);
-		strainerGraphPf3p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss3p[i]) - parseFloat(npshrpsis[i]);
-		strainerGraphPf4p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss4p[i]) - parseFloat(npshrpsis[i]);
-		strainerGraphPf6p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss6p[i]) - parseFloat(npshrpsis[i]);
+		strainerGraphPf2[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss2[i]) - parseFloat(npshrpsis[i]) - couplingLoss[i];
+		strainerGraphPf3[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss3[i]) - parseFloat(npshrpsis[i]) - couplingLoss[i]
+		strainerGraphPf4[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss4[i]) - parseFloat(npshrpsis[i]) - couplingLoss[i]
+		strainerGraphPf6[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss6[i]) - parseFloat(npshrpsis[i]) - couplingLoss[i]
+		strainerGraphPf2p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss2p[i]) - parseFloat(npshrpsis[i]) - couplingLoss[i]
+		strainerGraphPf3p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss3p[i]) - parseFloat(npshrpsis[i]) - couplingLoss[i]
+		strainerGraphPf4p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss4p[i]) - parseFloat(npshrpsis[i]) - couplingLoss[i]
+		strainerGraphPf6p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(strainerGraphLoss6p[i]) - parseFloat(npshrpsis[i]) - couplingLoss[i]
 		// BVG 6
-		breakawayGraphPf4[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss4[i]) - parseFloat(npshrpsis[i]);
-		breakawayGraphPf6[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss6[i]) - parseFloat(npshrpsis[i]);
-		breakawayGraphPf4p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss4p[i]) - parseFloat(npshrpsis[i]);
-		breakawayGraphPf6p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss6p[i]) - parseFloat(npshrpsis[i]);
+		breakawayGraphPf4[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss4[i]) - parseFloat(npshrpsis[i]) - couplingLoss[i]
+		breakawayGraphPf6[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss6[i]) - parseFloat(npshrpsis[i]) - couplingLoss[i]
+		breakawayGraphPf4p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss4p[i]) - parseFloat(npshrpsis[i]) - couplingLoss[i]
+		breakawayGraphPf6p[i] = parseFloat(atm) + parseFloat(staticHead) - parseFloat(breakawayGraphLoss6p[i]) - parseFloat(npshrpsis[i]) - couplingLoss[i]
 	}
 	// old TVP formulas
 	// var TVP = RVP * Math.pow(Math.E,(-6622.5 * ((1/((temperature*1.8021)+459.69)) - (1/559.69)))) + (.04*RVP) + (.1 * 27);
@@ -616,13 +587,23 @@ function calculate() {
 	// New TVP calculation uses A, B, C, and D to make looking and typing the calculation easier
 	
 	// RVG 1
+	var RVPs = [1, 5, 10, 14, 16];
+	var RVPlength = 5;
+	var TVPs = new Array();
+	for (var i = 0; i < RVPlength; i++){
+		var A = 9.4674 - (-0.9445 * Math.log(RVPs[i]));
+		var B = 5211 - (16.014 * Math.log(RVPs[i]));
+		var C = 459.67;
+		var D = A-((B)/(parseFloat(temperature) + parseFloat(C)));
+		TVPs[i] = Math.exp(D);
+	}
 	
 	var A = 9.4674 - (-0.9445 * Math.log(RVP));
     var B = 5211 - (16.014 * Math.log(RVP));
     var C = 459.67;
     var D = A-((B)/(parseFloat(temperature) + parseFloat(C)));
     var TVP = Math.exp(D);
-	//alert("TVP: " + TVP);
+	
 	/**
 	var VL = (atm - pfCalc)/(pfCalc - TVP);
 	// The v/l ratio shown on the page
@@ -650,6 +631,11 @@ function calculate() {
 	var breakawayGraphVL4p = new Array();
 	var breakawayGraphVL6p = new Array();
 	// RVG 2
+	var RVPVLd = new Array();
+	var RVPVL1 = new Array();
+	var RVPVL2 = new Array();
+	var RVPVL5 = new Array();
+	var RVPVL10 = new Array();
 	for (var i = 0; i < loopIndex; i++){
 		VLs[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVP);
 		VLPD[i] = (atm - pfCalcsPD[i])/(pfCalcsPD[i] - TVP);
@@ -658,6 +644,11 @@ function calculate() {
 		VLHigh[i] = (atm - pfCalcsHigh[i])/(pfCalcsHigh[i] - TVP);
 		
 		// RVG 3
+		RVPVLd[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVPs[0]);
+		RVPVL1[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVPs[1]);
+		RVPVL2[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVPs[2]);
+		RVPVL5[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVPs[3]);
+		RVPVL10[i] = (atm - pfCalcs[i])/(pfCalcs[i] - TVPs[4]);
 		// SG 8
 		strainerGraphVL2[i] = (atm - strainerGraphPf2[i])/(strainerGraphPf2[i] - TVP);
 		strainerGraphVL3[i] = (atm - strainerGraphPf3[i])/(strainerGraphPf3[i] - TVP);
@@ -674,6 +665,8 @@ function calculate() {
 		breakawayGraphVL6p[i] = (atm - breakawayGraphPf6p[i])/(breakawayGraphPf6p[i] - TVP);
 	}
 	
+	//alert(" TVP: " + TVP + "\n atm: " + atm + "\n pf: " + pfCalcs[freq] + "\n V/L: " + VLs[freq] + "\n VLPD: " + VLPD[freq] + "\n npshrPD: " + npshrpsisPD[freq] + "\n npshr: " + npshrpsis[freq]);
+	
 	// The estimated flow shown on the page
 	// var ans = q*VLratio;
 	var answers = new Array();
@@ -684,6 +677,11 @@ function calculate() {
 	var answersLow = new Array();
 	var answersHigh = new Array();
 	// RVG 4
+	var RVPdA = new Array();
+	var RVP1A = new Array();
+	var RVP2A = new Array();
+	var RVP5A = new Array();
+	var RVP10A = new Array();
 	// SG 9
 	var strainerGraphA2 = new Array();
 	var strainerGraphA3 = new Array();
@@ -706,6 +704,11 @@ function calculate() {
 		answersLow[i] = (qs[i]*(1.0/(VLLow[i] + 1)));
 		answersHigh[i] = (qs[i]*(1.0/(VLHigh[i] + 1)));
 		// RVG 5
+		RVPdA[i] = qs[i]*(1.0/(RVPVLd[i] + 1));
+		RVP1A[i] = qs[i]*(1.0/(RVPVL1[i] + 1));
+		RVP2A[i] = qs[i]*(1.0/(RVPVL2[i] + 1));
+		RVP5A[i] = qs[i]*(1.0/(RVPVL5[i] + 1));
+		RVP10A[i] = qs[i]*(1.0/(RVPVL10[i] + 1));
 		// SG 10
 		strainerGraphA2[i] = qs[i]*(1.0/(strainerGraphVL2[i] + 1));
 		strainerGraphA3[i] = qs[i]*(1.0/(strainerGraphVL3[i] + 1));
@@ -725,6 +728,21 @@ function calculate() {
 			answers[i] = 0;
 		}
 		// RVG 6
+		if (RVPdA[i] < 0){
+			RVPdA[i] = 0;
+		}
+		if (RVP1A[i] < 0){
+			RVP1A[i] = 0;
+		}
+		if (RVP2A[i] < 0){
+			RVP2A[i] = 0;
+		}
+		if (RVP5A[i] < 0){
+			RVP5A[i] = 0;
+		}
+		if (RVP10A[i] < 0){
+			RVP10A[i] = 0;
+		}
 		// SG 11
 		if (strainerGraphA2[i] < 0){
 			strainerGraphA2[i] = 0;
@@ -768,14 +786,14 @@ function calculate() {
 			qs[i] = 0;
 		}
 		// if the V/L is < 0, you have defied the laws of physics
-		if (VLs[i] < 0 && i > 30){
-			VLs[i] = 100;
+		if (VLs[i] < 0){
+			VLs[i] = 0;
 		}
-		if (VLPD[i] < 0 && i > 30){
-			VLPD[i] = 100;
+		if (VLPD[i] < 0){
+			VLPD[i] = 0;
 		}
-		if (VLRVP[i] < 0 && i > 30){
-			VLRVP[i] = 100;
+		if (VLRVP[i] < 0){
+			VLRVP[i] = 0;
 		}
 		// Again, laws of fluid dynamics are broken if answer > q
 		if (answers[i] > qs[i]){
@@ -810,6 +828,21 @@ function calculate() {
 				answersHigh[i] = answersHigh[i-1] + (0.1*Math.log(i));
 			}
 			// RVG 7
+			if (RVPdA[i-1] > RVPdA[i]){
+				RVPdA[i] = RVPdA[i-1] + (0.1*Math.log(i));
+			}
+			if (RVP1A[i-1] > RVP1A[i]){
+				RVP1A[i] = RVP1A[i-1] + (0.1*Math.log(i));
+			}
+			if (RVP2A[i-1] > RVP2A[i]){
+				RVP2A[i] = RVP2A[i-1] + (0.1*Math.log(i));
+			}
+			if (RVP5A[i-1] > RVP5A[i]){
+				RVP5A[i] = RVP5A[i-1] + (0.1*Math.log(i));
+			}
+			if (RVP10A[i-1] > RVP10A[i]){
+				RVP10A[i] = RVP10A[i-1] + (0.1*Math.log(i));
+			}
 			// SG 12
 			if (strainerGraphA2[i-1] > strainerGraphA2[i]){
 			strainerGraphA2[i] = strainerGraphA2[i-1] + (0.1*Math.log(i));
@@ -906,16 +939,23 @@ function calculate() {
 	dataArray[25] = strainerGraphA6p;
 	dataArray[26] = strainerGraphLoss2;
 	dataArray[27] = strainerGraphLoss3;
-	dataArray[28] = strainerGraphLoss4;
-	dataArray[29] = strainerGraphLoss6;
+	dataArray[28] = strainerGraph4;
+	dataArray[29] = strainerGraph6;
 	dataArray[30] = strainerGraphLoss2p;
 	dataArray[31] = strainerGraphLoss3p;
 	dataArray[32] = strainerGraphLoss4p;
 	dataArray[33] = strainerGraphLoss6p;
-	dataArray[34] = breakawayGraphLoss4;
-	dataArray[35] = breakawayGraphLoss6;
-	dataArray[36] = breakawayGraphLoss4p;
-	dataArray[37] = breakawayGraphLoss6p;
+	dataArray[34] = breakawayGraph4;
+	dataArray[35] = breakawayGraph6;
+	dataArray[36] = breakawayGraph4p;
+	dataArray[37] = breakawayGraph6p;
+	dataArray[38] = headLosses;
+	dataArray[39] = RVPdA;
+	dataArray[40] = RVP1A;
+	dataArray[41] = RVP2A;
+	dataArray[42] = RVP5A;
+	dataArray[43] = RVP10A;
+	dataArray[44] = couplingLoss;
 	var myChart = new Chart(ctx, {
 		// the type of graph
 		type: 'line',
@@ -1237,22 +1277,29 @@ function createOutputString(isHTML, outputString){
 	outputString.push(begin + "\n Flow (With two 3\" Strainers in Parallel) GPM," + end + dataArray[23].join());
 	outputString.push(begin + "\n Flow (With two 4\" Strainers in Parallel) GPM," + end + dataArray[24].join());
 	outputString.push(begin + "\n Flow (With two 6\" Strainers in Parallel) GPM," + end + dataArray[25].join());
-	outputString.push(begin + "\n Head Loss (With 4\" Breakaway Valve) GPM," + end + dataArray[34].join());
-	outputString.push(begin + "\n Head Loss (With 6\" Breakaway Valve) GPM," + end + dataArray[35].join());
-	outputString.push(begin + "\n Head Loss (With two 4\" Breakaway Valves in Parallel) GPM," + end + dataArray[36].join());
-	outputString.push(begin + "\n Head Loss (With two 6\" Breakaway Valves in Parallel) GPM," + end + dataArray[37].join());
-	outputString.push(begin + "\n Head Loss (With 2\" Strainers) GPM," + end + dataArray[26].join());
-	outputString.push(begin + "\n Head Loss (With 3\" Strainers) GPM," + end + dataArray[27].join());
-	outputString.push(begin + "\n Head Loss (With 4\" Strainers) GPM," + end + dataArray[28].join());
-	outputString.push(begin + "\n Head Loss (With 6\" Strainers) GPM," + end + dataArray[29].join());
-	outputString.push(begin + "\n Head Loss (With two 2\" Strainers in Parallel) GPM," + end + dataArray[30].join());
-	outputString.push(begin + "\n Head Loss (With two 3\" Strainers in Parallel) GPM," + end + dataArray[31].join());
-	outputString.push(begin + "\n Head Loss (With two 4\" Strainers in Parallel) GPM," + end + dataArray[32].join());
-	outputString.push(begin + "\n Head Loss (With two 6\" Strainers in Parallel) GPM," + end + dataArray[33].join());
+	outputString.push(begin + "\n Head Loss (With 4\" Breakaway Valve) ft," + end + dataArray[34].join());
+	outputString.push(begin + "\n Head Loss (With 6\" Breakaway Valve) ft," + end + dataArray[35].join());
+	outputString.push(begin + "\n Head Loss (With two 4\" Breakaway Valves in Parallel) ft," + end + dataArray[36].join());
+	outputString.push(begin + "\n Head Loss (With two 6\" Breakaway Valves in Parallel) ft," + end + dataArray[37].join());
+	outputString.push(begin + "\n Head Loss (With 2\" Strainers) ft," + end + dataArray[26].join());
+	outputString.push(begin + "\n Head Loss (With 3\" Strainers) ft," + end + dataArray[27].join());
+	outputString.push(begin + "\n Head Loss (With 4\" Strainers) ft," + end + dataArray[28].join());
+	outputString.push(begin + "\n Head Loss (With 6\" Strainers) ft," + end + dataArray[29].join());
+	outputString.push(begin + "\n Head Loss (With two 2\" Strainers in Parallel) ft," + end + dataArray[30].join());
+	outputString.push(begin + "\n Head Loss (With two 3\" Strainers in Parallel) ft," + end + dataArray[31].join());
+	outputString.push(begin + "\n Head Loss (With two 4\" Strainers in Parallel) ft," + end + dataArray[32].join());
+	outputString.push(begin + "\n Head Loss (With two 6\" Strainers in Parallel) ft," + end + dataArray[33].join());
+	outputString.push(begin + "\n Head Loss (All Fittings) ft," + end + dataArray[38].join());
 	outputString.push(begin + "\n Theoretical Flow GPM," + end + dataArray[8].join());
 	outputString.push(begin + "\n V/L (Pump + Impeller)," + end + dataArray[9].join());
 	outputString.push(begin + "\n V/L (PD Pump Only)," + end + dataArray[10].join());
 	outputString.push(begin + "\n V/L (RVP Pump + Impeller + Inducer)," + end + dataArray[11].join());
+	outputString.push(begin + "\n Flow (With 1 RVP fluid) GPM," + end + dataArray[39].join());
+	outputString.push(begin + "\n Flow (With 5 RVP fluid) GPM," + end + dataArray[40].join());
+	outputString.push(begin + "\n Flow (With 10 RVP fluid) GPM," + end + dataArray[41].join());
+	outputString.push(begin + "\n Flow (With 14 RVP fluid) GPM," + end + dataArray[42].join());
+	outputString.push(begin + "\n Flow (With 16 RVP fluid) GPM," + end + dataArray[43].join());
+	outputString.push(begin + "\n Head Loss (With 4\" Coupling)," + end + dataArray[44].join());
 }
 
 // copy to clipboard button
@@ -1272,7 +1319,7 @@ function copy(){
 	$('html, body').animate({scrollTop:$(document).height()}, 1);
 
 }
-// https://stackoverflow.com/questions/22581345/click-button-copy-to-clipboard-using-jquery <- The Stackover flow answer here
+// https://stackoverflow.com/questions/22581345/click-button-copy-to-clipboard-using-jquery <- The Stack overflow answer here
 function copyToClipboard(elem) {
 	  // create hidden text element, if it doesn't already exist
     var targetId = "_hiddenCopyText_";
