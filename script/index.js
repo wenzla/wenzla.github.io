@@ -22,7 +22,7 @@ angular.module('link', [])
       {url:'flowCalc',  id: 'chuCalc', title:'Parker Flow Rate Calculator', text: 'Parker Flow Calculator'},
 	  {url:'video', id: 'videoPage', title:'Parker Long Video', text: 'Parker Long Video'},
 	  {url:'email', id: 'emailGen', title:'Email Generator', text: 'Email Generator'},
-	  {url:'Schedule', id: 'schedule', title:'Spring 2018 Schedule', text: 'Spring 2018 Schedule'},
+	  {url:'schedule', id: 'schedule', title:'Spring 2018 Schedule', text: 'Spring 2018 Schedule'},
 	  //{url:'email', id: 'cssFormat', title:'CSS Formatter', text: 'CSS Formatter'},
       {url:'test', id: 'testPage', title:'Testing Location', text: 'Test Area'}];
   });
