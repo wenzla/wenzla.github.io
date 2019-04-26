@@ -1,0 +1,43 @@
+.pad{
+	padding: 2ex;
+}
+
+.newLineMessage{
+	padding: 0.3ex;
+	opacity: 0;
+	color: #fff;
+	background-color: #333;
+	border-radius: 1ex;
+}
+
+#new-link-line {
+    position: absolute;
+    width: 1ex;
+    background-color: transparent;
+	border: solid 1px black;
+    z-index: 100;
+    -webkit-transform-origin: top left;
+    -moz-transform-origin: top left;
+    -o-transform-origin: top left;
+    -ms-transform-origin: top left;
+    transform-origin: top left;
+}
+.connected-link-line {
+    position: absolute;
+    width: 1ex;
+    background-color: transparent;
+	border: solid 1px black;
+    z-index: 100;
+    -webkit-transform-origin: top left;
+    -moz-transform-origin: top left;
+    -o-transform-origin: top left;
+    -ms-transform-origin: top left;
+    transform-origin: top left;
+}
+
+.animate                                                    { -webkit-animation: confirmation 2s linear; /* Safari, Chrome and Opera > 12.1 */ -moz-animation: confirmation 2s linear; /* Firefox < 16 */ -ms-animation: confirmation 2s linear; /* Internet Explorer */ -o-animation: confirmation 2s linear; /* Opera < 12.1 */ animation: confirmation 2s linear; }
+@-moz-keyframes confirmation                                { 0% { opacity: 0.2; right: 3ex; bottom: 0ex} 40% { opacity: 1;	left: 0ex; bottom: 0ex} 80% { opacity: 1;	left: 0ex; bottom: 0ex} 100% { opacity: 0; bottom: 2ex ; left: 0ex;} }
+@-webkit-keyframes confirmation                             { 0% { opacity: 0.2; right: 3ex; bottom: 0ex} 40% { opacity: 1;	left: 0ex; bottom: 0ex} 80% { opacity: 1;	left: 0ex; bottom: 0ex} 100% { opacity: 0; bottom: 2ex ; left: 0ex;} }
+@-ms-keyframes confirmation                                 { 0% { opacity: 0.2; right: 3ex; bottom: 0ex} 40% { opacity: 1;	left: 0ex; bottom: 0ex} 80% { opacity: 1;	left: 0ex; bottom: 0ex} 100% { opacity: 0; bottom: 2ex ; left: 0ex;} }
+@-o-keyframes confirmation                                  { 0% { opacity: 0.2; right: 3ex; bottom: 0ex} 40% { opacity: 1;	left: 0ex; bottom: 0ex} 80% { opacity: 1;	left: 0ex; bottom: 0ex} 100% { opacity: 0; bottom: 2ex ; left: 0ex;} }
+@keyframes confirmation                                     { 0% { opacity: 0.2; right: 3ex; bottom: 0ex} 40% { opacity: 1;	left: 0ex; bottom: 0ex} 80% { opacity: 1;	left: 0ex; bottom: 0ex} 100% { opacity: 0; bottom: 2ex ; left: 0ex;} } 
