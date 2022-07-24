@@ -23,7 +23,7 @@ angular.module('link', [])
 	  {url:'video', id: 'videoPage', title:'Parker Long Video', text: 'Parker Long Video'},
 	  {url:'email', id: 'emailGen', title:'Email Generator', text: 'Email Generator'},
 	  {url:'schedule', id: 'schedule', title:'Spring 2018 Schedule', text: 'Spring 2018 Schedule'},
-	  //{url:'email', id: 'cssFormat', title:'CSS Formatter', text: 'CSS Formatter'},
+	  {url:'visual_narrative', id: 'visual_narrative', title:'Visual Narative', text: 'Visual Narative'},
       {url:'test', id: 'testPage', title:'Testing Location', text: 'Test Area'}];
   });
 // loads the tooltips on document load
