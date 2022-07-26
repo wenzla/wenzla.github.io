@@ -24,7 +24,6 @@
 		  .append("g")
 			.attr("transform",
 				  "translate(" + margin.left + "," + margin.top + ")");
-		
 
 		var data = d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_polling_all.csv", function(d) {
 			d.forEach(function(dt) {
