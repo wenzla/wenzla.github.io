@@ -26,7 +26,13 @@
 				  "translate(" + margin.left + "," + margin.top + ")");
 		
 		//Read the data
-		d3.csv("/data/japan_polling_all.csv", function(data) {
+		d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_polling_all.csv", function(data) {
+		// d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv", function(data) {
+
+			console.log(data)
+
+			// console.log(data['LDP', 'CDP', 'NKP', 'JCP', 'Ishin', 'DPP', 'SDP', 'Reiwa', 'N-Koku', 'Others'])
+
 			// group the data: I want to draw one line per group
 			var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
 			.key(function(d) { return d.name;})
