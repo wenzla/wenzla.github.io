@@ -58,19 +58,37 @@
 			.range([ height, 0 ]);
 			svg.append("g")
 			.call(d3.axisLeft(y));
+			
+			var cols_to_graph = ['LDP', 'CDP', 'NKP', 'JCP', 'Ishin', 'DPP', 'SDP', 'Reiwa', 'N-Koku', 'Others'];
+			var colors = ['rgb(60,163,36)', 'rgb(24,69,137)', 'rgb(245,88,157)', 'rgb(219,0,28)', 'rgb(184,206,67)', 'rgb(255,215,0)', 'rgb(28,169,233)', 'rgb(237,0,140)', 'rgb(248,234,13)', 'rgb(234,236,240)']
 
-			// Add the line
-			svg.append("path")
-			.datum(d)
-			.attr("fill", "none")
-			.attr("stroke", "steelblue")
-			.attr("stroke-width", 1.5)
-			.attr("d", d3.line()
-				.x(function(dt) { return x(dt.Fieldwork_date) })
-				.y(function(dt) { return y(dt.LDP)})
-				)
+			//tooltip: https://bl.ocks.org/d3noob/a22c42db65eb00d4e369
 
+			cols_to_graph.forEach(function(item, ind) {
+				// Add the line
+				svg.append("path")
+				.datum(d)
+				.attr("fill", "none")
+				.attr("stroke", colors[ind])
+				.attr("stroke-width", 1.5)
+				.attr("d", d3.line()
+					.x(function(dt) { return x(dt.Fieldwork_date) })
+					.y(function(dt) { return y(dt[item])})
+					);
 
+				svg.append("g")
+				.selectAll("dot")
+				.data(d)
+				.enter()
+				.append("circle")
+					.attr("id", "circle_tooltip")
+					.attr("cx", function(dt) { return x(dt.Fieldwork_date) } )
+					.attr("cy", function(dt) { return y(dt[item]) } )
+					.attr("r", 5)
+					.attr("fill", colors[ind])
+
+				d3.select
+			});
 			});
 
 		</script>
