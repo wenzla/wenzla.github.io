@@ -25,6 +25,18 @@
 			.attr("transform",
 				  "translate(" + margin.left + "," + margin.top + ")");
 		
+
+		// d3.csv.parse also lets you define an accessor function to scrub values…
+		data = d3.csv.parse(csv_contents, function(d) {
+		return {
+			'Fieldwork date': d['Fieldwork date'],
+			Var: d.Var,
+			param: d.param,
+			PC1: (+d.PC1).noExponents(),
+			PC2: (+d.PC2).noExponents(),
+			Type: d.Type
+		};
+		});
 		//Read the data
 		d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_polling_all.csv", function(data) {
 		// d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv", function(data) {
