@@ -113,7 +113,17 @@
 				.attr("d", d3.line()
 					.x(function(dt) { return x(dt.Fieldwork_date) })
 					.y(function(dt, i) { return y(ma_vals[i])})
-					);
+					)
+				.on("mouseover", function(d){
+					return tooltip.style("visibility", "visible").text(item)
+				})
+				.on("mousemove", function() {
+					return tooltip.style("top", (event.pageY - 30) + "px")
+					.style("left", event.pageX + "px");
+				})
+				.on("mouseout", function() {
+					return tooltip.style("visibility", "hidden");
+				});
 
 				
 				d3.select("path").append("svg:circle")
