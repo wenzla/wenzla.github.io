@@ -41,17 +41,84 @@ body {
 
 <body>
 
-<font style="font-size:11px;">Change metric:</font>
+<font style="font-size:11px;">Graph Changer</font>
 <select id="selectbox">
-	<option value="_1">Fahrenheit</option>
-	<option value="_2">Celsius</option>
+	<option value="1">test1</option>
+	<option value="2">test2</option>
 </select>
 
-<svg id="chart" width="850" height="410"></svg>
+<svg id="chart" width="1000" height="800"></svg>
 
 <script>
 
-d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/data.csv").then(d => chart(d))
+d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_polling_all.csv").then(d => chart(d))
+
+function NMoveAvg(context, N) { // from: https://stackoverflow.com/questions/41386083/plot-rolling-moving-average-in-d3-js-v4/41388581#41388581
+      this._context = context;
+      this._points = {
+        x: [],
+        y: []
+      };
+      this._N = N;
+    }
+NMoveAvg.prototype = {
+      areaStart: function() {
+        this._line = 0;
+      },
+      areaEnd: function() {
+        this._line = NaN;
+      },
+      lineStart: function() {
+        this._point = 0;
+      },
+      lineEnd: function() {
+        if (this._line || (this._line !== 0 && this._point === 1)) this._context.closePath();
+        this._line = 1 - this._line;
+      },
+      point: function(x, y) {
+        x = +x, y = +y;
+
+        this._points.x.push(x);
+        this._points.y.push(y);
+
+        if (this._points.x.length < this._N) return;
+
+        var aX = this._points.x.reduce(function(a, b) {
+            return a + b;
+          }, 0) / this._N,
+          aY = this._points.y.reduce(function(a, b) {
+            return a + b;
+          }, 0) / this._N;
+
+        this._points.x.shift();
+        this._points.y.shift();
+
+        switch (this._point) {
+          case 0:
+            this._point = 1;
+            this._line ? this._context.lineTo(aX, aY) : this._context.moveTo(aX, aY);
+            break;
+          case 1:
+            this._point = 2; // proceed
+          default:
+            this._context.lineTo(aX, aY);
+            break;
+        }
+      }
+    };
+
+function get_column(list, col) {
+
+		var return_col = [];
+
+		for (var i = 0; i < list.values.length; ++i){
+			return_col.push(list.values[i][col]);
+		}
+
+		console.log(list.values[7][col])
+
+		return return_col;
+	}
 
 function chart(data) {
 
@@ -60,12 +127,24 @@ function chart(data) {
 	var parseTime = d3.timeParse("%Y%m%d"),
 		formatDate = d3.timeFormat("%Y-%m-%d"),
 		bisectDate = d3.bisector(d => d.date).left,
-		formatValue = d3.format(",.0f");
+		formatValue = d3.format(",.01f");
 
-	data.forEach(function(d) {
-		d.date = parseTime(d.date);
-		return d;
-	})
+	data.forEach(function(dt) {
+			//d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
+			dt['date'] = d3.timeParse("%m/%e/%Y")(dt['Fieldwork_date']),
+			dt['Polling_firm'] = dt['Polling_firm'],
+			dt['CDP'] = +dt['CDP'],
+			dt['DPP'] = +dt['DPP'],
+			dt['Ishin'] = +dt['Ishin'],
+			dt['JCP'] = +dt['JCP'],
+			dt['LDP'] = +dt['LDP'],
+			dt['N-Koku'] = +dt['N-Koku'],
+			dt['NKP'] = +dt['NKP'],
+			dt['No_party'] = +dt['No_party'],
+			dt['Reiwa'] = +dt['Reiwa'],
+			dt['Others'] = +dt['Others'],
+			dt['SDP'] = +dt['SDP']
+		});
 
 	var svg = d3.select("#chart"),
 		margin = {top: 15, right: 35, bottom: 15, left: 35},
@@ -79,10 +158,29 @@ function chart(data) {
 	var y = d3.scaleLinear()
 		.rangeRound([height - margin.bottom, margin.top]);
 
-	var z = d3.scaleOrdinal(d3.schemeCategory10);
+	var party_colors = ['rgb(60,163,36)', 'rgb(24,69,137)', 'rgb(245,88,157)', 'rgb(219,0,28)', 'rgb(184,206,67)', 'rgb(255,215,0)', 'rgb(28,169,233)', 'rgb(237,0,140)', 'rgb(248,234,13)', 'rgb(234,236,240)']
+	var z = d3.scaleOrdinal(party_colors);
 
-	var line = d3.line()
+	var curveNMoveAge = (function custom(N) { // from: https://stackoverflow.com/questions/41386083/plot-rolling-moving-average-in-d3-js-v4/41388581#41388581
+
+		function nMoveAge(context) {
+			return new NMoveAvg(context, N);
+		}
+
+		nMoveAge.N = function(N) {
+		return custom(+N);
+		};
+
+		return nMoveAge;
+		})(0);
+
+	var raw_line = d3.line()
 		.curve(d3.curveCardinal)
+		.x(d => x(d.date))
+		.y(d => y(d.degrees));
+
+	var poll_line = d3.line()
+		.curve(curveNMoveAge.N(8))
 		.x(d => x(d.date))
 		.y(d => y(d.degrees));
 
@@ -118,22 +216,18 @@ function chart(data) {
 		.attr("height", height)
 
 	update(d3.select('#selectbox').property('value'), 0);
+	
 
 	function update(input, speed) {
 
-		var copy = keys.filter(f => f.includes(input))
+		var cols_to_graph = ['LDP', 'CDP', 'NKP', 'JCP', 'Ishin', 'DPP', 'SDP', 'Reiwa', 'N-Koku', 'Others']
 
-		console.log(copy)
-
-		var cities = copy.map(function(id) {
-			console.log(id);
+		var cities = cols_to_graph.map(function(id) {
 			return {
 				id: id,
 				values: data.map(d => {return {date: d.date, degrees: +d[id]}})
 			};
 		});
-
-		
 
 		y.domain([
 			d3.min(cities, d => d3.min(d.values, c => c.degrees)),
@@ -154,15 +248,26 @@ function chart(data) {
 			.style("stroke", d => z(d.id))
 			.merge(city)
 		.transition().duration(speed)
-			.attr("d", d => line(d.values))
+			.attr("d", d => poll_line(d.values))
 
-		tooltip(copy);
+		
+
+		city.enter().insert("g", ".focus").append("circle")
+			.attr("class", "parties")
+			.style("fill", d => z(d.id))
+			.merge(city)
+		.transition().duration(speed)
+			.attr("r", 1)
+			.attr("cx", function(d) {get_column(d,'date');return x(get_column(d,'date')) } )
+
+
+		tooltip(cols_to_graph);
 	}
 
-	function tooltip(copy) {
+	function tooltip(cols_to_graph) {
 		
 		var labels = focus.selectAll(".lineHoverText")
-			.data(copy)
+			.data(cols_to_graph)
 
 		labels.enter().append("text")
 			.attr("class", "lineHoverText")
@@ -173,12 +278,12 @@ function chart(data) {
 			.merge(labels);
 
 		var circles = focus.selectAll(".hoverCircle")
-			.data(copy)
+			.data(cols_to_graph)
 
 		circles.enter().append("circle")
 			.attr("class", "hoverCircle")
 			.style("fill", d => z(d))
-			.attr("r", 2.5)
+			.attr("r", 0)
 			.merge(circles);
 
 		svg.selectAll(".overlay")
@@ -209,7 +314,7 @@ function chart(data) {
 			focus.selectAll(".lineHoverText")
 				.attr("transform", 
 					"translate(" + (x(d.date)) + "," + height / 2.5 + ")")
-				.text(e => e + " " + "º" + formatValue(d[e]));
+				.text(e => e + " " + formatValue(d[e]) +"%");
 
 			x(d.date) > (width - width / 4) 
 				? focus.selectAll("text.lineHoverText")
