@@ -14,8 +14,8 @@
 	<script>
 		// set the dimensions and margins of the graph
 		var margin = {top: 10, right: 30, bottom: 30, left: 60},
-			width = 1800 - margin.left - margin.right,
-			height = 900 - margin.top - margin.bottom;
+			width = 1200 - margin.left - margin.right,
+			height = 600 - margin.top - margin.bottom;
 		// append the svg object to the body of the page
 		var svg = d3.select("#viz")
 		  .append("svg")
@@ -24,6 +24,36 @@
 		  .append("g")
 			.attr("transform",
 				  "translate(" + margin.left + "," + margin.top + ")");
+
+		function movingAverage(values, N) { // function from d3 docs: https://observablehq.com/@d3/moving-average
+			var i = 0;
+			var sum = 0;
+			const means = new Float64Array(values.length).fill(NaN);
+
+			for (let n = Math.min(N - 1, values.length); i < n; ++i) {
+				sum += values[i];
+			}
+			for (let n = values.length; i < n; ++i) {
+				sum += values[i];
+				means[i] = sum / N;
+				sum -= values[i - N + 1];
+			}
+			for (var i = 0; i < N; ++i){ // added to fill in the NaN with the values of original array
+				means[i] = values[i];
+			}
+
+			return means;
+		}
+
+		function get_column(list, col) {
+			var return_col = [];
+
+			for (var i = 0; i < list.length; ++i){
+				return_col.push(list[i][col]);
+			}
+
+			return return_col;
+		}
 
 		var data = d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_polling_all.csv", function(d) {
 			d.forEach(function(dt) {
@@ -39,6 +69,7 @@
 				dt['NKP'] = +dt['NKP'],
 				dt['No_party'] = +dt['No_party'],
 				dt['Reiwa'] = +dt['Reiwa'],
+				dt['Others'] = +dt['Others'],
 				dt['SDP'] = +dt['SDP']
 			});
 
@@ -54,7 +85,7 @@
 
 			// y-axis
 			var y = d3.scaleLinear()
-			.domain([0,100])
+			.domain([0,50])
 			.range([ height, 0 ]);
 			svg.append("g")
 			.call(d3.axisLeft(y));
@@ -65,29 +96,36 @@
 			//tooltip: https://bl.ocks.org/d3noob/a22c42db65eb00d4e369
 
 			cols_to_graph.forEach(function(item, ind) {
+
+				var data_col = get_column(d, item);
+				ma_vals = movingAverage(data_col, 10).slice(10, 428)
+
+				curve = d3.curveLinear
+
 				// Add the line
 				svg.append("path")
-				.datum(d)
+				.datum(d.slice(10, 428))
 				.attr("fill", "none")
 				.attr("stroke", colors[ind])
-				.attr("stroke-width", 1.5)
+				.attr("stroke-width", 2.5)
 				.attr("d", d3.line()
 					.x(function(dt) { return x(dt.Fieldwork_date) })
 					.y(function(dt) { return y(dt[item])})
+					.curve(curve)
 					);
 
-				svg.append("g")
-				.selectAll("dot")
-				.data(d)
-				.enter()
-				.append("circle")
-					.attr("id", "circle_tooltip")
-					.attr("cx", function(dt) { return x(dt.Fieldwork_date) } )
-					.attr("cy", function(dt) { return y(dt[item]) } )
-					.attr("r", 5)
-					.attr("fill", colors[ind])
+				// svg.append("g")
+				// .selectAll("dot")
+				// .data(d)
+				// .enter()
+				// .append("circle")
+				// 	.attr("id", "circle_tooltip")
+				// 	.attr("cx", function(dt) { return x(dt.Fieldwork_date) } )
+				// 	.attr("cy", function(dt) { return y(dt[item]) } )
+				// 	.attr("r", 5)
+				// 	.attr("fill", colors[ind]);
 
-				d3.select
+
 			});
 			});
 
