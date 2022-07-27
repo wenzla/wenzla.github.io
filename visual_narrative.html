@@ -100,7 +100,9 @@
 				var data_col = get_column(d, item);
 				ma_vals = movingAverage(data_col, 10).slice(10, 428)
 
-				curve = d3.curveLinear
+				var tooltip = d3.select("body")
+				.append("div")
+				.attr('class', 'tooltip');
 
 				// Add the line
 				svg.append("path")
@@ -110,20 +112,19 @@
 				.attr("stroke-width", 2.5)
 				.attr("d", d3.line()
 					.x(function(dt) { return x(dt.Fieldwork_date) })
-					.y(function(dt) { return y(dt[item])})
-					.curve(curve)
+					.y(function(dt, i) { return y(ma_vals[i])})
 					);
 
-				// svg.append("g")
-				// .selectAll("dot")
-				// .data(d)
-				// .enter()
-				// .append("circle")
-				// 	.attr("id", "circle_tooltip")
-				// 	.attr("cx", function(dt) { return x(dt.Fieldwork_date) } )
-				// 	.attr("cy", function(dt) { return y(dt[item]) } )
-				// 	.attr("r", 5)
-				// 	.attr("fill", colors[ind]);
+				
+				d3.select("path").append("svg:circle")
+				.attr("stroke", "black")
+				.attr("fill", "aliceblue")
+				.attr("r", 50)
+				.attr("cx", 52)
+				.attr("cy", 52)
+				.on("mouseover", function(){return tooltip.style("visibility", "visible");})
+				.on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+				.on("mouseout", function(){return tooltip.style("visibility", "hidden");});
 
 
 			});
