@@ -1,0 +1,81 @@
+body {
+	margin:auto;	
+	width: 885px;
+	font: 10px arial;
+	padding: 25px;
+}
+.y-axis line {
+	opacity:.2;
+}
+.y-axis path {
+	display:none;
+}
+.line {
+	fill: none;
+	stroke-width: 1.5px;
+	opacity:.75;
+}
+.overlay {
+	fill: none;
+	pointer-events: all;
+}
+.lineHoverText {
+	text-shadow:
+	-2px -2px 0 #fff,
+	2px -2px 0 #fff,
+	-2px 2px 0 #fff,
+	2px 2px 0 #fff;
+}
+.hoverCircle {
+	opacity: .75;
+}
+
+.annotation path {
+	stroke: var(--annotation-context-color);
+}
+
+.annotation:not(.above):not(.anomaly) path {
+	stroke-dasharray: 1,3;
+}
+
+.annotation text {
+	fill: var(--annotation-context-color);
+}
+
+.annotation.above path {
+	stroke: var(--annotation-above-color);
+}
+
+.annotation.above text {
+	fill: var(--annotation-above-color);
+}
+
+.annotation.anomaly path {
+	stroke: var(--annotation-anomaly-color);
+	stroke-width: 2px;
+}
+
+.annotation.anomaly text {
+	fill: var(--annotation-anomaly-color);
+}
+
+.annotation-note-bg {
+	fill: rgba(0, 0, 0, 0);
+}
+
+.annotation-note-title {
+	font-weight: bold;
+}
+
+.dotted {stroke: 'black'; stroke-width: 1; stroke-dasharray: 0.5%;}
+
+button{
+    font-size:18px; 
+    font-weight: bold;
+    margin: 6px;
+}
+
+.axis_label{
+    font-size:14px; 
+    font-weight: bold;
+}

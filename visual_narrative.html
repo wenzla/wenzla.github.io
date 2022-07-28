@@ -1,145 +1,61 @@
 <!DOCTYPE html>
-<!--
+<head>
+	<meta charset="utf-8">
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/1.12.1/d3-annotation.min.js"></script>
+	<script src="script/visual_narrative.js"></script>
+	<link rel="stylesheet" href="css/visual_narrative.css">
+	<style>
+	</style>
+</head>
 
--->
-<html>
-	<head>
-		<title> Visual Narrative </title>
-		<script src="https://d3js.org/d3.v4.js"></script>
-	</head>
-	<body>
-		<div id="viz"></div>
-	</body>
+<body>
 
-	<script>
-		// set the dimensions and margins of the graph
-		var margin = {top: 10, right: 30, bottom: 30, left: 60},
-			width = 1200 - margin.left - margin.right,
-			height = 600 - margin.top - margin.bottom;
-		// append the svg object to the body of the page
-		var svg = d3.select("#viz")
-		  .append("svg")
-			.attr("width", width + margin.left + margin.right)
-			.attr("height", height + margin.top + margin.bottom)
-		  .append("g")
-			.attr("transform",
-				  "translate(" + margin.left + "," + margin.top + ")");
+<p style="font-size:18px;">Graph Changer</p>
 
-		function movingAverage(values, N) { // function from d3 docs: https://observablehq.com/@d3/moving-average
-			var i = 0;
-			var sum = 0;
-			const means = new Float64Array(values.length).fill(NaN);
+<button type="button" id="button1" value="1"> 1 </button>
+<button type="button" id="button2" value="2"> 2 </button>
+<button type="button" id="button3" value="3"> 3 </button>
+<br>
+<br>
 
-			for (let n = Math.min(N - 1, values.length); i < n; ++i) {
-				sum += values[i];
-			}
-			for (let n = values.length; i < n; ++i) {
-				sum += values[i];
-				means[i] = sum / N;
-				sum -= values[i - N + 1];
-			}
-			for (var i = 0; i < N; ++i){ // added to fill in the NaN with the values of original array
-				means[i] = values[i];
-			}
+<svg id="chart" width="1000" height="700"></svg>
 
-			return means;
-		}
+<script>
 
-		function get_column(list, col) {
-			var return_col = [];
+var button1 = d3.select("#button1")
+	.on("click", function() {
+		d3.selectAll("#chart > *").remove();
+	})
 
-			for (var i = 0; i < list.length; ++i){
-				return_col.push(list[i][col]);
-			}
+var button2 = d3.select("#button2")
+	.on("click", function() {
+		d3.selectAll("#chart > *").remove();
+		load_popularity_chart();
+	})
 
-			return return_col;
-		}
+var button3 = d3.select("#button3")
+	.on("click", function() {
+		d3.selectAll("#chart > *").remove();
+	})
 
-		var data = d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_polling_all.csv", function(d) {
-			d.forEach(function(dt) {
-				//d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
-				dt['Fieldwork_date'] = d3.timeParse("%m/%e/%Y")(dt['Fieldwork_date']),
-				dt['Polling_firm'] = dt['Polling_firm'],
-				dt['CDP'] = +dt['CDP'],
-				dt['DPP'] = +dt['DPP'],
-				dt['Ishin'] = +dt['Ishin'],
-				dt['JCP'] = +dt['JCP'],
-				dt['LDP'] = +dt['LDP'],
-				dt['N-Koku'] = +dt['N-Koku'],
-				dt['NKP'] = +dt['NKP'],
-				dt['No_party'] = +dt['No_party'],
-				dt['Reiwa'] = +dt['Reiwa'],
-				dt['Others'] = +dt['Others'],
-				dt['SDP'] = +dt['SDP']
-			});
+function load_2017_parliment(){
+	d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_2017_parliment.csv").then(d => parliment_chart(d))
+}
 
-			console.log(d)
-
-			// x-axis
-			var x = d3.scaleTime()
-			.domain(d3.extent(d, function(dt) { return dt.Fieldwork_date;}))
-			.range([ 0, width ]);
-			svg.append("g")
-			.attr("transform", "translate(0," + height + ")")
-			.call(d3.axisBottom(x));
-
-			// y-axis
-			var y = d3.scaleLinear()
-			.domain([0,50])
-			.range([ height, 0 ]);
-			svg.append("g")
-			.call(d3.axisLeft(y));
-			
-			var cols_to_graph = ['LDP', 'CDP', 'NKP', 'JCP', 'Ishin', 'DPP', 'SDP', 'Reiwa', 'N-Koku', 'Others'];
-			var colors = ['rgb(60,163,36)', 'rgb(24,69,137)', 'rgb(245,88,157)', 'rgb(219,0,28)', 'rgb(184,206,67)', 'rgb(255,215,0)', 'rgb(28,169,233)', 'rgb(237,0,140)', 'rgb(248,234,13)', 'rgb(234,236,240)']
-
-			//tooltip: https://bl.ocks.org/d3noob/a22c42db65eb00d4e369
-
-			cols_to_graph.forEach(function(item, ind) {
-
-				var data_col = get_column(d, item);
-				ma_vals = movingAverage(data_col, 10).slice(10, 428)
-
-				var tooltip = d3.select("body")
-				.append("div")
-				.attr('class', 'tooltip');
-
-				// Add the line
-				svg.append("path")
-				.datum(d.slice(10, 428))
-				.attr("fill", "none")
-				.attr("stroke", colors[ind])
-				.attr("stroke-width", 2.5)
-				.attr("d", d3.line()
-					.x(function(dt) { return x(dt.Fieldwork_date) })
-					.y(function(dt, i) { return y(ma_vals[i])})
-					)
-				.on("mouseover", function(d){
-					return tooltip.style("visibility", "visible").text(item)
-				})
-				.on("mousemove", function() {
-					return tooltip.style("top", (event.pageY - 30) + "px")
-					.style("left", event.pageX + "px");
-				})
-				.on("mouseout", function() {
-					return tooltip.style("visibility", "hidden");
-				});
-
-				
-				d3.select("path").append("svg:circle")
-				.attr("stroke", "black")
-				.attr("fill", "aliceblue")
-				.attr("r", 50)
-				.attr("cx", 52)
-				.attr("cy", 52)
-				.on("mouseover", function(){return tooltip.style("visibility", "visible");})
-				.on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
-				.on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+function load_2021_parliment(){
+	d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_2021_parliment.csv").then(d => parliment_chart(d))
+}
 
 
-			});
-			});
+function parliment_chart(data){
+	return 0
+}
 
-		</script>
-</html>
 
+function load_popularity_chart(){
+	d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_polling_all.csv").then(d => popularity_chart(d))
+}
+
+</script>
+</body>
