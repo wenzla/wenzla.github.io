@@ -348,7 +348,7 @@ function popularity_chart(data) {
 
 }
 
-function parliment_chart(data){
+function parliment_chart(data, year){
 
 	data.forEach(function(dt) {
 			dt['Prefecture'] = dt['Prefecture'],
@@ -371,14 +371,28 @@ function parliment_chart(data){
 
 	var PR_data = data.slice(data.length-11)
 	var parl_data = data.slice(0,data.length-11)
-
-	// console.log(PR_data, parl_data)
-	
+	// console.log(PR_data, parl_data)	
 
 	var party_colors = ['rgb(60,163,36)', 'rgb(24,69,137)', 'rgb(245,88,157)', 'rgb(219,0,28)', 'rgb(184,206,67)', 'rgb(255,215,0)', 'rgb(28,169,233)', 'rgb(237,0,140)', '#999']
-	var xCenter = [250, 300, 500, 200, 400, 600, 550, 200, 400];
-	var yCenter = [150, 400, 100, 550, 250, 200, 400, 350, 500];
-	var parties = ['LDP', 'CDP', 'NKP', 'JCP', 'Ishin', 'DPP', 'SDP', 'Reiwa', 'Others']
+
+    function get_centers(year){
+        if(year == 2017){ // change centers
+            return [[250, 400, 325, 400, 600, 600, 425, 200, 550],  [150, 400, 100, 430, 150, 200, 400, 350, 150]];
+        }
+    
+        if(year == 2021){
+            return [[250, 400, 350, 400, 600, 400, 425, 375, 450], [150, 400, 100, 430, 150, 350, 400, 350, 400]];
+        }
+    }
+
+    var centers = get_centers(year)
+
+	var xCenter = centers[0]
+	var yCenter = centers[1]
+
+    console.log(yCenter, centers[1])
+
+	var parties = ['LDP', 'CDP', 'NKP', 'JCP', 'Ishin', 'DPP', 'SDP', 'Reiwa', 'Others'] // for readability
 	var radius = 4
 
 	function get_node_list(arr, party, cat){
@@ -437,10 +451,8 @@ function parliment_chart(data){
 	.on("mouseout", force_mouseout)
 
 	node.append('title').text(function(d){
-        console.log(d.location.slice(-2))
-        if (d.location.slice(-2) == 'DP'){
-           
-            return d.party + " official proportionally represented from " + d.location.slice(-2)
+        if (d.location.slice(-2) == 'PR'){
+            return d.party + " proportionally represented from " + d.location.slice(0, -3)
         }
         return d.party + " elected official from " + d.location
     })
@@ -516,28 +528,143 @@ function parliment_chart(data){
 
 	simulation.nodes(nodes).on('tick', tick);
 
-	// Handmade legend
 
-	['rgb(60,163,36)', 'rgb(24,69,137)', 'rgb(245,88,157)', 'rgb(219,0,28)', 'rgb(184,206,67)', 'rgb(255,215,0)', 'rgb(28,169,233)', 'rgb(237,0,140)', '#999']
-	['LDP', 'CDP', 'NKP', 'JCP', 'Ishin', 'DPP', 'SDP', 'Reiwa', 'Others']
 
-	svg.append("circle").attr("cx",800).attr("cy",130).attr("r", 4).style("fill", "rgb(60,163,36)")
-	svg.append("circle").attr("cx",800).attr("cy",150).attr("r", 4).style("fill", "rgb(24,69,137)")
-	svg.append("circle").attr("cx",800).attr("cy",170).attr("r", 4).style("fill", "rgb(245,88,157)")
-	svg.append("circle").attr("cx",800).attr("cy",190).attr("r", 4).style("fill", "rgb(219,0,28)")
-	svg.append("circle").attr("cx",800).attr("cy",210).attr("r", 4).style("fill", "rgb(184,206,67)")
-	svg.append("circle").attr("cx",800).attr("cy",230).attr("r", 4).style("fill", "rgb(255,215,0)")
-	svg.append("circle").attr("cx",800).attr("cy",250).attr("r", 4).style("fill", "rgb(28,169,233)")
-	svg.append("circle").attr("cx",800).attr("cy",270).attr("r", 4).style("fill", "rgb(237,0,140)")
-	svg.append("circle").attr("cx",800).attr("cy",290).attr("r", 4).style("fill", "#999")
-	svg.append("text").attr("x", 810).attr("y", 130).text("LDP").style("font-size", "15px").attr("alignment-baseline","middle")
-	svg.append("text").attr("x", 810).attr("y", 150).text("CDP").style("font-size", "15px").attr("alignment-baseline","middle")
-	svg.append("text").attr("x", 810).attr("y", 170).text("NKP").style("font-size", "15px").attr("alignment-baseline","middle")
-	svg.append("text").attr("x", 810).attr("y", 190).text("JCP").style("font-size", "15px").attr("alignment-baseline","middle")
-	svg.append("text").attr("x", 810).attr("y", 210).text("Ishin").style("font-size", "15px").attr("alignment-baseline","middle")
-	svg.append("text").attr("x", 810).attr("y", 230).text("DPP").style("font-size", "15px").attr("alignment-baseline","middle")
-	svg.append("text").attr("x", 810).attr("y", 250).text("SDP").style("font-size", "15px").attr("alignment-baseline","middle")
-	svg.append("text").attr("x", 810).attr("y", 270).text("Reiwa").style("font-size", "15px").attr("alignment-baseline","middle")
-	svg.append("text").attr("x", 810).attr("y", 290).text("Others").style("font-size", "15px").attr("alignment-baseline","middle")
+    if(year == 2017){
+        annotation_2017()
+    }
+
+    if(year == 2021){
+        annotation_2021()
+    }
+
+    function annotation_2017(){
+        svg.append("circle").attr("cx",800).attr("cy",130).attr("r", 4).style("fill", "rgb(60,163,36)").style('opacity', 0.5)
+        svg.append("circle").attr("cx",800).attr("cy",150).attr("r", 4).style("fill", "rgb(24,69,137)").style('opacity', 0.5)
+        svg.append("circle").attr("cx",800).attr("cy",170).attr("r", 4).style("fill", "rgb(245,88,157)").style('opacity', 0.5)
+        svg.append("circle").attr("cx",800).attr("cy",190).attr("r", 4).style("fill", "rgb(219,0,28)").style('opacity', 0.5)
+        svg.append("circle").attr("cx",800).attr("cy",210).attr("r", 4).style("fill", "rgb(184,206,67)").style('opacity', 0.5)
+        // svg.append("circle").attr("cx",800).attr("cy",230).attr("r", 4).style("fill", "rgb(255,215,0)")
+        svg.append("circle").attr("cx",800).attr("cy",230).attr("r", 4).style("fill", "rgb(28,169,233)").style('opacity', 0.5)
+        // svg.append("circle").attr("cx",800).attr("cy",270).attr("r", 4).style("fill", "rgb(237,0,140)")
+        svg.append("circle").attr("cx",800).attr("cy",250).attr("r", 4).style("fill", "#999").style('opacity', 0.5)
+        svg.append("text").attr("x", 810).attr("y", 130).text("LDP").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", 810).attr("y", 150).text("CDP").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", 810).attr("y", 170).text("NKP").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", 810).attr("y", 190).text("JCP").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", 810).attr("y", 210).text("Ishin").style("font-size", "15px").attr("alignment-baseline","middle")
+        // svg.append("text").attr("x", 810).attr("y", 230).text("DPP").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", 810).attr("y", 230).text("SDP").style("font-size", "15px").attr("alignment-baseline","middle")
+        // svg.append("text").attr("x", 810).attr("y", 270).text("Reiwa").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", 810).attr("y", 250).text("Others").style("font-size", "15px").attr("alignment-baseline","middle")
+
+
+        const annotations = [
+			{
+				note: { label: "Ruling coalition containing the LDP and Komeito (NKP)"},
+				dy: 240,
+				dx: 170
+			},
+            {
+				note: { label: "Koike's coalition pushing for LDP to lose power"},
+				dy: 215,
+				dx: 490
+			},
+            {
+				note: { label: "Pacifist coalition working with Koike's coalition to oppose the Ruling coalition"},
+				dy: 450,
+				dx: 350
+			},
+		];
+
+        // Annotation L's
+        drawn_L(170,330,100,235) // ruling coalition
+
+        drawn_L(490,600,100,210) // ruling coalition
+
+        drawn_L(350,450,350,445) // Pacifist coalition	
+
+
+		const makeAnnotations = d3.annotation()
+		.annotations(annotations)
+		d3.select("#chart")
+		.append("g")
+		.call(makeAnnotations);
+
+    }
+
+    function annotation_2021(){
+        // Legend
+        svg.append("circle").attr("cx",800).attr("cy",130).attr("r", 4).style("fill", "rgb(60,163,36)").style('opacity', 0.5)
+        svg.append("circle").attr("cx",800).attr("cy",150).attr("r", 4).style("fill", "rgb(24,69,137)").style('opacity', 0.5)
+        svg.append("circle").attr("cx",800).attr("cy",170).attr("r", 4).style("fill", "rgb(245,88,157)").style('opacity', 0.5)
+        svg.append("circle").attr("cx",800).attr("cy",190).attr("r", 4).style("fill", "rgb(219,0,28)").style('opacity', 0.5)
+        svg.append("circle").attr("cx",800).attr("cy",210).attr("r", 4).style("fill", "rgb(184,206,67)").style('opacity', 0.5)
+        svg.append("circle").attr("cx",800).attr("cy",230).attr("r", 4).style("fill", "rgb(255,215,0)").style('opacity', 0.5)
+        svg.append("circle").attr("cx",800).attr("cy",250).attr("r", 4).style("fill", "rgb(28,169,233)").style('opacity', 0.5)
+        svg.append("circle").attr("cx",800).attr("cy",270).attr("r", 4).style("fill", "rgb(237,0,140)").style('opacity', 0.5)
+        svg.append("circle").attr("cx",800).attr("cy",290).attr("r", 4).style("fill", "#999").style('opacity', 0.5)
+        svg.append("text").attr("x", 810).attr("y", 130).text("LDP").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", 810).attr("y", 150).text("CDP").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", 810).attr("y", 170).text("NKP").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", 810).attr("y", 190).text("JCP").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", 810).attr("y", 210).text("Ishin").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", 810).attr("y", 230).text("DPP").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", 810).attr("y", 250).text("SDP").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", 810).attr("y", 270).text("Reiwa").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", 810).attr("y", 290).text("Others").style("font-size", "15px").attr("alignment-baseline","middle")
+
+
+        
+        const annotations = [
+			{
+				note: { label: "Ruling coalition containing the LDP and Komeito (NKP)"},
+				dy: 240,
+				dx: 180
+			},
+            {
+				note: { label: "Regional party from Osaka in its own coalition"},
+				dy: 200,
+				dx: 545
+			},
+            {
+				note: { label: "Opposition coalition working with primarily against ruling coalition"},
+				dy: 455,
+				dx: 340
+			},
+		];
+
+        // Annotation L's
+        drawn_L(180,355,80,235) // ruling coalition
+
+        drawn_L(545,620,120,195) // other coalition
+
+        drawn_L(340,475,325,450) // Pacifist coalition	
+
+
+		const makeAnnotations = d3.annotation()
+		.annotations(annotations)
+		d3.select("#chart")
+		.append("g")
+		.call(makeAnnotations);
+    }
+
+    function drawn_L(x1,x2,y1,y2){
+        svg.append('line') 
+			.style("stroke", "black")
+			.attr("x1", x1)
+			.attr("y1", y1)
+			.attr("x2", x1)
+			.attr("y2", y2);
+
+        svg.append('line')
+			.style("stroke", "black")
+			.attr("x1", x1)
+			.attr("y1", y2)
+			.attr("x2", x2)
+			.attr("y2", y2);
+
+    }
+
 
 }
