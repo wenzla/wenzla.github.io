@@ -1,4 +1,16 @@
 
+function get_column(list, col) {
+
+    var return_col = [];
+
+    for (var i = 0; i < list.length; ++i){
+        return_col.push(list[i][col]);
+    }
+
+    return return_col;
+}
+
+
 function popularity_chart(data) {
 
 
@@ -56,22 +68,11 @@ function popularity_chart(data) {
 		}
 		};
 
-	// function get_column(list, col) {
-
-	// 		var return_col = [];
-
-	// 		for (var i = 0; i < list.length; ++i){
-	// 			return_col.push(list[i][col]);
-	// 		}
-
-	// 		return return_col;
-	// 	}
-
 	var	formatDate = d3.timeFormat("%m/%e/%Y");
 	var	bisectDate = d3.bisector(d => d.date).left;
 
-	var party_colors = ['rgb(60,163,36)', 'rgb(24,69,137)', 'rgb(245,88,157)', 'rgb(219,0,28)', 'rgb(184,206,67)', 'rgb(255,215,0)', 'rgb(28,169,233)', 'rgb(237,0,140)', 'rgb(248,234,13)', 'black']
-	var party_colors_a = ['rgb(60,163,36,0.1)', 'rgb(24,69,137,0.1)', 'rgb(245,88,157,0.1)', 'rgb(219,0,28,0.1)', 'rgb(184,206,67,0.1)', 'rgb(255,215,0,0.1)', 'rgb(28,169,233,0.1)', 'rgb(237,0,140,0.1)', 'rgb(248,234,13,0.1)', 'rgb(0,0,0,0.1)']
+	var party_colors = ['rgb(60,163,36)', 'rgb(24,69,137)', 'rgb(245,88,157)', 'rgb(219,0,28)', 'rgb(184,206,67)', 'rgb(255,215,0)', 'rgb(28,169,233)', 'rgb(237,0,140)', 'rgb(248,234,13)', '#999']
+	var party_colors_a = ['rgb(60,163,36,0.1)', 'rgb(24,69,137,0.1)', 'rgb(245,88,157,0.1)', 'rgb(219,0,28,0.1)', 'rgb(184,206,67,0.1)', 'rgb(255,215,0,0.1)', 'rgb(28,169,233,0.1)', 'rgb(237,0,140,0.1)', 'rgb(248,234,13,0.1)', 'rgb(60,60,60,0.1)']
 	var z = d3.scaleOrdinal(party_colors);
     var z_a = d3.scaleOrdinal(party_colors_a);
 
@@ -127,9 +128,8 @@ function popularity_chart(data) {
 		.style("display", "none");
 
 	focus.append("line").attr("class", "lineHover")
-		.style("stroke", "#999")
+		.style("stroke", "#777")
 		.attr("stroke-width", 1)
-		.style("shape-rendering", "crispEdges")
 		.style("opacity", 0.5)
 		.attr("y1", -height)
 		.attr("y2",0);
@@ -348,259 +348,196 @@ function popularity_chart(data) {
 
 }
 
-d3.parliament = function() {
-    /* params */
-    var width,
-        height,
-        innerRadiusCoef = 0.4;
+function parliment_chart(data){
 
-    /* animations */
-    var enter = {
-            "smallToBig": true,
-            "fromCenter": true
-        },
-        update = {
-          'animate': true,
-        },
-        exit = {
-            "bigToSmall": true,
-            "toCenter": true
-        };
+	data.forEach(function(dt) {
+			dt['Prefecture'] = dt['Prefecture'],
+			dt['CDP'] = +dt['CDP'],
+			dt['DPP'] = +dt['DPP'],
+			dt['Ishin'] = +dt['ISHIN'],
+			dt['JCP'] = +dt['JCP'],
+			dt['LDP'] = +dt['LDP'],
+			dt['N-Koku'] = +dt['N-Koku'],
+			dt['NKP'] = +dt['NKP'],
+			dt['Reiwa'] = +dt['Reiwa'],
+			dt['Others'] = +dt['Others/Independents'],
+			dt['SDP'] = +dt['SDP']
+		});
 
-    /* events */
-    var parliamentDispatch = d3.dispatch("click", "dblclick", "mousedown", "mouseenter",
-        "mouseleave", "mousemove", "mouseout", "mouseover", "mouseup", "touchcancel", "touchend",
-        "touchmove", "touchstart");
+	var svg = d3.select("#chart");
+	var margin = {top: 50, right: 50, bottom: 50, left: 50};
+	var	width = +(svg.attr("width") - margin.left - margin.right);
+	var	height = +(svg.attr("height") - margin.top - margin.bottom);
 
-    function parliament(data) {
-        data.each(function(d) {
+	var PR_data = data.slice(data.length-11)
+	var parl_data = data.slice(0,data.length-11)
 
-            // if user did not provide, fill the svg:
-            width = width ? width : this.getBoundingClientRect().width;
-            height = width ? width / 2 : this.getBoundingClientRect().width/2;
+	// console.log(PR_data, parl_data)
+	
 
-            var outerParliamentRadius = Math.min(width/2, height);
-            var innerParliementRadius = outerParliamentRadius * innerRadiusCoef;
+	var party_colors = ['rgb(60,163,36)', 'rgb(24,69,137)', 'rgb(245,88,157)', 'rgb(219,0,28)', 'rgb(184,206,67)', 'rgb(255,215,0)', 'rgb(28,169,233)', 'rgb(237,0,140)', '#999']
+	var xCenter = [250, 300, 500, 200, 400, 600, 550, 200, 400];
+	var yCenter = [150, 400, 100, 550, 250, 200, 400, 350, 500];
+	var parties = ['LDP', 'CDP', 'NKP', 'JCP', 'Ishin', 'DPP', 'SDP', 'Reiwa', 'Others']
+	var radius = 4
 
-            /* init the svg */
-            var svg = d3.select(this);
+	function get_node_list(arr, party, cat){
+		var col = get_column(arr, party)
+		var pref = get_column(arr, 'Prefecture')
+		var node_location = []
 
-            /***
-             * compute number of seats and rows of the parliament */
-            var nSeats = 0;
-            d.forEach(function(p) { nSeats += (typeof p.seats === 'number') ? Math.floor(p.seats) : p.seats.length; });
+		for (let i=0; i < col.length; i++){
+			var temp_arr = []
+				for (let k=0; k<col[i]; k++){
+					temp_arr.push(pref[i])
+				}
+			node_location = node_location.concat(temp_arr)
+		}
 
-            var nRows = 0;
-            var maxSeatNumber = 0;
-            var b = 0.5;
-            (function() {
-                var a = innerRadiusCoef / (1 - innerRadiusCoef);
-                while (maxSeatNumber < nSeats) {
-                    nRows++;
-                    b += a;
-                    /* NOTE: the number of seats available in each row depends on the total number
-                    of rows and floor() is needed because a row can only contain entire seats. So,
-                    it is not possible to increment the total number of seats adding a row. */
-                    maxSeatNumber = series(function(i) { return Math.floor(Math.PI * (b + i)); }, nRows-1);
-                }
-            })();
+		var numNodes = col.reduce((a, b) => a + b, 0); //gets sum of array
+		var nodes = d3.range(numNodes).map(function(d) {
+			return {
+				radius: radius,
+				category: cat,
+				party: party,
+				color: party_colors[cat],
+				location: 'None'
+			}
+		});
 
+		if (node_location.length > 0){
+			for (let i=0; i < (nodes.length); i++){
+				nodes[i]['location'] = node_location[i]
+			}
+		}
 
-            /***
-             * create the seats list */
-            /* compute the cartesian and polar coordinates for each seat */
-            var rowWidth = (outerParliamentRadius - innerParliementRadius) / nRows;
-            var seats = [];
-            (function() {
-                var seatsToRemove = maxSeatNumber - nSeats;
-                for (var i = 0; i < nRows; i++) {
-                    var rowRadius = innerParliementRadius + rowWidth * (i + 0.5);
-                    var rowSeats = Math.floor(Math.PI * (b + i)) - Math.floor(seatsToRemove / nRows) - (seatsToRemove % nRows > i ? 1 : 0);
-                    var anglePerSeat = Math.PI / rowSeats;
-                    for (var j = 0; j < rowSeats; j++) {
-                        var s = {};
-                        s.polar = {
-                            r: rowRadius,
-                            teta: -Math.PI + anglePerSeat * (j + 0.5)
-                        };
-                        s.cartesian = {
-                            x: s.polar.r * Math.cos(s.polar.teta),
-                            y: s.polar.r * Math.sin(s.polar.teta)
-                        };
-                        seats.push(s);
-                    }
-                };
-            })();
+		return nodes
+	}
+	
+	var nodes = get_node_list(data, 'LDP', 0) //TODO: put in a loop
+	.concat(get_node_list(data, 'CDP', 1))
+	.concat(get_node_list(data, 'NKP', 2))
+	.concat(get_node_list(data, 'JCP', 3))
+	.concat(get_node_list(data, 'Ishin', 4))
+	.concat(get_node_list(data, 'DPP', 5))
+	.concat(get_node_list(data, 'SDP', 6))
+	.concat(get_node_list(data, 'Reiwa', 7))
+	.concat(get_node_list(data, 'Others', 8))
 
-            /* sort the seats by angle */
-            seats.sort(function(a,b) {
-                return a.polar.teta - b.polar.teta || b.polar.r - a.polar.r;
-            });
+	console.log(nodes)
 
-            /* fill the seat objects with data of its party and of itself if existing */
-            (function() {
-                var partyIndex = 0;
-                var seatIndex = 0;
-                seats.forEach(function(s) {
-                    /* get current party and go to the next one if it has all its seats filled */
-                    var party = d[partyIndex];
-                    var nSeatsInParty = typeof party.seats === 'number' ? party.seats : party.seats.length;
-                    if (seatIndex >= nSeatsInParty) {
-                        partyIndex++;
-                        seatIndex = 0;
-                        party = d[partyIndex];
-                    }
+	var node = svg.selectAll('.node').data(nodes).enter().append('g')
+	
+	node.append('circle')
+	.attr('class', 'node')
+	.attr('r', radius)
+	.attr('fill', function(d) {return d.color})
+	.style('opacity', 0.5)
+	.on('mouseover', force_mouseover)
+	.on("mouseout", force_mouseout)
 
-                    /* set party data */
-                    s.party = party;
-                    s.data = typeof party.seats === 'number' ? null : party.seats[seatIndex];
-
-                    seatIndex++;
-                });
-            })();
-
-
-            /***
-             * helpers to get value from seat data */
-            var seatClasses = function(d) {
-                var c = "seat ";
-                c += (d.party && d.party.id) || "";
-                return c.trim();
-            };
-            var seatX = function(d) { return d.cartesian.x; };
-            var seatY = function(d) { return d.cartesian.y; };
-            var seatRadius = function(d) {
-                var r = 0.4 * rowWidth;
-                if (d.data && typeof d.data.size === 'number') {
-                    r *= d.data.size;
-                }
-                return r;
-            };
-
-
-            /***
-             * fill svg with seats as circles */
-            /* container of the parliament */
-            var container = svg.select(".parliament");
-            if (container.empty()) {
-                container = svg.append("g");
-                container.classed("parliament", true);
-            }
-            container.attr("transform", "translate(" + width / 2 + "," + outerParliamentRadius + ")");
-
-            /* all the seats as circles */
-            var circles = container.selectAll(".seat").data(seats);
-            circles.attr("class", seatClasses);
-
-            /* animation adding seats to the parliament */
-            var circlesEnter = circles.enter().append("circle");
-            circlesEnter.attr("class", seatClasses);
-            circlesEnter.attr("cx", enter.fromCenter ? 0 : seatX);
-            circlesEnter.attr("cy", enter.fromCenter ? 0 : seatY);
-            circlesEnter.attr("r", enter.smallToBig ? 0 : seatRadius);
-            if (enter.fromCenter || enter.smallToBig) {
-                var t = circlesEnter.transition().duration(function() { return 1000 + Math.random()*800; });
-                if (enter.fromCenter) {
-                    t.attr("cx", seatX);
-                    t.attr("cy", seatY);
-                }
-                if (enter.smallToBig) {
-                    t.attr("r", seatRadius);
-                }
-            }
-
-            /* circles catch mouse and touch events */
-            for (var evt in parliamentDispatch._) {
-                (function(evt){
-                    circlesEnter.on(evt, function(e) { parliamentDispatch.call(evt, this, e); });
-                })(evt);
-            }
-
-            /* animation updating seats in the parliament */
-            if (update.animate) {
-              var circlesUpdate = circles.transition().duration(function() { return 1000 + Math.random()*800; });
-            } else {
-              var circlesUpdate = circles;
-            }
-              circlesUpdate.attr("cx", seatX)
-                .attr("cy", seatY)
-                .attr("r", seatRadius);
-
-            /* animation removing seats from the parliament */
-            if (exit.toCenter || exit.bigToSmall) {
-                var t = circles.exit().transition().duration(function() { return 1000 + Math.random()*800; });
-                if (exit.toCenter) {
-                    t.attr("cx", 0).attr("cy", 0);
-                }
-                if (exit.bigToSmall) {
-                    t.attr("r", 0);
-                }
-                t.remove();
-            } else {
-                circles.exit().remove();
-            }
-        });
-    }
-
-    parliament.width = function(value) {
-        if (!arguments.length) return width;
-        width = value;
-        return parliament;
-    };
-
-    /** Deprecated since v1.0.1 */
-    parliament.height = function(value) {
-        if (!arguments.length) return height;
-        return parliament;
-    };
-
-    parliament.innerRadiusCoef = function(value) {
-        if (!arguments.length) return innerRadiusCoef;
-        innerRadiusCoef = value;
-        return parliament;
-    };
-
-    parliament.enter = {
-        smallToBig: function (value) {
-            if (!arguments.length) return enter.smallToBig;
-            enter.smallToBig = value;
-            return parliament.enter;
-        },
-        fromCenter: function (value) {
-            if (!arguments.length) return enter.fromCenter;
-            enter.fromCenter = value;
-            return parliament.enter;
+	node.append('title').text(function(d){
+        console.log(d.location.slice(-2))
+        if (d.location.slice(-2) == 'DP'){
+           
+            return d.party + " official proportionally represented from " + d.location.slice(-2)
         }
-    };
+        return d.party + " elected official from " + d.location
+    })
 
-    parliament.update = {
-      animate: function(value) {
-        if (!arguments.length) return update.animate;
-        update.animate = value;
-        return parliament.update;
-      }
-    }
+	// add a label to each node
+    node.append("text")
+        .attr("dx", 10)
+        .text(function(d) {return d.location;})
+        .style("stroke", "black")
+        .style("stroke-width", 0.5)
+        .style("fill", 'black')
+		.style('display', 'none')
+		.style('border', '2px solid black');
 
-    parliament.exit = {
-        bigToSmall: function (value) {
-            if (!arguments.length) return exit.bigToSmall;
-            exit.bigToSmall = value;
-            return parliament.exit;
-        },
-        toCenter: function (value) {
-            if (!arguments.length) return exit.toCenter;
-            exit.toCenter = value;
-            return parliament.exit;
-        }
-    };
+	// node.append('text').text('test').style("stroke", "black")
+    //     .style("stroke-width", 0.5)
+    //     .style("fill", 'black')
 
-    parliament.on = function(type, callback) {
-        parliamentDispatch.on(type, callback);
-    }
+	var simulation = d3.forceSimulation()
+		.force('charge', d3.forceManyBody().strength(1))
+		.force('x', d3.forceX().x(function(d) {
+			return xCenter[d.category];
+		}))
+		.force('y', d3.forceY().y(function(d) {
+			return yCenter[d.category];
+		}))
+		.force('collision', d3.forceCollide(radius));
 
-    return parliament;
+	function tick() {
+		node.attr('transform', tick_move)
 
-    // util
-    function series(s, n) { var r = 0; for (var i = 0; i <= n; i++) { r+=s(i); } return r; }
+		function tick_move(d){ 
+			// keep the node within the boundaries of the svg
+			if (d.x < 0) {
+				d.x = 0
+			};
+			if (d.y < 0) {
+				d.y = 0
+			};
+			if (d.x > width) {
+				d.x = width
+			};
+			if (d.y > height) {
+				d.y = height
+			};
+			return "translate(" + d.x + "," + d.y + ")";
+		}
+	}
+
+	function force_mouseover() {
+		d3.select(this).transition()
+			.duration(500)
+			.attr("r", 8)
+			.style('opacity', 1);
+
+		d3.select(this.parentNode).select('text')
+		.style('display', 'block')
+		.style('padding', '2ex')
+		.style('position', 'absolute')
+		.style('z-index', 1);
+	}
+
+	function force_mouseout() {
+		d3.select(this).transition()
+			.duration(500)
+			.attr("r", radius)
+			.style('opacity', 0.5);
+		
+
+		d3.select(this.parentNode).select('text')
+		.style('display', 'none');
+	}
+
+	simulation.nodes(nodes).on('tick', tick);
+
+	// Handmade legend
+
+	['rgb(60,163,36)', 'rgb(24,69,137)', 'rgb(245,88,157)', 'rgb(219,0,28)', 'rgb(184,206,67)', 'rgb(255,215,0)', 'rgb(28,169,233)', 'rgb(237,0,140)', '#999']
+	['LDP', 'CDP', 'NKP', 'JCP', 'Ishin', 'DPP', 'SDP', 'Reiwa', 'Others']
+
+	svg.append("circle").attr("cx",800).attr("cy",130).attr("r", 4).style("fill", "rgb(60,163,36)")
+	svg.append("circle").attr("cx",800).attr("cy",150).attr("r", 4).style("fill", "rgb(24,69,137)")
+	svg.append("circle").attr("cx",800).attr("cy",170).attr("r", 4).style("fill", "rgb(245,88,157)")
+	svg.append("circle").attr("cx",800).attr("cy",190).attr("r", 4).style("fill", "rgb(219,0,28)")
+	svg.append("circle").attr("cx",800).attr("cy",210).attr("r", 4).style("fill", "rgb(184,206,67)")
+	svg.append("circle").attr("cx",800).attr("cy",230).attr("r", 4).style("fill", "rgb(255,215,0)")
+	svg.append("circle").attr("cx",800).attr("cy",250).attr("r", 4).style("fill", "rgb(28,169,233)")
+	svg.append("circle").attr("cx",800).attr("cy",270).attr("r", 4).style("fill", "rgb(237,0,140)")
+	svg.append("circle").attr("cx",800).attr("cy",290).attr("r", 4).style("fill", "#999")
+	svg.append("text").attr("x", 810).attr("y", 130).text("LDP").style("font-size", "15px").attr("alignment-baseline","middle")
+	svg.append("text").attr("x", 810).attr("y", 150).text("CDP").style("font-size", "15px").attr("alignment-baseline","middle")
+	svg.append("text").attr("x", 810).attr("y", 170).text("NKP").style("font-size", "15px").attr("alignment-baseline","middle")
+	svg.append("text").attr("x", 810).attr("y", 190).text("JCP").style("font-size", "15px").attr("alignment-baseline","middle")
+	svg.append("text").attr("x", 810).attr("y", 210).text("Ishin").style("font-size", "15px").attr("alignment-baseline","middle")
+	svg.append("text").attr("x", 810).attr("y", 230).text("DPP").style("font-size", "15px").attr("alignment-baseline","middle")
+	svg.append("text").attr("x", 810).attr("y", 250).text("SDP").style("font-size", "15px").attr("alignment-baseline","middle")
+	svg.append("text").attr("x", 810).attr("y", 270).text("Reiwa").style("font-size", "15px").attr("alignment-baseline","middle")
+	svg.append("text").attr("x", 810).attr("y", 290).text("Others").style("font-size", "15px").attr("alignment-baseline","middle")
 
 }

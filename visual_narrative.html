@@ -39,6 +39,7 @@ var button2 = d3.select("#button2")
 var button3 = d3.select("#button3")
 	.on("click", function() {
 		d3.selectAll("#chart > *").remove();
+		load_2021_parliment();
 	})
 
 function load_2017_parliment(){
@@ -49,27 +50,11 @@ function load_2021_parliment(){
 	d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_2021_parliment.csv").then(d => parliment_chart(d))
 }
 
-
-function parliment_chart(data){
-	var parliament = d3.parliament();
-	parliament.width(500).height(500).innerRadiusCoef(0.4);
-	parliament.enter.fromCenter(true).smallToBig(true);
-	parliament.exit.toCenter(false).bigToSmall(true);
-
-	parliament.on("click", function(d) { alert("You clicked on a seat of " + d.party.name); });
-	parliament.on("mouseover", function(d) { console.log("mouse on " + d.party.name); });
-	parliament.on("mouseout", function(d) { console.log("mouse out of " + d.party.name); });
-
-	/* add the parliament to the page */
-	d3.json("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/test.json", function(d) {
-		d3.select("svg").datum(d).call(parliament);
-	});
-
-}
-
 function load_popularity_chart(){
 	d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_polling_all.csv").then(d => popularity_chart(d))
 }
+
+load_2017_parliment()
 
 </script>
 </body>
