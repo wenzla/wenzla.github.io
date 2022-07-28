@@ -11,7 +11,7 @@
 
 <body>
 
-<p style="font-size:18px;">Graph Changer</p>
+<p style="font-size:18px;">Scene Transitioner</p>
 
 <button type="button" id="button1" value="1"> 1 </button>
 <button type="button" id="button2" value="2"> 2 </button>
@@ -26,6 +26,7 @@
 var button1 = d3.select("#button1")
 	.on("click", function() {
 		d3.selectAll("#chart > *").remove();
+		load_2017_parliment()
 	})
 
 var button2 = d3.select("#button2")
@@ -49,7 +50,7 @@ function load_2021_parliment(){
 
 
 function parliment_chart(data){
-	return 0
+	console.log(data)
 }
 
 
