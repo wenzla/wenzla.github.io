@@ -4,6 +4,7 @@
 	<script src="https://d3js.org/d3.v5.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/1.12.1/d3-annotation.min.js"></script>
 	<script src="script/visual_narrative.js"></script>
+	<script src="https://d3js.org/topojson.v0.min.js"></script>
 	<link rel="stylesheet" href="css/visual_narrative.css">
 	<style>
 	</style>
@@ -11,7 +12,7 @@
 
 <body>
 
-<p style="font-size:18px;">Scene Transitioner</p>
+<p style="font-size:18px;">Slide Transitioner</p>
 
 <button type="button" id="button1" value="1"> 1 </button>
 <button type="button" id="button2" value="2"> 2 </button>
@@ -26,7 +27,7 @@
 var button1 = d3.select("#button1")
 	.on("click", function() {
 		d3.selectAll("#chart > *").remove();
-		load_2017_parliment()
+		load_2017_parliment();
 	})
 
 var button2 = d3.select("#button2")
@@ -50,9 +51,21 @@ function load_2021_parliment(){
 
 
 function parliment_chart(data){
-	console.log(data)
-}
+	var parliament = d3.parliament();
+	parliament.width(500).height(500).innerRadiusCoef(0.4);
+	parliament.enter.fromCenter(true).smallToBig(true);
+	parliament.exit.toCenter(false).bigToSmall(true);
 
+	parliament.on("click", function(d) { alert("You clicked on a seat of " + d.party.name); });
+	parliament.on("mouseover", function(d) { console.log("mouse on " + d.party.name); });
+	parliament.on("mouseout", function(d) { console.log("mouse out of " + d.party.name); });
+
+	/* add the parliament to the page */
+	d3.json("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/test.json", function(d) {
+		d3.select("svg").datum(d).call(parliament);
+	});
+
+}
 
 function load_popularity_chart(){
 	d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_polling_all.csv").then(d => popularity_chart(d))
