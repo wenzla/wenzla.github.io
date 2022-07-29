@@ -186,8 +186,7 @@ function popularity_chart(data) {
 			d3.max(polling_data, d => d3.max(d.values, c => c.poll))
 		]).nice();
 
-		svg.selectAll(".y-axis").transition()
-			.duration(speed)
+		svg.selectAll(".y-axis")
 			.call(d3.axisLeft(y).tickSize(-width + margin.right + margin.left))
 
 		var pollingd = svg.selectAll(".polling_data")
@@ -199,7 +198,6 @@ function popularity_chart(data) {
 			.attr("class", "line polling_data")
 			.style("stroke", function(d) {return z(d.id)})
 			.merge(pollingd)
-		.transition().duration(speed)
 			.attr("d", function(d) {return poll_line(d.values)})
 
 		// Scatter plot
@@ -528,8 +526,6 @@ function parliment_chart(data, year){
 
 	simulation.nodes(nodes).on('tick', tick);
 
-
-
     if(year == 2017){
         annotation_2017()
     }
@@ -668,3 +664,50 @@ function parliment_chart(data, year){
 
 
 }
+
+var description_1 = `The 2017 Japanese election was called by Shinzo Abe in the midst of the North Korea missile threat and with the largest opposition party, the CDP, in disarray.
+The election had the second lowest turn out ever at 53.68% becaue the election occured during Typhoon Lan.
+During this term, Shinzo Abe became the longest serving prime minister of Japan. 
+In this visualization, we can see the three different coalitions that formed during this time.  
+Despite two of the coalitions being formed against Shinzo Abe's LDP, they still formed the minority governement during this time. 
+You can hover over the dots below to see where each parliament member came from.
+`
+var description_2 = `Despite 3 relatively large scandals involving the LDP, their popularity still polled between 30-45%; well above any of the other parties.
+Although Abe announced his retirement due to health concerns, he had an approval rating of 30% at the time of his retirment due to scandals and cabinet resignations throughout his tenure.
+While the LDP was losing popularity, the other parties were not doing any favors by merging and dissolving multiple times throughout these 4 years.
+Hover over the graph to see the popularity poll numbers during the tenure.
+`
+var description_3 = `The LDP, led by new Prime Minister Fumio Kishida, maintained a comfortable majority despite losing seats.
+ The primary two opposition parties, the CDP and the JCP, both underperformed expectations and lost seats relative to their standings in the chamber immediately before the election.
+ This election marks yet another consistent win for the LDP who have help power for 60 of the last 66 years since the LDP was formed.
+`
+
+function make_table (data, slice_size){
+	var table = d3.select("#table_loc").append("table")
+	.attr('class', 'election_table')
+
+	var table_h = data.flatMap(x => Object.keys(x)).slice(slice_size); // https://stackoverflow.com/questions/55583869/javascript-get-key-name-from-array-of-objects
+
+	var thead = table.append("thead")
+
+	var thead_labels = thead.selectAll('tr')
+	.data(['foo']).enter()
+	.append('tr');
+
+	var th = thead_labels.selectAll('th')
+	.data(table_h).enter()
+	.append('th').text(function(d) {return d;})
+
+	var tbody = table.append("tbody")
+
+	var tr = tbody.selectAll("tr")
+	.data(data)
+	.enter().append("tr");
+
+	var td = tr.selectAll("td")
+	.data(function(d) { return Object.values(d); })
+	.enter().append("td")
+		.text(function(d) { return d; });
+}
+
+

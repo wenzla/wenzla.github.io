@@ -12,61 +12,97 @@
 
 <body>
 
-<p style="font-size:18px;">Move through visualization with below slide buttons</p>
+<h3>Instructions</h3>
+<p id="instructions">Move through visualization with the below slide buttons. Visuals on all slides contain hover tooltips.  Be sure to explore each visualization by hovering over the graph elements!</p>
 
 <button type="button" id="button1" value="1"> 1 </button>
 <button type="button" id="button2" value="2"> 2 </button>
 <button type="button" id="button3" value="3"> 3 </button>
-<br>
-<p id="viz_description">dummy</p>
+
+<p id="viz_description"><text></text></p>
+<p id="table_loc"></p>
 
 <svg id="chart" width="1000" height="700"></svg>
 
 <script>
+d3.select('#button1').style('background-color', '#999')
 
 var button1 = d3.select("#button1")
 	.on("click", function() {
 		d3.selectAll("#chart > *").remove();
+		d3.selectAll("#table_loc > *").remove();
 		load_2017_parliment();
+		d3.select('#button1').style('background-color', '#999')
+		d3.select('#button2').style('background-color', '#dedede')
+		d3.select('#button3').style('background-color', '#dedede')
 	})
 
 var button2 = d3.select("#button2")
 	.on("click", function() {
 		d3.selectAll("#chart > *").remove();
+		d3.selectAll("#table_loc > *").remove();
 		load_popularity_chart();
+		d3.select('#button1').style('background-color', '#dedede')
+		d3.select('#button2').style('background-color', '#999')
+		d3.select('#button3').style('background-color', '#dedede')
 	})
 
 var button3 = d3.select("#button3")
 	.on("click", function() {
 		d3.selectAll("#chart > *").remove();
+		d3.selectAll("#table_loc > *").remove();
 		load_2021_parliment();
+		d3.select('#button1').style('background-color', '#dedede')
+		d3.select('#button2').style('background-color', '#dedede')
+		d3.select('#button3').style('background-color', '#999')
 	})
 
 function load_2017_parliment(){
 	d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_2017_parliment.csv").then(d => parliment_chart(d, 2017))
 
-	d3.select("#viz_description").text(`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus aliquet turpis at augue luctus, a tempor nisl maximus. Phasellus finibus cursus est at feugiat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer vitae turpis eu orci vestibulum tincidunt. Nunc tristique urna suscipit laoreet varius. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Quisque tincidunt, nulla sed volutpat consequat, diam felis fermentum massa, vel sodales sem velit vitae nulla.
+	d3.select("#viz_description").text(description_1);
 
-Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas sagittis sapien ut mi pulvinar molestie. Nullam blandit libero erat, a interdum enim interdum vel. Donec ac ultrices dolor. Aenean id metus tincidunt, tempor odio eget, scelerisque sapien. Maecenas vulputate vel nibh sit amet posuere. Etiam ac blandit felis. Donec elementum eu urna eget venenatis. Aenean libero libero, egestas in ullamcorper eget, vehicula quis libero. Aliquam eget risus in dui vehicula varius sit amet quis orci. Sed a lorem ultrices diam dignissim porttitor nec eu tellus. Nam tempor leo sed commodo ornare. Morbi rutrum ex dui, vitae vehicula enim ullamcorper vitae. Aenean ultricies a arcu nec molestie. Curabitur elementum sem a tellus iaculis, fermentum mattis mi volutpat.
+	var election_2017 = [
+		{Party: "LDP", Seats: 284},
+		{Party: "CDP", Seats: 55},
+		{Party: "NKP", Seats: 29},
+		{Party: "JCP", Seats: 12},
+		{Party: "Ishin", Seats: 11},
+		{Party: "SDP", Seats: 2},
+		{Party: "Others", Seats: 50},
+   ];
 
-Maecenas sit amet orci dolor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nunc tortor arcu, dignissim nec nunc a, eleifend eleifend tortor. Nullam lacinia magna vitae mauris imperdiet dictum. Nullam lobortis vitae dui a fringilla. Integer quis ultricies orci. Nam in cursus neque. Pellentesque ut velit metus. Vivamus vitae lacinia nulla, sit amet tincidunt massa. Duis vulputate orci ut metus aliquam placerat. Sed tempus elit non eleifend ornare. Aenean quis libero nec ex condimentum semper at a est. Morbi tortor felis, volutpat id efficitur ac, pulvinar sed nulla.
+//    d3.select("#table_loc").text(description_1_1)
 
-Aenean in imperdiet erat. Nullam non eros eget lacus auctor laoreet. Vivamus rutrum ipsum turpis, id dictum dui vestibulum a. Curabitur fermentum enim eget ultrices viverra. Nam quis sollicitudin magna. Suspendisse mauris eros, lacinia quis est eu, finibus tristique urna. Suspendisse at felis arcu.
-
-Aliquam pulvinar fermentum mi. Nullam eleifend pretium nibh in finibus. In id volutpat massa. Suspendisse malesuada dui arcu, ornare rutrum nulla finibus et. Phasellus egestas felis non faucibus eleifend. Proin posuere justo sed luctus blandit. Morbi mauris urna, iaculis eu auctor at, suscipit quis tortor. Integer molestie gravida nibh ut euismod. Nam quis mollis ante, eu pulvinar mi. Donec accumsan tortor vel consequat consequat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.`)
+   make_table(election_2017, -2);
 
 }
 
 function load_2021_parliment(){
 	d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_2021_parliment.csv").then(d => parliment_chart(d, 2021))
 
-	d3.select("#viz_description").text(`jasldfjas;lkfjas;lfkjas;lfkjas;lfkasjf;lkasjfa;sldkfjas;lkfjas;lfkjaslk;fjas;lfkjas;lfkjas;lfkjas;lfkjas;lfkjas;lfksjf;lkasjf;alkjdf`)
+	d3.select("#viz_description").text(description_3)
+
+	var election_2021 = [
+		{Party: "LDP", Seats: 259, change: "-25"},
+		{Party: "CDP", Seats: 96, change: "+41"},
+		{Party: "Ishin", Seats: 41, change: "+30"},
+		{Party: "NKP", Seats: 32, change: "+3"},
+		{Party: "JCP", Seats: 10, change: "-2"},
+		{Party: "DPP", Seats: 11, change: "New"},
+		{Party: "Reiwa", Seats: 3, change: "New"},
+		{Party: "SDP", Seats: 1, change: "-1"},
+		{Party: "Others", Seats: 12, change: "-38"},
+   ];
+
+   make_table(election_2021, -3);
+
 }
 
 function load_popularity_chart(){
 	d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_polling_all.csv").then(d => popularity_chart(d))
 
-	d3.select("#viz_description").text('test2')
+	d3.select("#viz_description").text(description_2)
 }
 
 load_2017_parliment() // load this graph by default
