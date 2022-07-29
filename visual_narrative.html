@@ -31,7 +31,8 @@ var button1 = d3.select("#button1")
 	.on("click", function() {
 		d3.selectAll("#chart > *").remove();
 		d3.selectAll("#table_loc > *").remove();
-		load_2017_parliment();
+		scene_selector(this.value)
+		// load_2017_parliment();
 		d3.select('#button1').style('background-color', '#999')
 		d3.select('#button2').style('background-color', '#dedede')
 		d3.select('#button3').style('background-color', '#dedede')
@@ -41,7 +42,8 @@ var button2 = d3.select("#button2")
 	.on("click", function() {
 		d3.selectAll("#chart > *").remove();
 		d3.selectAll("#table_loc > *").remove();
-		load_popularity_chart();
+		scene_selector(this.value)
+		// load_popularity_chart();
 		d3.select('#button1').style('background-color', '#dedede')
 		d3.select('#button2').style('background-color', '#999')
 		d3.select('#button3').style('background-color', '#dedede')
@@ -51,11 +53,23 @@ var button3 = d3.select("#button3")
 	.on("click", function() {
 		d3.selectAll("#chart > *").remove();
 		d3.selectAll("#table_loc > *").remove();
-		load_2021_parliment();
+		scene_selector(this.value)
+		// load_2021_parliment();
 		d3.select('#button1').style('background-color', '#dedede')
 		d3.select('#button2').style('background-color', '#dedede')
 		d3.select('#button3').style('background-color', '#999')
 	})
+
+function scene_selector(scene_num){
+	if (scene_num == 1){
+		load_2017_parliment()
+	} else if(scene_num == 2){
+		load_popularity_chart()
+	} else if(scene_num == 3){
+		load_2021_parliment()
+	}
+
+}
 
 function load_2017_parliment(){
 	d3.csv("https://raw.githubusercontent.com/wenzla/wenzla.github.io/master/data/japan_2017_parliment.csv").then(d => parliment_chart(d, 2017))
