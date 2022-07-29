@@ -680,6 +680,7 @@ Hover over the graph to see the popularity poll numbers during the tenure.
 var description_3 = `The LDP, led by new Prime Minister Fumio Kishida, maintained a comfortable majority despite losing seats.
  The primary two opposition parties, the CDP and the JCP, both underperformed expectations and lost seats relative to their standings in the chamber immediately before the election.
  This election marks yet another consistent win for the LDP who have help power for 60 of the last 66 years since the LDP was formed.
+ You can hover over the dots below to see where each parliament member came from.
 `
 
 function make_table (data, slice_size){
